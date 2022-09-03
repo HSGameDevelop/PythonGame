@@ -1,13 +1,13 @@
 class binaryFileManager:
 
-    # ファイルを開く
-    def OpenFile(filepath):
+    # 読み込み用にファイルを開く
+    def OpenFileRead(filepath):
         file = open(filepath, 'rb')
         return file
 
     #ファイルを読み込む
     def ReadFile(self, filepath):
-        file = self.OpenFile(filepath)
+        file = self.OpenFileRead(filepath)
         readData = file.read()
         file.close()
         return readData
@@ -17,5 +17,17 @@ class binaryFileManager:
         readData = self.ReadFile(filepath)
         return readData.decode()
 
-        
-        
+    # 書き込み用にファイルを開く
+    def OpenFileWrite(filepath):
+        file = open(filepath, 'wb')
+        return file
+
+    # ファイルに書き込む
+    def WriteFile(self, filepath, data):
+        file = self.OpenFileWrite(filepath)
+        file.write(data)
+
+    # 文字列をファイルに書き込む
+    def WriteFileFromString(self, filepath, data):
+        file = self.OpenFileWrite(filepath)
+        file.write(data.encode())
