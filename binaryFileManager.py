@@ -26,8 +26,10 @@ class binaryFileManager:
     def WriteFile(self, filepath, data):
         file = self.OpenFileWrite(filepath)
         file.write(data)
+        file.close()
 
     # 文字列をファイルに書き込む
     def WriteFileFromString(self, filepath, data):
         file = self.OpenFileWrite(filepath)
         file.write(data.encode())
+        file.close()
