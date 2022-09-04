@@ -1,3 +1,6 @@
+from pydoc import writedoc
+import codecs
+
 class binaryFileManager:
 
     # 読み込み用にファイルを開く
@@ -31,6 +34,11 @@ class binaryFileManager:
     # 文字列をファイルに書き込む
     def WriteFileFromString(self, filepath, data):
         file = self.OpenFileWrite(filepath)
-        writeData = data.encode()
-        file.write(writeData)
+        writeData = self.EncodeData(data)
+        file.write(hex(writeData).encode())
         file.close()
+
+    def EncodeData(self, data):
+        returnData = codecs.encode(data)
+        returnData = int.from_bytes(returnData, byteorder='big')
+        return returnData

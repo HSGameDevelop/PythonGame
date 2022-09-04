@@ -10,7 +10,7 @@ from binaryFileManager import binaryFileManager
 
 # ファイル指定の関数
 def filedialog_clicked():
-    fTyp = [("Excelファイル", "*.xlsx")]
+    fTyp = [("csvファイル", "*.csv")]
     iFile = os.path.abspath(os.path.dirname(__file__))
     iFilePath = filedialog.askopenfilename(filetype = fTyp, initialdir = iFile)
     entry2.set(iFilePath)
@@ -19,7 +19,7 @@ def filedialog_clicked():
 def ConverBinaryDataFromExcel(filePath):
     # Excelファイルの読み込み
     excelManager = excelFileManager()
-    readData = excelManager.ReadExcelFile(filePath)
+    readData = excelManager.ReadCsvFile(filePath)
     
     binaryManager = binaryFileManager()
     dir = os.path.dirname(filePath)
