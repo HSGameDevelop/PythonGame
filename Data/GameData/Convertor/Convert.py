@@ -24,10 +24,28 @@ def conductMain():
         messagebox.showinfo("info", text)
     else:
         messagebox.showerror("error", "パスの指定がありません。")
+    
+# ウィンドウを中央に移動する    
+def CenterWindow(window, width, height):
+    window.update_idletasks()
+    width = width
+    height = height
+    x = (window.winfo_screenwidth() // 2) - (width // 2)
+    y = (window.winfo_screenheight() // 2) - (height // 2)
+    window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
 
-def CreateSelectFileMenu(tkInstance):
+if __name__ == "__main__":
+
+    # rootの作成
+    root = Tk()
+    # 画面タイトル
+    root.title('ExcelConvertor')
+
+    # 画面位置調整
+    CenterWindow(root, 400, 150)
+    
     # ファイル選択Frameの作成
-    frameSelectFile = ttk.Frame(tkInstance, padding=10)
+    frameSelectFile = ttk.Frame(root, padding=10)
     frameSelectFile.grid(row=2, column=1, sticky=E)
 
     # 「ファイル選択」ラベルの作成
@@ -42,15 +60,6 @@ def CreateSelectFileMenu(tkInstance):
     # 「ファイル選択」ボタンの作成
     IFileButton = ttk.Button(frameSelectFile, text="参照", command=filedialog_clicked)
     IFileButton.pack(side=LEFT)
-
-if __name__ == "__main__":
-
-    # rootの作成
-    root = Tk()
-    # 画面タイトル
-    root.title('ExcelConvertor')
-
-    CreateSelectFileMenu(root)
 
     # Frameの作成
     frame3 = ttk.Frame(root, padding=10)
