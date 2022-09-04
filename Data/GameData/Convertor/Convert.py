@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
+from ExcelImporter import excelFileManager
 
 # ファイル指定の関数
 def filedialog_clicked():
@@ -19,6 +20,9 @@ def conductMain():
 
     if filePath:
         text += "ファイルパス：" + filePath
+        manager = excelFileManager()
+        readData = manager.ReadExcelFile(filePath)
+        print(readData)
 
     if text:
         messagebox.showinfo("info", text)
