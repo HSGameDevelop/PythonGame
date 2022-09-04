@@ -31,5 +31,6 @@ class binaryFileManager:
     # 文字列をファイルに書き込む
     def WriteFileFromString(self, filepath, data):
         file = self.OpenFileWrite(filepath)
-        file.write(data.encode())
+        writeData = data.encode()
+        file.write(writeData)
         file.close()

@@ -3,7 +3,10 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
+import pathlib
+import shutil
 from ExcelImporter import excelFileManager
+from binaryFileManager import binaryFileManager
 
 # ファイル指定の関数
 def filedialog_clicked():
@@ -12,17 +15,28 @@ def filedialog_clicked():
     iFilePath = filedialog.askopenfilename(filetype = fTyp, initialdir = iFile)
     entry2.set(iFilePath)
 
+# バイナリファイルへのコンバート
+def ConverBinaryDataFromExcel(filePath):
+    # Excelファイルの読み込み
+    excelManager = excelFileManager()
+    readData = excelManager.ReadExcelFile(filePath)
+    
+    binaryManager = binaryFileManager()
+    dir = os.path.dirname(filePath)
+    path = pathlib.Path(filePath)
+    beforeFileName = path.stem
+    afterFileName = beforeFileName + ".bin"
+    convertFilePath = dir + "/" + afterFileName
+    binaryManager.WriteFileFromString(convertFilePath, readData.to_string())
+
 # 実行ボタン押下時の実行関数
 def conductMain():
     text = ""
-
     filePath = entry2.get()
 
     if filePath:
-        text += "ファイルパス：" + filePath
-        manager = excelFileManager()
-        readData = manager.ReadExcelFile(filePath)
-        print(readData)
+        text += "ファイルパス：" + filePath + "\nのコンバートを行いました。"
+        ConverBinaryDataFromExcel(filePath)
 
     if text:
         messagebox.showinfo("info", text)
