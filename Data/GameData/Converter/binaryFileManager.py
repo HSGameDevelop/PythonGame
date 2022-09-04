@@ -1,4 +1,5 @@
 from pydoc import writedoc
+import codecs
 
 class binaryFileManager:
 
@@ -17,7 +18,7 @@ class binaryFileManager:
     # ファイルを読み込んで文字列に変換する
     def ReadFileToString(self, filepath):
         readData = self.ReadFile(filepath)
-        return readData.decode()
+        return self.DecodeData(readData)
 
     # 書き込み用にファイルを開く
     def OpenFileWrite(self, filepath):
@@ -39,15 +40,11 @@ class binaryFileManager:
 
     # １６進数のバイト文字に変換
     def EncodeData(self, data):
-        returnData = data.encode() # 文字列を直接intにできないためバイト文字に変換
-        returnData = int.from_bytes(returnData, byteorder='big') # バイト文字をintに変換
-        returnData = hex(returnData) # 16進数に変換
-        returnData = returnData.encode() # 再びバイト文字に変換
+        returnData = codecs.encode(data.encode('utf-8'), 'hex_codec') 
         return returnData
 
     # 16進数のバイト文字から変換
     def DecodeData(self, data):
         returnData = data.decode() # バイト文字から文字列へ
-        returnData = int(data, 16) # 10進数に戻す
-        returnData = bytes(returnData) # バイト文字に変換
+        returnData = codecs.decode(returnData, 'hex_codec').decode('utf-8')
         return returnData

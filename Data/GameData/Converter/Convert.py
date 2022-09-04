@@ -21,6 +21,7 @@ def ConverBinaryDataFromExcel(filePath):
     excelManager = excelFileManager()
     readData = excelManager.ReadCsvFile(filePath)
     
+    # バイナリファイルへの書き込み
     binaryManager = binaryFileManager()
     dir = os.path.dirname(filePath)
     path = pathlib.Path(filePath)
@@ -28,6 +29,10 @@ def ConverBinaryDataFromExcel(filePath):
     afterFileName = beforeFileName + ".bin"
     convertFilePath = dir + "/" + afterFileName
     binaryManager.WriteFileFromString(convertFilePath, readData.to_string())
+
+    # 確認用
+    readData = binaryManager.ReadFileToString(convertFilePath)
+    print(readData)
 
 # 実行ボタン押下時の実行関数
 def conductMain():
