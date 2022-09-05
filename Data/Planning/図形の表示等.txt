@@ -1,0 +1,7 @@
+図形の描画：　https://imagingsolution.net/program/python/tkinter/canvas_drawing_lines_circles_shapes/
+
+円の描画：　https://natu-ym.com/python-canvas-arc-oval/
+
+当たり判定：　https://yttm-work.jp/collision/collision_0008.html
+
+
