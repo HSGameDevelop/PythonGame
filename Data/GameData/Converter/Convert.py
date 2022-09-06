@@ -11,11 +11,13 @@ from ExcelImporter import excelFileManager
 from binaryFileManager import binaryFileManager
 
 entrySelectFile = 0 # ファイル選択のエントリー
-isCanConver = False # コンバートできるかどうかのフラグ
 buttonConvert = None # コンバートボタン
 
 # 各種フラグ群
 sheetBln = {} # シート一覧チェックボックスのフラグ群
+
+# シート一覧チェックボッス用
+selectSheeteNameIndex = 0
 
 # ファイル指定の関数
 def filedialog_clicked():
@@ -67,17 +69,28 @@ def CheckSelectFile():
     global sheetBln
     for i in range(len(sheetList)):
         sheetBln[i] = tkinter.BooleanVar()
+        if i == 0:
+            sheetBln[i].set(True)
+            buttonConvert['state'] = tkinter.NORMAL 
+            selectSheeteNameIndex = i
         chk = tkinter.Checkbutton(frameSheet, variable=sheetBln[i], text=sheetList[i], command=SelectSheeteNamesCheckBox) 
         chk.grid(row=0,column=i)
         
 
 def SelectSheeteNamesCheckBox():
     global buttonConvert
+    global selectSheeteNameIndex
     buttonConvert['state'] = tkinter.DISABLED
 
     for i in range(len(sheetBln)):
+        if i == selectSheeteNameIndex:
+            sheetBln[i].set(not sheetBln[i].get())
+
         if sheetBln[i].get():
             buttonConvert['state'] = tkinter.NORMAL 
+            if i != selectSheeteNameIndex:
+                sheetBln[selectSheeteNameIndex].set(False)
+                selectSheeteNameIndex = i
             break
     
 # ウィンドウを画面中央に作成
