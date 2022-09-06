@@ -8,18 +8,22 @@ import shutil
 from ExcelImporter import excelFileManager
 from binaryFileManager import binaryFileManager
 
+entrySelectFile = 0 # ファイル選択のエントリー
+isCanConver = False # コンバートできるかどうかのフラグ
+
 # ファイル指定の関数
 def filedialog_clicked():
-    fTyp = [("csvファイル", "*.csv")]
+    fTyp = [("Excelファイル", "*.xlsx")]
     iFile = os.path.abspath(os.path.dirname(__file__))
     iFilePath = filedialog.askopenfilename(filetype = fTyp, initialdir = iFile)
-    entry2.set(iFilePath)
+    if entrySelectFile:
+        entrySelectFile.set(iFilePath)
 
 # バイナリファイルへのコンバート
 def ConverBinaryDataFromExcel(filePath):
     # Excelファイルの読み込み
     excelManager = excelFileManager()
-    readData = excelManager.ReadCsvFile(filePath)
+    readData = excelManager.ReadExcelFile(filePath)
     
     binaryManager = binaryFileManager()
     dir = os.path.dirname(filePath)
@@ -32,7 +36,7 @@ def ConverBinaryDataFromExcel(filePath):
 # 実行ボタン押下時の実行関数
 def conductMain():
     text = ""
-    filePath = entry2.get()
+    filePath = entrySelectFile.get()
 
     if filePath:
         text += "ファイルパス：" + filePath + "\nのコンバートを行いました。"
@@ -42,9 +46,17 @@ def conductMain():
         messagebox.showinfo("info", text)
     else:
         messagebox.showerror("error", "パスの指定がありません。")
+
+def CheckSelectFile():
+    return None
     
-# ウィンドウを中央に移動する    
-def CenterWindow(window, width, height):
+# ウィンドウを画面中央に作成
+def CreateCenterWindow(title, width, height):
+     # rootの作成
+    window = Tk()
+    # 画面タイトル
+    window.title(title)
+
     window.update_idletasks()
     width = width
     height = height
@@ -52,39 +64,50 @@ def CenterWindow(window, width, height):
     y = (window.winfo_screenheight() // 2) - (height // 2)
     window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
 
-if __name__ == "__main__":
+    return window
 
-    # rootの作成
-    root = Tk()
-    # 画面タイトル
-    root.title('ExcelConvertor')
-
-    # 画面位置調整
-    CenterWindow(root, 400, 150)
-    
+# ファイル選択メニューの作成
+def CreateSelectFile(window):
     # ファイル選択Frameの作成
-    frameSelectFile = ttk.Frame(root, padding=10)
-    frameSelectFile.grid(row=2, column=1, sticky=E)
+    frameSelectFile = ttk.Frame(window, padding=5)
+    frameSelectFile.grid(row=0, column=0,sticky=W+E)
 
     # 「ファイル選択」ラベルの作成
-    IFileLabel = ttk.Label(frameSelectFile, text="ファイル選択＞＞", padding=(5, 2))
+    IFileLabel = ttk.Label(frameSelectFile, text="ファイル選択：", padding=(5, 2))
     IFileLabel.pack(side=LEFT)
 
     # 「ファイル選択」エントリーの作成
-    entry2 = StringVar()
-    IFileEntry = ttk.Entry(frameSelectFile, textvariable=entry2, width=30)
+    entry = StringVar()
+    IFileEntry = ttk.Entry(frameSelectFile, state="readonly", textvariable=entry, width=60)
     IFileEntry.pack(side=LEFT)
 
     # 「ファイル選択」ボタンの作成
     IFileButton = ttk.Button(frameSelectFile, text="参照", command=filedialog_clicked)
     IFileButton.pack(side=LEFT)
 
+    return entry
+
+# 各ボタンの作成
+def CreateButtons(window):
     # Frameの作成
-    frame3 = ttk.Frame(root, padding=10)
-    frame3.grid(row=5,column=1,sticky=W)
+    frame3 = ttk.Frame(window, padding=5)
+    frame3.grid(row=1,column=0,sticky=W+E)
 
+    # 確認ボタンの設置
+    buttonCheck = ttk.Button(frame3, text="読み込み", command=conductMain)
+    buttonCheck.pack(fill = "x", side = "left")
+    
     # 実行ボタンの設置
-    button1 = ttk.Button(frame3, text="実行", command=conductMain)
-    button1.pack(fill = "x", padx=30, side = "left")
+    buttonConvert = ttk.Button(frame3, text="コンバート", command=conductMain)
+    buttonConvert.pack(fill = "x", side = "left")
 
-    root.mainloop()
+if __name__ == "__main__":
+
+    # 画面位置調整
+    window = CreateCenterWindow('ExcelConvertor', 640, 150)
+    
+    entrySelectFile = CreateSelectFile(window)
+
+    CreateButtons(window)
+
+    window.mainloop()
