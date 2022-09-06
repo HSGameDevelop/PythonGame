@@ -2,35 +2,32 @@ import tkinter as tk
 import tkinter.messagebox as tk_m
 
 # キャンバスの横方向・縦方向のサイズ（px）
-CANVAS_WIDTH = 1200
-CANVAS_HEIGHT = 900
+CANVAS_SIZE = 400
 
 # 横方向・縦方向のマスの数
-NUM_WIDTH = 40
-NUM_HEIGHT = 30
+NUM_SQUARE = 8
 
-# 色の設定
-BOARD_COLOR = 'black' # 盤面全体（見えない位置）
-YOUR_COLOR = 'green' # あなたのユニットの色
-COM_COLOR = 'red' # 相手のユニットの色
-VISIBLE_COLOR = 'white' # ユニットの見える範囲
+BOARD_COLOR = 'green' # 盤面の背景色
+YOUR_COLOR = 'black' # あなたの石の色
+COM_COLOR = 'white' # 相手の石の色
+PLACABLE_COLOR = 'yellow' # 次に石を置ける場所を示す色
+PLACABLE_COLOR = 'yellow' # 次に石を置ける場所を示す色
 
 # プレイヤーを示す値
 YOU = 1
 COM = 2
 
-
-class Move():
+class Othello():
     def __init__(self, master):
         '''コンストラクタ'''
 
-        self.master = master    #   親ウィジェット
-        self.player = YOU       #   次に動かすユニット
-        self.board = None       #   盤面上のユニットを管理する2次元リスト
-        self.color = {
+        self.master = master # 親ウィジェット
+        self.player = YOU # 次に置く石の色
+        self.board = None # 盤面上の石を管理する２次元リスト
+        self.color = { # 石の色を保持する辞書
             YOU : YOUR_COLOR,
             COM : COM_COLOR
-       }
+        }
 
         # ウィジェットの作成
         self.createWidgets()
@@ -38,50 +35,49 @@ class Move():
         # イベントの設定
         self.setEvents()
 
-        # ゲームの初期化
-        self.initMove()
+        # オセロゲームの初期化
+        self.initOthello()
 
 
     def createWidgets(self):
         '''ウィジェットを作成・配置する'''
-    
-        #   キャンバスの作成
+
+        # キャンバスの作成
         self.canvas = tk.Canvas(
             self.master,
-            bg = BOARD_COLOR,
-            width=CANVAS_WIDTH + 1,     # +1は枠線描画のため
-            height = CANVAS_HEIGHT + 1, # +1は枠線描画のため
-            highlightthickness = 0
+            bg=BOARD_COLOR,
+            width=CANVAS_SIZE+1, # +1は枠線描画のため
+            height=CANVAS_SIZE+1, # +1は枠線描画のため
+            highlightthickness=0
         )
-        self.canvas.pack(padx = 40, pady = 30)
+        self.canvas.pack(padx=10, pady=10)
 
 
     def setEvents(self):
         '''イベントを設定する'''
+
         #   キャンバス上のマウスクリックを受け付ける
         self.canvas.bind('<ButtonPress>', self.click)
 
 
-    def initMove(self):
+    def initOthello(self):
         '''ゲームの初期化を行う'''
 
         # 盤面上の石を管理する２次元リストを作成（最初は全てNone）
-        #[[None for _ in range(10)] for _ in range(10)]
-        self.board = [[None] * NUM_WIDTH for i in range(NUM_HEIGHT)]
+        self.board = [[None] * NUM_SQUARE for i in range(NUM_SQUARE)]
 
         # １マスのサイズ（px）を計算
-        self.square_size = CANVAS_WIDTH // NUM_WIDTH
-        #   縦横比は同じなのでどちらでも可
+        self.square_size = CANVAS_SIZE // NUM_SQUARE
 
         # マスを描画
-        for y in range(NUM_HEIGHT):
-            for x in range(NUM_WIDTH):
+        for y in range(NUM_SQUARE):
+            for x in range(NUM_SQUARE):
                 # 長方形の開始・終了座標を計算
                 xs = x * self.square_size
                 ys = y * self.square_size
                 xe = (x + 1) * self.square_size
                 ye = (y + 1) * self.square_size
-
+                
                 # 長方形を描画
                 tag_name = 'square_' + str(x) + '_' + str(y)
                 self.canvas.create_rectangle(
@@ -91,10 +87,10 @@ class Move():
                 )
 
         # あなたの石の描画位置を計算
-        your_init_pos_1_x = NUM_WIDTH // 2
-        your_init_pos_1_y = NUM_HEIGHT // 2
-        your_init_pos_2_x = NUM_WIDTH // 2 - 1
-        your_init_pos_2_y = NUM_HEIGHT // 2 - 1
+        your_init_pos_1_x = NUM_SQUARE // 2
+        your_init_pos_1_y = NUM_SQUARE // 2
+        your_init_pos_2_x = NUM_SQUARE // 2 - 1
+        your_init_pos_2_y = NUM_SQUARE // 2 - 1
 
         your_init_pos = (
             (your_init_pos_1_x, your_init_pos_1_y),
@@ -106,10 +102,10 @@ class Move():
             self.drawDisk(x, y, self.color[YOU])
 
         # 対戦相手の石の描画位置を計算
-        com_init_pos_1_x = NUM_WIDTH // 2 - 1
-        com_init_pos_1_y = NUM_HEIGHT // 2
-        com_init_pos_2_x = NUM_WIDTH // 2
-        com_init_pos_2_y = NUM_HEIGHT // 2 - 1
+        com_init_pos_1_x = NUM_SQUARE // 2 - 1
+        com_init_pos_1_y = NUM_SQUARE // 2
+        com_init_pos_2_x = NUM_SQUARE // 2
+        com_init_pos_2_y = NUM_SQUARE // 2 - 1
 
         com_init_pos = (
             (com_init_pos_1_x, com_init_pos_1_y),
@@ -152,19 +148,21 @@ class Move():
         # 描画した円の色を管理リストに記憶させておく
         self.board[y][x] = color
 
+
     def getPlacable(self):
         '''次に置くことができる石の位置を取得'''
 
         placable = []
 
-        for y in range(NUM_HEIGHT):
-            for x in range(NUM_WIDTH):
+        for y in range(NUM_SQUARE):
+            for x in range(NUM_SQUARE):
                 # (x,y) の位置のマスに石が置けるかどうかをチェック
                 if self.checkPlacable(x, y):
                     # 置けるならその座標をリストに追加
                     placable.append((x, y))
 
         return placable
+
 
     def checkPlacable(self, x, y):
         '''(x,y)に石が置けるかどうかをチェック'''
@@ -187,7 +185,7 @@ class Move():
                     continue
 
                 # その方向が盤面外になる場合も次の方向の確認に移る
-                if x + i < 0 or x + i >= NUM_WIDTH or y + j < 0 or y + j >= NUM_HEIGHT:
+                if x + i < 0 or x + i >= NUM_SQUARE or y + j < 0 or y + j >= NUM_SQUARE:
                     continue
 
                 # 隣が相手の色でなければその方向に石を置いても裏返せない
@@ -195,9 +193,9 @@ class Move():
                     continue
 
                 # 置こうとしているマスから遠い方向へ１マスずつ確認
-                for s in range(2, NUM_HEIGHT):
+                for s in range(2, NUM_SQUARE):
                     # 盤面外のマスはチェックしない
-                    if x + i * s >= 0 and x + i * s < NUM_WIDTH and y + j * s >= 0 and y + j * s < NUM_HEIGHT:
+                    if x + i * s >= 0 and x + i * s < NUM_SQUARE and y + j * s >= 0 and y + j * s < NUM_SQUARE:
                         
                         if self.board[y + j * s][x + i * s] == None:
                             # 自分の石が見つかる前に空きがある場合
@@ -211,18 +209,19 @@ class Move():
         # 裏返せる石がなかったので(x,y)に石は置けない
         return False
 
+
     def showPlacable(self, placable):
         '''placableに格納された次に石が置けるマスの色を変更する'''
 
-        for y in range(NUM_WIDTH):
-            for x in range(NUM_HEIGHT):
+        for y in range(NUM_SQUARE):
+            for x in range(NUM_SQUARE):
 
                 # fillを変更して石が置けるマスの色を変更
                 tag_name = 'square_' + str(x) + '_' + str(y)
                 if (x, y) in placable:
                     self.canvas.itemconfig(
                         tag_name,
-                        fill=VISIBLE_COLOR
+                        fill=PLACABLE_COLOR
                     )
 
                 else:
@@ -230,6 +229,7 @@ class Move():
                         tag_name,
                         fill=BOARD_COLOR
                     )
+
 
     def click(self, event):
         '''盤面がクリックされた時の処理'''
@@ -245,6 +245,7 @@ class Move():
         if self.checkPlacable(x, y):
             # 次に石を置けるマスであれば石を置く
             self.place(x, y, self.color[self.player])
+
 
     def place(self, x, y, color):
         '''(x,y)に色がcolorの石を置く'''
@@ -279,6 +280,7 @@ class Move():
             # 次のプレイヤーがCOMの場合は1秒後にCOMに石を置く場所を決めさせる
             self.master.after(1000, self.com)
 
+
     def reverse(self, x, y):
         '''(x,y)に石が置かれた時に裏返す必要のある石を裏返す'''
 
@@ -297,7 +299,7 @@ class Move():
                 if i == 0 and j == 0:
                     continue
 
-                if x + i < 0 or x + i >= NUM_HEIGHT or y + j < 0 or y + j >= NUM_WIDTH:
+                if x + i < 0 or x + i >= NUM_SQUARE or y + j < 0 or y + j >= NUM_SQUARE:
                     continue
 
                 # 隣が相手の色でなければその方向で裏返せる石はない
@@ -305,9 +307,9 @@ class Move():
                     continue
 
                 # 置こうとしているマスから遠い方向へ１マスずつ確認
-                for s in range(2, NUM_WIDTH):
+                for s in range(2, NUM_SQUARE):
                     # 盤面外のマスはチェックしない
-                    if x + i * s >= 0 and x + i * s < NUM_HEIGHT and y + j * s >= 0 and y + j * s < NUM_WIDTH:
+                    if x + i * s >= 0 and x + i * s < NUM_SQUARE and y + j * s >= 0 and y + j * s < NUM_SQUARE:
                         
                         if self.board[y + j * s][x + i * s] == None:
                             # 自分の石が見つかる前に空きがある場合
@@ -329,6 +331,7 @@ class Move():
                                 )
                             
                             break
+
 
     def nextPlayer(self):
         '''次に石を置くプレイヤーを決める'''
@@ -355,6 +358,7 @@ class Move():
                 # それでも置けないのであれば両者とも石を置けないということ
                 self.player = None
 
+
     def showResult(self):
         '''ゲーム終了時の結果を表示する'''
 
@@ -362,8 +366,8 @@ class Move():
         num_your = 0
         num_com = 0
 
-        for y in range(NUM_WIDTH):
-            for x in range(NUM_HEIGHT):
+        for y in range(NUM_SQUARE):
+            for x in range(NUM_SQUARE):
                 if self.board[y][x] == YOUR_COLOR:
                     num_your += 1
                 elif self.board[y][x] == COM_COLOR:
@@ -371,6 +375,7 @@ class Move():
         
         # 結果をメッセージボックスで表示する
         tk_m.showinfo('結果', 'あなた' + str(num_your) + '：COM' + str(num_com))
+
 
     def com(self):
         '''COMに石を置かせる'''
@@ -384,54 +389,10 @@ class Move():
         # 石を置く
         self.place(x, y, COM_COLOR)
 
+
 # スクリプト処理ここから
 app = tk.Tk()
-app.geometry("1280x960")
-app.title('move')
-move = Move(app)
+app.title('othello')
+othello = Othello(app)
 app.mainloop()
 
-#これで描画できる
-# Canvasの生成
-#canvas = tk.Canvas(root)
-# Canvasを配置
-#canvas.pack(fill = tk.BOTH, expand = True)
-
-# 扇形の座標
-# 左上(x1, y1)
-#x1 = 10
-#y1 = 10
-# 右下(x2, y2)
-#x2 = 200
-#y2 = 200
-# 作成の方法が四角形の左上と右下の座標から生成する。
-#extent_type = 100
-
-#  扇形の作成
-#canvas.create_arc(x1, y1, x2, y2, width=1, extent=extent_type, start=10)
-
-# 基準の点からのずれの分を戻すために初期座標のx1,y1をx1_1,x2_1・y1_1,y2_1にそれぞれ加算する
-# 左上(x1_1, y1_1)
-#x1_1 = ((x2 - x1) / 2 - 5) + x1
-#y1_1 = ((y2 - y1) / 2 - 5) + y1
-# 右下(x2_1, y2_1)
-#x2_1 = ((x2 - x1) / 2 + 5) + x1
-#y2_1 = ((y2 - y1) / 2 + 5) + y1
-
-#  円の作成
-#canvas.create_oval(x1_1, y1_1, x2_1, y2_1, width=5, fill="#ff0000")
-
-# Canvasの作成
-#canvas = tk.Canvas(root, bg = "white")
-# Canvasを配置
-#canvas.pack(fill = tk.BOTH, expand = True)
-#canvas.create_oval(x0, y0, x1, y1, )
-# 線の描画
-#canvas.create_line(20, 10, 280, 190, fill = "Blue", width = 5)
-
-
-#root = tk.Tk()
-#root.geometry("1280x960")
-#root.title('windowPlactice')
-#move = Move(root)
-#root.mainloop()
