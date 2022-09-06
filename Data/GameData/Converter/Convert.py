@@ -16,8 +16,8 @@ buttonConvert = None # コンバートボタン
 # 各種フラグ群
 sheetBln = {} # シート一覧チェックボックスのフラグ群
 
-# シート一覧チェックボッス用
-selectSheeteNameIndex = 0
+sheetNameList = {}
+selectSheeteNameIndex = 0 # シート一覧チェックボックス用
 
 # ファイル指定の関数
 def filedialog_clicked():
@@ -31,7 +31,7 @@ def filedialog_clicked():
 def ConverBinaryDataFromExcel(filePath):
     # Excelファイルの読み込み
     excelManager = excelFileManager()
-    readData = excelManager.ReadExcelFile(filePath)
+    readData = excelManager.ReadExcelFile(filePath, GetSelectSheetName())
     
     binaryManager = binaryFileManager()
     dir = os.path.dirname(filePath)
@@ -40,6 +40,13 @@ def ConverBinaryDataFromExcel(filePath):
     afterFileName = beforeFileName + ".bin"
     convertFilePath = dir + "/" + afterFileName
     binaryManager.WriteFileFromString(convertFilePath, readData.to_string())
+
+def GetSelectSheetName():
+    for i in range(len(sheetBln)):
+        if sheetBln[i].get():
+            return sheetNameList[i]
+
+    return None
 
 # 実行ボタン押下時の実行関数
 def conductMain():
@@ -57,7 +64,8 @@ def conductMain():
 
 def CheckSelectFile():
     excelManager = excelFileManager()
-    sheetList = excelManager.ReadExcelSheetNames(entrySelectFile.get())
+    global sheetNameList
+    sheetNameList = excelManager.ReadExcelSheetNames(entrySelectFile.get())
 
     frameSheetLabel = ttk.Frame(window, padding=5)
     frameSheetLabel.grid(row=2,column=0,sticky=NW)
@@ -67,13 +75,13 @@ def CheckSelectFile():
     frameSheet = ttk.Frame(window, padding=5)
     frameSheet.grid(row=2,column=1,sticky=NW)
     global sheetBln
-    for i in range(len(sheetList)):
+    for i in range(len(sheetNameList)):
         sheetBln[i] = tkinter.BooleanVar()
         if i == 0:
             sheetBln[i].set(True)
             buttonConvert['state'] = tkinter.NORMAL 
             selectSheeteNameIndex = i
-        chk = tkinter.Checkbutton(frameSheet, variable=sheetBln[i], text=sheetList[i], command=SelectSheeteNamesCheckBox) 
+        chk = tkinter.Checkbutton(frameSheet, variable=sheetBln[i], text=sheetNameList[i], command=SelectSheeteNamesCheckBox) 
         chk.grid(row=0,column=i)
         
 

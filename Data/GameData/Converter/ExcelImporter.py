@@ -3,8 +3,8 @@ import pandas as pd
 class excelFileManager:
 
     # Excelファイルを読み込む
-    def ReadExcelFile(self, filePath):
-        readData = pd.read_excel(filePath)
+    def ReadExcelFile(self, filePath, sheetName):
+        readData = pd.read_excel(filePath, sheet_name=sheetName)
         return readData
     
     # シート名を読み込む
