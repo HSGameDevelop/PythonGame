@@ -87,7 +87,8 @@ class Move():
                 self.canvas.create_rectangle(
                     xs, ys,
                     xe, ye,
-                    tag=tag_name
+                    tag=tag_name,
+                    outline = "white"
                 )
 
         # あなたの石の描画位置を計算
@@ -207,7 +208,20 @@ class Move():
                         # その方向に自分の色の石があれば石が裏返せる
                         if self.board[y + j * s][x + i * s] == self.color[self.player]:
                             return True
-        
+
+                # 置こうとしているマスから遠い方向へ１マスずつ確認
+                for e in range(2, NUM_WIDTH):
+                    # 盤面外のマスはチェックしない
+                    if x + i * e >= 0 and x + i * e < NUM_WIDTH and y + j * e >= 0 and y + j * e < NUM_HEIGHT:
+                        
+                        if self.board[y + j * e][x + i * e] == None:
+                            # 自分の石が見つかる前に空きがある場合
+                            # この方向の石は裏返せないので次の方向をチェック
+                            break
+
+                        # その方向に自分の色の石があれば石が裏返せる
+                        if self.board[y + j * e][x + i * e] == self.color[self.player]:
+                            return True
         # 裏返せる石がなかったので(x,y)に石は置けない
         return False
 
@@ -307,7 +321,7 @@ class Move():
                 # 置こうとしているマスから遠い方向へ１マスずつ確認
                 for s in range(2, NUM_WIDTH):
                     # 盤面外のマスはチェックしない
-                    if x + i * s >= 0 and x + i * s < NUM_HEIGHT and y + j * s >= 0 and y + j * s < NUM_WIDTH:
+                    if x + i * s >= 0 and x + i * s < NUM_WIDTH and y + j * s >= 0 and y + j * s < NUM_HEIGHT:
                         
                         if self.board[y + j * s][x + i * s] == None:
                             # 自分の石が見つかる前に空きがある場合
@@ -317,6 +331,32 @@ class Move():
                         # その方向に自分の色の石があれば石が裏返せる
                         if self.board[y + j * s][x + i * s] == self.color[self.player]:
                             for n in range(1, s):
+
+                                # 盤面の石の管理リストを石を裏返した状態に更新
+                                self.board[y + j * n][x + i * n] = self.color[self.player]
+
+                                # 石の色を変更することで石の裏返しを実現
+                                tag_name = 'disk_' + str(x + i * n) + '_' + str(y + j * n)
+                                self.canvas.itemconfig(
+                                    tag_name,
+                                    fill=self.color[self.player]
+                                )
+                            
+                            break
+                
+                                # 置こうとしているマスから遠い方向へ１マスずつ確認
+                for e in range(2, NUM_HEIGHT):
+                    # 盤面外のマスはチェックしない
+                    if x + i * e >= 0 and x + i * e < NUM_WIDTH and y + j * e >= 0 and y + j * e < NUM_HEIGHT:
+                        
+                        if self.board[y + j * e][x + i * e] == None:
+                            # 自分の石が見つかる前に空きがある場合
+                            # この方向の石は裏返せないので次の方向をチェック
+                            break
+
+                        # その方向に自分の色の石があれば石が裏返せる
+                        if self.board[y + j * e][x + i * e] == self.color[self.player]:
+                            for n in range(1, e):
 
                                 # 盤面の石の管理リストを石を裏返した状態に更新
                                 self.board[y + j * n][x + i * n] = self.color[self.player]
