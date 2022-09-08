@@ -52,7 +52,7 @@ def FilterData(data):
     selectColumns = GetSelectColumns();
     filterCount = len(selectColumns)
 
-    # 強引にフィルターを掛ける
+    # 強引に列フィルターを掛ける
     if filterCount == 1:
         returnData = returnData.filter(items=[selectColumns[0]])
     elif filterCount == 2:
