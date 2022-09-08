@@ -18,6 +18,12 @@ sheetBln = {} # シート一覧チェックボックスのフラグ群
 
 sheetNameList = {}
 selectSheeteNameIndex = 0 # シート一覧チェックボックス用
+readData = None
+
+# 列名用変数一覧
+frameColumn = None
+columnBln = {} # 列一覧チェックボックスのフラグ群
+checkBoxComlumns = {}
 
 # ファイル指定の関数
 def filedialog_clicked():
@@ -29,18 +35,48 @@ def filedialog_clicked():
 
 # バイナリファイルへのコンバート
 def ConverBinaryDataFromExcel(filePath):
-    # Excelファイルの読み込み
-    excelManager = excelFileManager()
-    readData = excelManager.ReadExcelFile(filePath, GetSelectSheetName())
-    
+    #global readData
+    # 読み込んでいるデータにフィルターを掛ける
+    writeData = FilterData(readData)
+    # 確認用
+    print(writeData)
+    # バイナリファイルの作成
     binaryManager = binaryFileManager()
+    convertFilePath = ExtensionToBin(filePath)
+    binaryManager.WriteFileFromString(convertFilePath, writeData.to_string())
+
+# データにフィルターを掛ける
+def FilterData(data):
+    returnData = data
+    
+    selectColumns = GetSelectColumns();
+    filterCount = len(selectColumns)
+
+    # 強引にフィルターを掛ける
+    if filterCount == 1:
+        returnData = returnData.filter(items=[selectColumns[0]])
+    elif filterCount == 2:
+        returnData = returnData.filter(items=[selectColumns[0], selectColumns[1]])
+    elif filterCount == 3:
+        returnData = returnData.filter(items=[selectColumns[0], selectColumns[1], selectColumns[2]])
+    elif filterCount == 4:
+        returnData = returnData.filter(items=[selectColumns[0], selectColumns[1], selectColumns[2], selectColumns[3]])
+    elif filterCount == 5:
+        returnData = returnData.filter(items=[selectColumns[0], selectColumns[1], selectColumns[2], selectColumns[3], selectColumns[4]])
+    elif filterCount == 6:
+        returnData = returnData.filter(items=[selectColumns[0], selectColumns[1], selectColumns[2], selectColumns[3], selectColumns[4], selectColumns[5]])
+
+    return returnData
+
+# .binに拡張子を変換する
+def ExtensionToBin(filePath):
     dir = os.path.dirname(filePath)
     path = pathlib.Path(filePath)
     beforeFileName = path.stem
     afterFileName = beforeFileName + ".bin"
-    convertFilePath = dir + "/" + afterFileName
-    binaryManager.WriteFileFromString(convertFilePath, readData.to_string())
+    return dir + "/" + afterFileName
 
+# 選択しているシートの名前を取得
 def GetSelectSheetName():
     for i in range(len(sheetBln)):
         if sheetBln[i].get():
@@ -54,18 +90,24 @@ def conductMain():
     filePath = entrySelectFile.get()
 
     if filePath:
-        text += "ファイルパス：" + filePath + "\nのコンバートを行いました。"
         ConverBinaryDataFromExcel(filePath)
+        text += "ファイルパス：" + filePath + "\nシート名："+ sheetNameList[selectSheeteNameIndex] +"\n列名："+ GetSelectColumns()[0] +"\nのコンバートを行いました。"
 
     if text:
         messagebox.showinfo("info", text)
     else:
         messagebox.showerror("error", "パスの指定がありません。")
 
+# 読み込みボタン押下時の処理
 def CheckSelectFile():
+    global selectSheeteNameIndex
+    global buttonConvert
+    buttonConvert['state'] = tkinter.DISABLED
+
     excelManager = excelFileManager()
     global sheetNameList
-    sheetNameList = excelManager.ReadExcelSheetNames(entrySelectFile.get())
+    filePath = entrySelectFile.get()
+    sheetNameList = excelManager.ReadExcelSheetNames(filePath)
 
     frameSheetLabel = ttk.Frame(window, padding=5)
     frameSheetLabel.grid(row=2,column=0,sticky=NW)
@@ -79,26 +121,90 @@ def CheckSelectFile():
         sheetBln[i] = tkinter.BooleanVar()
         if i == 0:
             sheetBln[i].set(True)
-            buttonConvert['state'] = tkinter.NORMAL 
             selectSheeteNameIndex = i
-        chk = tkinter.Checkbutton(frameSheet, variable=sheetBln[i], text=sheetNameList[i], command=SelectSheeteNamesCheckBox) 
+        chk = tkinter.Checkbutton(frameSheet, variable=sheetBln[i], text=sheetNameList[i], command=SelectSheetNamesCheckBox) 
         chk.grid(row=0,column=i)
-        
+    
+    # 列名用テキスト作成
+    frameColumnLabel = ttk.Frame(window, padding=5)
+    frameColumnLabel.grid(row=3,column=0,sticky=NW)
+    labelColumn = ttk.Label(frameColumnLabel, text="列名一覧：", padding=(5, 2))
+    labelColumn.pack(side=LEFT)
 
-def SelectSheeteNamesCheckBox():
+    # 列名チェックボックスの更新
+    DestroyColumnsCheckBox()
+    CreateColumnsCheckBox(filePath)
+
+# 列名のチェックボックスを作成する
+def CreateColumnsCheckBox(filePath):
+    # Excelファイルの読み込み
+    global readData
+    excelManager = excelFileManager()
+    readData = excelManager.ReadExcelFile(filePath, GetSelectSheetName())
+    dataColumn = readData.columns
+    
+    # 各列名用チェックボックス作成
+    global frameColumn
+    global columnBln
+    global checkBoxComlumns
+    frameColumn = ttk.Frame(window, padding=5)
+    frameColumn.grid(row=3,column=1,sticky=NW)
+    for i in range(len(dataColumn)):
+        columnBln[i] = tkinter.BooleanVar()        
+        checkBoxComlumns[i] = tkinter.Checkbutton(frameColumn, variable=columnBln[i], text=dataColumn[i], command=SelectColumnsCheckBox) 
+        checkBoxComlumns[i].grid(row=0,column=i)     
+
+# 列名のチェックボックスを削除する
+def DestroyColumnsCheckBox():
+    global frameColumn
+    global columnBln
+    global checkBoxComlumns
+    for i in range(len(checkBoxComlumns)):
+        checkBoxComlumns[i].destroy()
+
+    columnBln.clear()
+
+# 選択している列を取得する
+def GetSelectColumns():
+    dataColumn = readData.columns
+    selectColumns = {}
+    index = 0
+    for i in range(len(columnBln)):
+        if columnBln[i].get():
+            selectColumns[index] = dataColumn[i]
+            index += 1
+    return selectColumns
+    
+# シート名チェックボックス押下時の処理
+def SelectSheetNamesCheckBox():
     global buttonConvert
     global selectSheeteNameIndex
-    buttonConvert['state'] = tkinter.DISABLED
 
     for i in range(len(sheetBln)):
         if i == selectSheeteNameIndex:
             sheetBln[i].set(not sheetBln[i].get())
 
         if sheetBln[i].get():
-            buttonConvert['state'] = tkinter.NORMAL 
+            #buttonConvert['state'] = tkinter.NORMAL 
             if i != selectSheeteNameIndex:
+                buttonConvert['state'] = tkinter.DISABLED
                 sheetBln[selectSheeteNameIndex].set(False)
                 selectSheeteNameIndex = i
+                
+                # 列名一覧の更新
+                filePath = entrySelectFile.get()
+                DestroyColumnsCheckBox()
+                CreateColumnsCheckBox(filePath)
+            break
+
+# 列名チェックボックス押下時の処理
+def SelectColumnsCheckBox():
+    global buttonConvert
+    buttonConvert['state'] = tkinter.DISABLED
+
+    for i in range(len(columnBln)):
+        if columnBln[i].get():
+            buttonConvert['state'] = tkinter.NORMAL 
             break
     
 # ウィンドウを画面中央に作成
@@ -168,5 +274,5 @@ if __name__ == "__main__":
     entrySelectFile = CreateSelectFile(window)
 
     CreateButtons(window)
-
+    
     window.mainloop()
