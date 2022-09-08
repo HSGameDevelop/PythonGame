@@ -6,8 +6,8 @@ CANVAS_WIDTH = 1200
 CANVAS_HEIGHT = 900
 
 # 横方向・縦方向のマスの数
-NUM_WIDTH = 40
-NUM_HEIGHT = 30
+NUM_WIDTH = 20
+NUM_HEIGHT = 20
 
 # 色の設定
 BOARD_COLOR = 'black' # 盤面全体（見えない位置）
@@ -30,7 +30,7 @@ class Move():
         self.color = {
             YOU : YOUR_COLOR,
             COM : COM_COLOR
-       }
+        }
 
         # ウィジェットの作成
         self.createWidgets()
