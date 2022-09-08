@@ -38,12 +38,14 @@ def ConverBinaryDataFromExcel(filePath):
     #global readData
     # 読み込んでいるデータにフィルターを掛ける
     writeData = FilterData(readData)
-    # 確認用
-    print(writeData)
+    
     # バイナリファイルの作成
     binaryManager = binaryFileManager()
     convertFilePath = ExtensionToBin(filePath)
     binaryManager.WriteFileFromString(convertFilePath, writeData.to_string())
+
+    # 確認用
+    print(binaryManager.ReadFileToString(convertFilePath))
 
 # データにフィルターを掛ける
 def FilterData(data):
