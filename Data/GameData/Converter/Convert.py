@@ -65,6 +65,14 @@ def FilterData(data):
         returnData = returnData.filter(items=[selectColumns[0], selectColumns[1], selectColumns[2], selectColumns[3], selectColumns[4]])
     elif filterCount == 6:
         returnData = returnData.filter(items=[selectColumns[0], selectColumns[1], selectColumns[2], selectColumns[3], selectColumns[4], selectColumns[5]])
+    elif filterCount == 7:
+        returnData = returnData.filter(items=[selectColumns[0], selectColumns[1], selectColumns[2], selectColumns[3], selectColumns[4], selectColumns[5], selectColumns[6]])
+    elif filterCount == 8:
+        returnData = returnData.filter(items=[selectColumns[0], selectColumns[1], selectColumns[2], selectColumns[3], selectColumns[4], selectColumns[5], selectColumns[6], selectColumns[7]])
+    elif filterCount == 9:
+        returnData = returnData.filter(items=[selectColumns[0], selectColumns[1], selectColumns[2], selectColumns[3], selectColumns[4], selectColumns[5], selectColumns[6], selectColumns[7], selectColumns[8]])
+    elif filterCount == 10:
+        returnData = returnData.filter(items=[selectColumns[0], selectColumns[1], selectColumns[2], selectColumns[3], selectColumns[4], selectColumns[5], selectColumns[6], selectColumns[7], selectColumns[8], selectColumns[9]])
 
     return returnData
 
@@ -91,7 +99,7 @@ def conductMain():
 
     if filePath:
         ConverBinaryDataFromExcel(filePath)
-        text += "ファイルパス：" + filePath + "\nシート名："+ sheetNameList[selectSheeteNameIndex] +"\n列名："+ GetSelectColumns()[0] +"\nのコンバートを行いました。"
+        text += "ファイルパス：" + filePath + "\nシート名："+ sheetNameList[selectSheeteNameIndex] +"\nのコンバートを行いました。"
 
     if text:
         messagebox.showinfo("info", text)
