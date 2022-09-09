@@ -53,7 +53,7 @@ class Move():
             height = CANVAS_HEIGHT + 1, # +1は枠線描画のため
             highlightthickness = 0
         )
-        self.canvas.pack(padx = 40, pady = 30)
+        self.canvas.pack(padx = 120, pady = 120)
 
 
     def setEvents(self):
