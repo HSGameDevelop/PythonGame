@@ -42,7 +42,7 @@ def ConverBinaryDataFromExcel(filePath):
     # バイナリファイルの作成
     binaryManager = binaryFileManager()
     convertFilePath = ExtensionToBin(filePath)
-    binaryManager.WriteFileFromString(convertFilePath, writeData.to_string())
+    binaryManager.WriteFileFromString(convertFilePath, writeData)
 
     # 確認用
     print(binaryManager.ReadFileToString(convertFilePath))

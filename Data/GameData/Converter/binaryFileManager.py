@@ -1,5 +1,6 @@
 from pydoc import writedoc
 import codecs
+import numpy as np
 
 class binaryFileManager:
 
@@ -34,9 +35,35 @@ class binaryFileManager:
     # 文字列をファイルに書き込む
     def WriteFileFromString(self, filepath, data):
         file = self.OpenFileWrite(filepath)
-        writeData = self.EncodeDataBytes16(data)
+        writeData = self.ConvertString(data)
+        writeData = self.EncodeDataBytes16(writeData)
         file.write(writeData)
         file.close()
+
+    # 文字列への変換処理
+    def ConvertString(self, data):
+        str = ''
+        columnSize = len(data.columns)
+
+        # データ名を先頭行に文字列としてつけておく
+        for i in range(columnSize):
+            str += data.columns[i] + ','
+        str += '\n'
+        
+        # 各データの値を文字列に変換
+        dataSize = data.size
+        for i in range(dataSize):
+            row = i // columnSize
+            col = i % columnSize
+            tmp = data.iat[row, col]
+            if type(tmp) is np.int64:
+                tmp = tmp.astype(np.unicode_)
+            addStr =  tmp + ','
+            if (col) == (columnSize - 1):
+                addStr += '\n'
+            str += addStr
+
+        return str
 
     # １６進数のバイト文字に変換
     def EncodeDataBytes16(self, data):
