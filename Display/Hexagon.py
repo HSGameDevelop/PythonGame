@@ -18,12 +18,9 @@ VISIBLE_COLOR = 'white'     # ユニットから見える範囲（カラー）
 DEAD_COLOR = 'red'          # 侵入不可エリア
 OUT_LINE_COLOR = 'black'    # 枠線の色
 
+
 #六角形の幅 w = sqrt(3) * sizeと高さはh = 2 * sizeです。sqrt(3) は sin(60°) 　b/c   c=斜線
 #(x, y)900*800 とすると　w = 45
-#h_w = 45
-#h_w1_4 = 45 / 4
-#h_w1_2 = 45 / 2
-#h_w3_4 = 45 * (3 / 4)
 # 中央座標の取り方
 # (x,y)の時、(h_w*x, h_w1_4 + h_w3_4*y)
 
@@ -38,25 +35,8 @@ class Hexagon:
         self.h_w1_2 = 45 / 2
         self.h_w3_4 = 45 * (3 / 4)
 
-        # ウィジェットの作成
-        self.createWidgets()
-
         # ゲームの初期化
         self.initMap()
-
-
-    def createWidgets(self):
-        '''ウィジェットを作成・配置する'''
-    
-        #   キャンバスの作成
-        self.canvas = tk.Canvas(
-            self.master,
-            bg = BOARD_COLOR,
-            width   = CANVAS_WIDTH,     # +1は枠線描画のため
-            height  = CANVAS_HEIGHT, # +1は枠線描画のため
-            highlightthickness = 0
-        )
-        self.canvas.pack(padx = 120, pady = 50)
 
     def initMap(self):
         '''マップの初期化を行う'''
@@ -65,6 +45,7 @@ class Hexagon:
         #[[None for _ in range(10)] for _ in range(10)]
         self.board = [[None] * (NUM_WIDTH) for i in range(NUM_HEIGHT)]
 
+        self.m_xy = []
         # マスを描画
         for y in range(NUM_HEIGHT):
             for x in range(NUM_WIDTH):
@@ -107,12 +88,19 @@ class Hexagon:
                     #   南東の点
                     xwe = xne
                     ywe = yws
+                self.m_xy.append([x, y, xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe])
 
                 #---６点指定 六角形
                 #canvas.create_polygon( (450, 60), (425, 17), (375, 17), (350, 60), (375, 103), (425, 103))
-                if y == 0 or y == (NUM_HEIGHT - 1) or x == 0 or x == (NUM_WIDTH - 1):
-                    self.canvas.create_polygon(xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, fill=DEAD_COLOR, outline=OUT_LINE_COLOR)
-                else:
-                    self.canvas.create_polygon(xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, fill=BOARD_COLOR, outline=OUT_LINE_COLOR)
+                #if y == 0 or y == (NUM_HEIGHT - 1) or x == 0 or x == (NUM_WIDTH - 1):
+                    #self.canvas.create_polygon(xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, fill=DEAD_COLOR, outline=OUT_LINE_COLOR)
+                #else:
+                    #self.canvas.create_polygon(xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, fill=BOARD_COLOR, outline=OUT_LINE_COLOR)
+        return self.m_xy
 
 
+#app = tk.Tk()
+#app.geometry("1280x960")
+#app.title('player test')
+#Hex = Hexagon(app)
+#app.mainloop()
