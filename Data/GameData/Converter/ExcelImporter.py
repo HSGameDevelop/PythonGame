@@ -2,10 +2,19 @@ import pandas as pd
 
 class excelFileManager:
 
-    def ReadExcelFile(self, filePath):
-        readData = pd.read_excel(filePath)
+    # Excelファイルを読み込む
+    def ReadExcelFile(self, filePath, sheetName):
+        readData = pd.read_excel(filePath, sheet_name=sheetName)
         return readData
+    
+    # シート名を読み込む
+    def ReadExcelSheetNames(self, filePath):
+        file = pd.ExcelFile(filePath)
+        return file.sheet_names
 
+    # CSVファイルを読み込む
     def ReadCsvFile(self, filePath):
         readData = pd.read_csv(filePath, encoding = "shift-jis")
         return readData
+
+
