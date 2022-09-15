@@ -9,4 +9,4 @@ class GameData:
     def LoadData(self):
         # キャラクターデータの読み込み
         cdl = CharacterDataLoader()
-        characterData = cdl.LoadData()
+        characterData = cdl.LoadCharacterData()
