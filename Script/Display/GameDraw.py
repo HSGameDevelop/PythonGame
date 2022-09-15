@@ -1,8 +1,11 @@
 import tkinter as tk
+import sys, os
 # マップ表示のクラス
-import Map
-# プレイヤー表示のクラス　未完
-import Character
+sys.path.append('/Script/Display/')
+from Script.Display.Map import Map
+# プレイヤー表示のクラス
+sys.path.append('/Script/Display/')
+from Script.Display.Character import Character, Player, Enemy
 
 CANVAS_WIDTH =  969
 CANVAS_HEIGHT = 732
@@ -27,11 +30,11 @@ class GameDraw:
         '''コンストラクタ'''
         self.master = master    #   親ウィジェット
         self.createWidgets()
-        self.map = Map.Map()
+        self.map = Map()
 
         self.characters = []
-        self.player = Character.Player()
-        self.enemy = Character.Enemy()
+        self.player = Player()
+        self.enemy = Enemy()
         
         # マップの描画
         self.drawMap(self.map)
@@ -92,9 +95,8 @@ class GameDraw:
     #        )
 
 
-app = tk.Tk()
-app.geometry("1280x960")
-app.title('world trigger')
-game = GameDraw(app)
+#app = tk.Tk()
+#app.geometry("1280x960")
+#game = GameDraw(app)
 #player = Player.Player(app)
-app.mainloop()
+#app.mainloop()

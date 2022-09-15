@@ -1,16 +1,10 @@
 import tkinter as tk
-import GameDraw as GD
+import sys, os
+sys.path.append('../../Script/Display/')
+from Script.Display.GameDraw import GameDraw
 
 class Game:    
     def __init__(self, master):
         self.master = master
+        self.gd = GameDraw(self.master)
 
-        self.gd = GD.GameDraw(self.master)
-
-
-app = tk.Tk()
-app.geometry("1280x960")
-app.title('Kings')
-game = Game(app)
-#player = Player.Player(app)
-app.mainloop()
