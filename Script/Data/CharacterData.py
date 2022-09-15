@@ -3,8 +3,6 @@ import sys, os
 sys.path.append('../../Script/Data/')
 from Script.Data.DataBase import DataLoaderBase
 
-
-
 class CharacterData:
     def __init__(self):
         self.characterId = 0    # キャラクターID
@@ -17,7 +15,7 @@ class CharacterDataLoader(DataLoaderBase):
     LOAD_FILE_NAME = 'Character.bin'
     LOAD_FILE_PATH = DataLoaderBase.LOAD_BIN_FILE_DIRECTORY + LOAD_FILE_NAME
 
-    # データの読みこみ
+    # キャラクターデータの読みこみ
     def LoadCharacterData(self) -> CharacterData:
         return super().LoadData(self.LOAD_FILE_PATH, self.ConvertCharacterData)
 
@@ -32,7 +30,3 @@ class CharacterDataLoader(DataLoaderBase):
         characterData = CharacterData()
         characterData = super().CreateOutputData(data, columns, characterData)
         return characterData
-
-
-
-
