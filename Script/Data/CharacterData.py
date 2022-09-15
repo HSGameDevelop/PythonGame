@@ -1,6 +1,7 @@
 import sys, os
-sys.path.append('../System/IO/')
-from ..System.IO.BinaryFileManager import BinaryFileManager
+
+sys.path.append('../../Script/Data/')
+from Script.Data.DataBase import DataLoaderBase
 
 class CharacterData:
     def __init__(self):
@@ -10,42 +11,22 @@ class CharacterData:
         self.actionPower = 0    # 行動力
         self.skillSetId = 0     # スキルセットID       
     
-class CharacterDataLoader:
+class CharacterDataLoader(DataLoaderBase):
     LOAD_FILE_NAME = 'Character.bin'
-    LOAD_FILE_PATH = os.getcwd() + '/Resource/Bin/' + LOAD_FILE_NAME
+    LOAD_FILE_PATH = DataLoaderBase.LOAD_BIN_FILE_DIRECTORY + LOAD_FILE_NAME
 
-    # データの読みこみ
-    def LoadData(self):
-        bfm = BinaryFileManager()
-        data = bfm.ReadFileToString(self.LOAD_FILE_PATH)
-        return self.ConvertCharacterData(data)
+    # キャラクターデータの読みこみ
+    def LoadCharacterData(self) -> CharacterData:
+        return super().LoadData(self.LOAD_FILE_PATH, self.ConvertCharacterData)
 
     # キャラクターデータへの変換
-    def ConvertCharacterData(self, data):
+    def ConvertCharacterData(self, data) -> CharacterData:
         characterDataList = []
-        convertData = data.splitlines()
-        columns = convertData[0].split(',') # 先頭行はパラメータ名
-
-        for i in range(len(convertData)):
-            if i == 0: # 先頭行はパラメータ名の為、弾く
-                continue
-            characterDataList.append(self.CreateCharacterData(convertData[i], columns))
+        characterDataList = super().ConvertOutputData(data, characterDataList, self.CreateCharacterData)
         return characterDataList
 
     # キャラクターデータの作成
     def CreateCharacterData(self, data, columns)-> CharacterData:
         characterData = CharacterData()
-        keys = list(characterData.__dict__.keys()) 
-        params = data.split(',')
-
-        for i in range(len(params)):
-            for j in range(len(keys)):
-                if keys[j].lower() == columns[i].lower():
-                    characterData.__setattr__(keys[j], params[i]) 
-                    break
-
+        characterData = super().CreateOutputData(data, columns, characterData)
         return characterData
-
-
-
-

@@ -10,7 +10,7 @@ class Game:
 
 app = tk.Tk()
 app.geometry("1280x960")
-app.title('world trigger')
+app.title('Kings')
 game = Game(app)
 #player = Player.Player(app)
 app.mainloop()
