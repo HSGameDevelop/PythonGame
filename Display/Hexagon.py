@@ -43,10 +43,10 @@ class Hexagon:
 
         # 盤面上の石を管理する２次元リストを作成（最初は全てNone）
         #[[None for _ in range(10)] for _ in range(10)]
-        self.board = [[None] * (NUM_WIDTH) for i in range(NUM_HEIGHT)]
+        self.board = [[None for j in range(NUM_WIDTH)] for i in range(NUM_HEIGHT)]
 
         self.m_xy = []
-        # マスを描画
+        # マスを描画    22* 22 = 484
         for y in range(NUM_HEIGHT):
             for x in range(NUM_WIDTH):
                 # 開始・終了座標を計算
@@ -90,13 +90,14 @@ class Hexagon:
                     ywe = yws
                 self.m_xy.append([x, y, xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe])
 
+        return self.m_xy
                 #---６点指定 六角形
                 #canvas.create_polygon( (450, 60), (425, 17), (375, 17), (350, 60), (375, 103), (425, 103))
                 #if y == 0 or y == (NUM_HEIGHT - 1) or x == 0 or x == (NUM_WIDTH - 1):
                     #self.canvas.create_polygon(xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, fill=DEAD_COLOR, outline=OUT_LINE_COLOR)
                 #else:
                     #self.canvas.create_polygon(xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, fill=BOARD_COLOR, outline=OUT_LINE_COLOR)
-        return self.m_xy
+        
 
 
 #app = tk.Tk()

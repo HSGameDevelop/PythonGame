@@ -28,7 +28,6 @@ def rand_ints_check(xl,yl):
 
 
 class Player:
-
     def __init__(self, master):
         self.master = master
         #self.base_y = VIEW_HEIGHT - self.right_image.height()
@@ -82,7 +81,7 @@ class Player:
             
             # (x, y)座標
             tagname = "(" + str(self.xl[num]) + "," + str(self.yl[num]) + ")"
-            self.p_xy.append([num, xns, yn, xne, yw, tagname])
+            self.p_xy.append([num, self.xl[num], self.yl[num], xns, yn, xne, yw, tagname])
 
         return self.p_xy
             #self.canvas.create_oval(xns, yn, xne, yw, fill=YOUR_COLOR)
@@ -91,6 +90,43 @@ class Player:
             #    self.create_text( xns + 4, yn + 10, text=tagname, anchor=tk.NW)
             #elif tag_length == 7:
             #    self.create_text( xns + 2, yn + 10, text=tagname, anchor=tk.NW)
+    def updatePlayer(self, num):    #　行動力でforの回数が変更される予定
+        # ほぼ同時に動かす想定なので、その辺を考えましょう
+        # 移動先を配列で管理して描画する設定
+        for num in range(6):
+            num
+            # 開始・終了座標を計算
+#            if self.p_xy[num][2] % 2 == 0:
+                # 左上のx
+#                xns = self.h_w * self.p_xy[num][1] - self.h_w1_2 + 5
+                # 左上のy
+#                yn = self.h_w3_4 * self.p_xy[num][2] - self.h_w1_4 + 5
+                # 右下のx
+#                xne = self.h_w * (self.p_xy[num][1] + 1) - self.h_w1_2 - 5
+                # 右下のy
+#                yw = self.h_w + (self.h_w3_4 * self.p_xy[num][2]) - self.h_w1_4 - 5 
+#            elif self.p_xy[num][2] % 2 == 1:
+                # 左上のx
+#                xns = (self.h_w * self.p_xy[num][1]) + self.h_w1_2 - self.h_w1_2 + 5
+                # 左上のy
+#                yn = self.h_w3_4 * self.p_xy[num][2] - self.h_w1_4 + 5
+                # 右下のx
+#                xne = self.h_w * (self.p_xy[num][1] + 1) + self.h_w1_2 - self.h_w1_2 - 5
+                # 右下のy
+#                yw = self.h_w1_4 + (self.h_w3_4 * (self.p_xy[num][2] +1)) - self.h_w1_4 - 5
+            
+            # (x, y)座標
+#            tagname = "(" + str(self.p_xy[num][1]) + "," + str(self.p_xy[num][2]) + ")"
+#            self.p_xy[num][1] = self.p_u_xy[num][1]
+#            self.p_xy[num][2] = self.p_u_xy[num][2]
+#            self.p_xy[num][3] = xns
+#            self.p_xy[num][4] = yn
+#            self.p_xy[num][5] = xne
+#            self.p_xy[num][6] = xne
+#            self.p_xy[num][7] = tagname
+            #self.p_xy.append([num, self.p_xy[num][1], self.p_xy[num][2], , , xne, yw, tagname])
+
+#        return self.p_xy
 
 
 
