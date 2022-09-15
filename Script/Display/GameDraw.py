@@ -1,20 +1,17 @@
 import tkinter as tk
 import sys, os
 # マップ表示のクラス
-sys.path.append('/Script/Display/')
-from Script.Display.Map import Map
+#sys.path.append('../../Script/Display/')
+#from Script.Display.Map import Map
+import Map
+
 # プレイヤー表示のクラス
-sys.path.append('/Script/Display/')
-from Script.Display.Character import Character, Player, Enemy
+#sys.path.append('../../Script/Display/')
+#from Script.Display.Character import Character, Player, Enemy
+import Character
 
-CANVAS_WIDTH =  969
-CANVAS_HEIGHT = 732
-
-# 六角形の表示数値(px)
-h_w = 45
-h_w1_4 = 11.25
-h_w1_2 = 22.5
-h_w3_4 = 33.75
+CANVAS_WIDTH =  1100
+CANVAS_HEIGHT = 960
 
 # 色の設定
 BOARD_COLOR = 'gray'        # 盤面全体（見えない位置）
@@ -30,12 +27,15 @@ class GameDraw:
         '''コンストラクタ'''
         self.master = master    #   親ウィジェット
         self.createWidgets()
-        self.map = Map()
+        #self.map = Map()
+        self.map = Map.Map()
 
-        self.characters = []
-        self.player = Player()
-        self.enemy = Enemy()
-        
+        #self.characters = []
+        #self.player = Player()
+        #self.enemy = Enemy()
+        self.player = Character.Player()
+        self.enemy = Character.Enemy()
+
         # マップの描画
         self.drawMap(self.map)
         # プレイヤーの描画
@@ -45,7 +45,7 @@ class GameDraw:
 
     def createWidgets(self):
         '''ウィジェットを作成・配置する'''
-    
+
         #   キャンバスの作成
         self.canvas = tk.Canvas(
             self.master,
@@ -54,10 +54,10 @@ class GameDraw:
             height  = CANVAS_HEIGHT, # +1は枠線描画のため
             highlightthickness = 0
         )
-        self.canvas.pack(padx = 120, pady = 50)
+        self.canvas.pack(anchor=tk.NE)
 
     def drawMap(self, map):
-        #---６点指定 六角形
+        # ６点指定 六角形
         for num in range(484):
             #canvas.create_polygon( (450, 60), (425, 17), (375, 17), (350, 60), (375, 103), (425, 103))
             if map.m_xy[num][1] == 0 or map.m_xy[num][1] == 21 or map.m_xy[num][0] == 0 or map.m_xy[num][0] == 21:
@@ -85,8 +85,11 @@ class GameDraw:
             elif tag_length == 6:
                 self.canvas.create_text( player.xy[num][3] + 4, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
 
+#    def updatePlayer(self, player):
+#        for num in range(6):
+#            self.canvas.move(self.player[num], player.xy[num][3] - 2, player.xy[num][4] + 10)
 
-    #def update(self, player_infos):
+    #def updateEnemy(self, player_infos):
     #    for x, y in player_infos:
     #        self.canvas.create_oval(
     #            xs, ys,
@@ -95,8 +98,7 @@ class GameDraw:
     #        )
 
 
-#app = tk.Tk()
-#app.geometry("1280x960")
-#game = GameDraw(app)
-#player = Player.Player(app)
-#app.mainloop()
+app = tk.Tk()
+app.geometry("1280x960")
+game = GameDraw(app)
+app.mainloop()
