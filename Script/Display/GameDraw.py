@@ -10,7 +10,7 @@ import Map
 #from Script.Display.Character import Character, Player, Enemy
 import Character
 
-CANVAS_WIDTH =  1100
+CANVAS_WIDTH =  1101
 CANVAS_HEIGHT = 960
 
 # 色の設定

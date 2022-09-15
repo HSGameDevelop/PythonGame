@@ -21,7 +21,7 @@ class Map:
         self.h_w1_2 = self.h_w / 2
         self.h_w3_4 = self.h_w * (3 / 4)
 
-        self.h_h = 59.3
+        self.h_h = 59.2
         self.h_h3_4 = self.h_h * (3 / 4)
         self.h_h1_4 = self.h_h / 4
         self.h_h1_2 = self.h_h / 2

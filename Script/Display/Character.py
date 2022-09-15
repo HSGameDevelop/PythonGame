@@ -23,10 +23,17 @@ def rand_ints_check(xl,yl):
                     return False
     return True
 
-h_w = 45
-h_w1_4 = 45 / 4
-h_w1_2 = 45 / 2
-h_w3_4 = 45 * (3 / 4)
+h_w = 51.2
+h_w1_4 = h_w / 4
+h_w1_2 = h_w / 2
+h_w3_4 = h_w * (3 / 4)
+h_w1_10 = h_w / 10
+
+h_h = 59.2
+h_h3_4 = h_h * (3 / 4)
+h_h1_4 = h_h / 4
+h_h1_2 = h_h / 2
+h_h1_10 = h_h / 10
 
 class Character:
     def __init__(self, x_i, x_j, y_i, y_j):
@@ -51,22 +58,22 @@ class Character:
             # 開始・終了座標を計算
             if yl[num] % 2 == 0:
                 # 左上のx
-                xns = h_w * xl[num] - h_w1_2 + 5
+                xns = h_w * xl[num] - h_w1_2 + h_w1_10
                 # 左上のy
-                yn = h_w3_4 * yl[num] - h_w1_4 + 5
+                yn = h_h3_4 * yl[num] - h_h1_4 + h_h1_10
                 # 右下のx
-                xne = h_w * (xl[num] + 1) - h_w1_2 - 5
+                xne = h_w * (xl[num] + 1) - h_w1_2 - h_w1_10
                 # 右下のy
-                yw = h_w + (h_w3_4 * yl[num]) - h_w1_4 - 5 
+                yw = h_h + (h_h3_4 * yl[num]) - h_h1_4 - h_h1_10
             elif yl[num] % 2 == 1:
                 # 左上のx
-                xns = (h_w * xl[num]) + h_w1_2 - h_w1_2 + 5
+                xns = (h_w * xl[num]) + h_w1_2 - h_w1_2 + h_w1_10
                 # 左上のy
-                yn = h_w3_4 * yl[num] - h_w1_4 + 5
+                yn = h_h3_4 * yl[num] - h_h1_4 + h_h1_10
                 # 右下のx
-                xne = h_w * (xl[num] + 1) + h_w1_2 - h_w1_2 - 5
+                xne = h_w * (xl[num] + 1) + h_w1_2 - h_w1_2 - h_w1_10
                 # 右下のy
-                yw = h_w1_4 + (h_w3_4 * (yl[num] +1)) - h_w1_4 - 5
+                yw = h_h1_4 + (h_h3_4 * (yl[num] +1)) - h_h1_4 - h_h1_10
             
             # (x, y)座標
             tagname = "(" + str(xl[num]) + "," + str(yl[num]) + ")"
