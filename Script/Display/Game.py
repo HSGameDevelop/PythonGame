@@ -1,11 +1,11 @@
 import tkinter as tk
-import GameDrow as GD
+import GameDraw as GD
 
 class Game:    
     def __init__(self, master):
         self.master = master
 
-        self.gd = GD.GameDrow(self.master)
+        self.gd = GD.GameDraw(self.master)
 
 
 app = tk.Tk()
