@@ -3,3 +3,6 @@ ExcelConverer:
 		openpyxl
 		pandas
 		xlrd
+
+Kings:
+	pyGame
