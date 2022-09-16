@@ -1,14 +1,14 @@
 import tkinter as tk
 import sys, os
 # マップ表示のクラス
-#sys.path.append('../../Script/Display/')
-#from Script.Display.Map import Map
-import Map
+sys.path.append('../../Script/Display/')
+from Script.Display.Map import Map
+#import Map
 
 # プレイヤー表示のクラス
-#sys.path.append('../../Script/Display/')
-#from Script.Display.Character import Character, Player, Enemy
-import Character
+sys.path.append('../../Script/Display/')
+from Script.Display.Character import Character, Player, Enemy
+#import Character
 
 CANVAS_WIDTH =  1101
 CANVAS_HEIGHT = 960
@@ -27,14 +27,14 @@ class GameDraw:
         '''コンストラクタ'''
         self.master = master    #   親ウィジェット
         self.createWidgets()
-        #self.map = Map()
-        self.map = Map.Map()
+        self.map = Map()
+        #self.map = Map.Map()
 
         #self.characters = []
-        #self.player = Player()
-        #self.enemy = Enemy()
-        self.player = Character.Player()
-        self.enemy = Character.Enemy()
+        self.player = Player()
+        self.enemy = Enemy()
+        #self.player = Character.Player()
+        #self.enemy = Character.Enemy()
 
         # マップの描画
         self.drawMap(self.map)
@@ -75,6 +75,7 @@ class GameDraw:
             elif tag_length == 7:
                 self.canvas.create_text( player.xy[num][3] + 2, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
 
+
     def createEnemy(self, player):
         for num in range(6):
             #[num, self.xl[num], self.yl[num], xns, yn, xne, yw, tagname]
@@ -85,9 +86,8 @@ class GameDraw:
             elif tag_length == 6:
                 self.canvas.create_text( player.xy[num][3] + 4, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
 
-#    def updatePlayer(self, player):
-#        for num in range(6):
-#            self.canvas.move(self.player[num], player.xy[num][3] - 2, player.xy[num][4] + 10)
+#    def updateDraw(self, player_infos):
+        
 
     #def updateEnemy(self, player_infos):
     #    for x, y in player_infos:
@@ -98,7 +98,7 @@ class GameDraw:
     #        )
 
 
-app = tk.Tk()
-app.geometry("1280x960")
-game = GameDraw(app)
-app.mainloop()
+#app = tk.Tk()
+#app.geometry("1280x960")
+#game = GameDraw(app)
+#app.mainloop()

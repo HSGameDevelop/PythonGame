@@ -9,9 +9,3 @@ class Game:
         self.gd = GameDraw(self.master)
 
 
-    def nextFrame(self):
-            self.gd.clear()
-
-            self.gd.update()
-            self.gd.ontimer(self.nextFrame(), 100)
-
