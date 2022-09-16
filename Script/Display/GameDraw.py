@@ -1,9 +1,12 @@
+import pygame
 import tkinter as tk
 import sys, os
 # マップ表示のクラス
 sys.path.append('../../Script/Display/')
 from Script.Display.Map import Map
 #import Map
+
+
 
 # プレイヤー表示のクラス
 sys.path.append('../../Script/Display/')
@@ -14,12 +17,19 @@ CANVAS_WIDTH =  1101
 CANVAS_HEIGHT = 960
 
 # 色の設定
-BOARD_COLOR = 'gray'        # 盤面全体（見えない位置）
-VISIBLE_COLOR = 'white'     # ユニットから見える範囲（カラー）
-DEAD_COLOR = 'red'          # 侵入不可エリア
-OUT_LINE_COLOR = 'black'    # 枠線の色
-YOUR_COLOR = 'blue' # あなたのユニットの色
-ENEMY_COLOR = 'yellow' # 相手のユニットの色
+white = (255,255,255)
+black = (0,0,0)
+gray = (128, 128, 128)
+blue = (0, 0, 255)
+red = (255, 0, 0)
+yellow = (255, 255, 0)
+
+BOARD_COLOR = gray          # 盤面全体（見えない位置）
+VISIBLE_COLOR = white       # ユニットから見える範囲（カラー）
+DEAD_COLOR = red            # 侵入不可エリア
+OUT_LINE_COLOR = black      # 枠線の色
+YOUR_COLOR = blue           # あなたのユニットの色
+ENEMY_COLOR = yellow        # 相手のユニットの色
 
 
 class GameDraw:
@@ -47,23 +57,17 @@ class GameDraw:
         '''ウィジェットを作成・配置する'''
 
         #   キャンバスの作成
-        self.canvas = tk.Canvas(
-            self.master,
-            bg = BOARD_COLOR,
-            width   = CANVAS_WIDTH,     # +1は枠線描画のため
-            height  = CANVAS_HEIGHT, # +1は枠線描画のため
-            highlightthickness = 0
-        )
-        self.canvas.pack(side = tk.RIGHT)
+        self.canvas = pygame.display.set_mode((600, 400))
 
     def drawMap(self, map):
         # ６点指定 六角形
         for num in range(484):
+            #pygame.draw.polygon(surface, (255,255,255), [(450, 60), (425, 17), (375, 17), (350, 60), (375, 103), (425, 103)], 0)
             #canvas.create_polygon( (450, 60), (425, 17), (375, 17), (350, 60), (375, 103), (425, 103))
             if map.m_xy[num][1] == 0 or map.m_xy[num][1] == 21 or map.m_xy[num][0] == 0 or map.m_xy[num][0] == 21:
-                self.canvas.create_polygon(map.m_xy[num][2], map.m_xy[num][3], map.m_xy[num][4], map.m_xy[num][5], map.m_xy[num][6], map.m_xy[num][7], map.m_xy[num][8], map.m_xy[num][9], map.m_xy[num][10], map.m_xy[num][11], map.m_xy[num][12], map.m_xy[num][13], fill=DEAD_COLOR, outline=OUT_LINE_COLOR)
+                pygame.draw.polygon( self.canvas, DEAD_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])], 1)  #fill=DEAD_COLOR, outline=OUT_LINE_COLOR)
             else:
-                self.canvas.create_polygon(map.m_xy[num][2], map.m_xy[num][3], map.m_xy[num][4], map.m_xy[num][5], map.m_xy[num][6], map.m_xy[num][7], map.m_xy[num][8], map.m_xy[num][9], map.m_xy[num][10], map.m_xy[num][11], map.m_xy[num][12], map.m_xy[num][13], fill=BOARD_COLOR, outline=OUT_LINE_COLOR)
+                pygame.draw.polygon( self.canvas, BOARD_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])], 1) #fill=BOARD_COLOR, outline=OUT_LINE_COLOR)
 
     def createPlayer(self, player):
         for num in range(6):
