@@ -54,7 +54,7 @@ class GameDraw:
             height  = CANVAS_HEIGHT, # +1は枠線描画のため
             highlightthickness = 0
         )
-        self.canvas.pack(anchor=tk.NE)
+        self.canvas.pack(side = tk.RIGHT)
 
     def drawMap(self, map):
         # ６点指定 六角形
