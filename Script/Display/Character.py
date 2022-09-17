@@ -50,6 +50,8 @@ class Character:
 
         self.xl = xl
         self.yl = yl
+        print(xl)
+        print(yl)
 
     def prepareUnit(self, xl, yl):
         # (x,y)のマスの中心座標を計算
@@ -57,34 +59,22 @@ class Character:
         for num in range(6):
             # 開始・終了座標を計算
             if yl[num] % 2 == 0:
-                # 左上のx
-                xns = h_w * xl[num] - h_w1_2 + h_w1_10
-                # 左上のy
-                yn = h_h3_4 * yl[num] - h_h1_4 + h_h1_10
-                # 右下のx
-                xne = h_w * (xl[num] + 1) - h_w1_2 - h_w1_10
-                # 右下のy
-                yw = h_h + (h_h3_4 * yl[num]) - h_h1_4 - h_h1_10
+                xc = h_w * xl[num]
+                yc = h_h3_4 * yl[num] + h_h1_4
             elif yl[num] % 2 == 1:
-                # 左上のx
-                xns = (h_w * xl[num]) + h_w1_2 - h_w1_2 + h_w1_10
-                # 左上のy
-                yn = h_h3_4 * yl[num] - h_h1_4 + h_h1_10
-                # 右下のx
-                xne = h_w * (xl[num] + 1) + h_w1_2 - h_w1_2 - h_w1_10
-                # 右下のy
-                yw = h_h1_4 + (h_h3_4 * (yl[num] +1)) - h_h1_4 - h_h1_10
+                xc = h_w1_2 + (xl[num] * h_w)
+                yc = h_h1_4 + (h_h3_4 * yl[num])
             
             # (x, y)座標
             tagname = "(" + str(xl[num]) + "," + str(yl[num]) + ")"
-            self.xy.append([num, xl[num], yl[num], xns, yn, xne, yw, tagname])
+            self.xy.append([num, xl[num], yl[num], xc, yc, tagname])
 
         return self.xy
 
 
 class Player(Character):
     def __init__(self):
-        super().__init__(6, 15, 16, 20)
+        super().__init__(8, 17, 16, 20)
 
 #    def preparePlayer(self):
 #        # (x,y)のマスの中心座標を計算
@@ -119,7 +109,7 @@ class Player(Character):
 
 class Enemy(Character):
     def __init__(self):
-        super().__init__(6, 15, 1, 5)
+        super().__init__(8, 17, 1, 5)
 
 #    def prepareEnemy(self):
 #            # (x,y)のマスの中心座標を計算

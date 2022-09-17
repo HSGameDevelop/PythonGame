@@ -1,7 +1,7 @@
 # 横方向・縦方向のマスの数
 # 動かせる部分は20*20だが、六角形表示のため上下左右に余分に作成している。
 NUM_WIDTH = 30
-NUM_HEIGHT = 30
+NUM_HEIGHT = 22
 
 # 色の設定
 BOARD_COLOR = 'gray'        # 盤面全体（見えない位置）
@@ -16,7 +16,7 @@ class Map:
     def __init__(self):
         '''コンストラクタ'''
         self.board = None       #   盤面上のユニットを管理する2次元リスト
-        self.h_w = 51.2
+        self.h_w = 51.15
         self.h_w1_4 = self.h_w / 4
         self.h_w1_2 = self.h_w / 2
         self.h_w3_4 = self.h_w * (3 / 4)
