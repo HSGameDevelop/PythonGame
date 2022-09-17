@@ -14,10 +14,8 @@ print(gd.GetWeaponDataFromId(1).weaponName)
 
 
 # ゲームループ
-while True:
+while not game.CheckEnd():
     game.Update()
     game.Draw()
     
-    if game.CheckEnd():
-        sys.exit()
-
+sys.exit()
