@@ -17,5 +17,5 @@ print(gd.GetWeaponDataFromId(1).weaponName)
 while not game.CheckEnd():
     game.Update()
     game.Draw()
-    
+
 sys.exit()

@@ -1,12 +1,7 @@
 from re import S
 import pygame
 from pygame.locals import *
-import tkinter as tk
 import sys, os
-sys.path.append('../System/')
-from Script.System.IO.InputKeyboard import InputKeyboard
-sys.path.append('../System/')
-from Script.System.Game.GameSequenceBase import GameSequenceBase
 # マップ表示のクラス
 #sys.path.append('../../Script/Display/')
 #from Script.Display.Map import Map
