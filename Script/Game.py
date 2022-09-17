@@ -1,13 +1,9 @@
 import sys, os
 import pygame
 
-from Script.System.IO.InputKeyboard import InputKeyboard
-sys.path.append('../../Display/')
-from Script.Display.BattleDraw import BattleDraw
-
 sys.path.append('../../System/')
 from Script.System.Game.PgLib import PgLib
-from Script.System.Game.GameSequenceBase import GameSequenceBase
+from Script.System.Game.Title import Title
 
 WIDTH = 640
 HEIGHT = 480
@@ -16,7 +12,7 @@ HEIGHT = 480
 class Game:    
     def __init__(self):
         self.pgLib = PgLib(WIDTH, HEIGHT)
-        self.gameSequence = GameSequenceBase()
+        self.gameSequence = Title()
         #self.tkIntance = tkIntance
         #self.gd = GameDraw(self.tkIntance)
         #self.inputManager = InputManager(tkIntance)
