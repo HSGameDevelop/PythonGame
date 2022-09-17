@@ -6,9 +6,6 @@ sys.path.append('../../System/')
 from Script.System.Game.PgLib import PgLib
 from Script.System.Game.GameSequenceBase import GameSequenceBase
 
-sys.path.append('../../System/IO/')
-from Script.System.IO.InputManager import InputManager
-
 WIDTH = 640
 HEIGHT = 480
 

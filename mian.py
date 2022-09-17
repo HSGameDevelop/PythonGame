@@ -2,7 +2,7 @@ import sys, os
 sys.path.append('/Script/Data/')
 from Script.Data.GameData import GameData
 sys.path.append('/Script/Display/')
-from Script.System.Game.Game import Game
+from Script.Game import Game
 
 gd = GameData()
 gd.LoadData()

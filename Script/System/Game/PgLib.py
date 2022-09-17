@@ -2,8 +2,12 @@ import pygame
 from pygame import constants
 
 import sys
-sys.path.append('/Script/System/Game/')
-from Script.System.Game.Singleton import Singleton
+sys.path.append('/Script/System/Util/')
+from Script.System.Util.Singleton import Singleton
+
+sys.path.append('../IO/')
+from ..IO.InputManager import InputManager
+
    
 class PgLib(Singleton):
     # 初期化(幅・高さ)
@@ -13,6 +17,9 @@ class PgLib(Singleton):
         self.screen = pygame.display.set_mode((width, height))
         self.bgColor = (0, 0, 0)
 
+        # 入力管理クラスのインスタンス生成
+        self.inputManager = InputManager()
+
     # スクリーンの取得
     def GetScreen(self):
         return self.screen
@@ -20,6 +27,10 @@ class PgLib(Singleton):
     # 背景色の色を設定
     def SetBgColor(self, r, g, b):
         self.bgColor = (r, g, b)
+
+    # ライブラリの更新処理
+    def Update(self):
+        self.inputManager.Update()
 
     # 描画開始
     def DrawStart(self):
