@@ -8,9 +8,16 @@ CANVAS_WIDTH =  179
 CANVAS_HEIGHT = 960
 
 # 色の設定
-BOARD_COLOR = 'white'       # 盤面全体（見えない位置）
-OUT_LINE_COLOR = 'black'    # 枠線の色
-TEXT_COLOR = 'black'        # 文字の色
+white = (255,255,255)
+black = (0,0,0)
+gray = (128, 128, 128)
+blue = (0, 0, 255)
+red = (255, 0, 0)
+yellow = (255, 255, 0)
+
+BOARD_COLOR = white       # 盤面全体（見えない位置）
+OUT_LINE_COLOR = black    # 枠線の色
+TEXT_COLOR = black        # 文字の色
 
 
 class GameDraw:

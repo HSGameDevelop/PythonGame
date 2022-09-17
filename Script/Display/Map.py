@@ -1,7 +1,7 @@
 # 横方向・縦方向のマスの数
 # 動かせる部分は20*20だが、六角形表示のため上下左右に余分に作成している。
-NUM_WIDTH = 22
-NUM_HEIGHT = 22
+NUM_WIDTH = 30
+NUM_HEIGHT = 30
 
 # 色の設定
 BOARD_COLOR = 'gray'        # 盤面全体（見えない位置）
@@ -38,7 +38,7 @@ class Map:
         self.board = [[None for j in range(NUM_WIDTH)] for i in range(NUM_HEIGHT)]
 
         self.m_xy = []
-        # マスを描画    22 * 22 = 484
+        # マスを描画    30 * 30 = 900
         for y in range(NUM_HEIGHT):
             for x in range(NUM_WIDTH):
                 # 開始・終了座標を計算
