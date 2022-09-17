@@ -5,8 +5,8 @@ sys.path.append('../../System/')
 from Script.System.Game.PgLib import PgLib
 from Script.System.Game.Title import Title
 
-WIDTH = 640
-HEIGHT = 480
+WIDTH = 1280
+HEIGHT = 960
 
 # ゲーム全般を扱うクラス
 class Game:    
@@ -14,7 +14,7 @@ class Game:
         self.pgLib = PgLib(WIDTH, HEIGHT)
         self.gameSequence = Title()
         #self.tkIntance = tkIntance
-        #self.gd = GameDraw(self.tkIntance)
+        #self.gameSequence = Battle()
         #self.inputManager = InputManager(tkIntance)
         return
 

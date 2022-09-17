@@ -3,14 +3,14 @@ import pygame
 from pygame.locals import *
 import sys, os
 # マップ表示のクラス
-#sys.path.append('../../Script/Display/')
-#from Script.Display.Map import Map
+sys.path.append('../../Script/Display/')
+from Script.Display.Map import Map
 import Map
 
 # プレイヤー表示のクラス
-#sys.path.append('../../Script/Display/')
-#from Script.Display.Character import Character, Player, Enemy
-import Character
+sys.path.append('../../Script/Display/')
+from Script.Display.Character import Character, Player, Enemy
+#import Character
 
 CANVAS_WIDTH =  1280
 CANVAS_HEIGHT = 960
@@ -34,15 +34,15 @@ class BattleDraw(GameSequenceBase):
     def __init__(self):
         '''コンストラクタ'''
         super().__init__()
-        self.createWidgets()
-        #self.map = Map()
-        self.map = Map.Map()
+        #self.createWidgets()
+        self.map = Map()
+        #self.map = Map.Map()
 
         #self.characters = []
-        #self.player = Player()
-        #self.enemy = Enemy()
-        self.player = Character.Player()
-        self.enemy = Character.Enemy()
+        self.player = Player()
+        self.enemy = Enemy()
+        #self.player = Character.Player()
+        #self.enemy = Character.Enemy()
 
         # マップの描画
         self.drawMap(self.map)
@@ -52,9 +52,9 @@ class BattleDraw(GameSequenceBase):
         # エネミーの描画
         self.createEnemy(self.enemy)
 
-    def createWidgets(self):
-        '''ウィジェットを作成　main以降する時削除'''
-        self.canvas = pygame.display.set_mode((1280, 960))
+#    def createWidgets(self):
+#        '''ウィジェットを作成　main以降する時削除'''
+#        self.canvas = pygame.display.set_mode((1280, 960))
 
     def drawMap(self, map):
         # ６点指定 六角形
@@ -134,23 +134,23 @@ class Battle:
     def __init__():
         S
 
-pygame.init()
-game = BattleDraw()
-
-# ゲームループ
-while True:
-    #game.canvas.fill(black) # 背景を黒で塗りつぶす
-
-    #game.Update()
-    #game.Draw()
-    
-    # 画面を更新
-    pygame.display.update()
-    game.updateDraw(game.enemy)
-    pygame.display.update()
-    # 終了イベントを確認 --- (*5)
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
+#pygame.init()
+#game = BattleDraw()
+#
+## ゲームループ
+#while True:
+#    #game.canvas.fill(black) # 背景を黒で塗りつぶす
+#
+#    #game.Update()
+#    #game.Draw()
+#    
+#    # 画面を更新
+#    pygame.display.update()
+#    game.updateDraw(game.enemy)
+#    pygame.display.update()
+#    # 終了イベントを確認 --- (*5)
+#    for event in pygame.event.get():
+#        if event.type == QUIT:
+#            pygame.quit()
+#            sys.exit()
 
