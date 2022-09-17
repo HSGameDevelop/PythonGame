@@ -26,7 +26,6 @@ class Map:
         self.h_h1_4 = self.h_h / 4
         self.h_h1_2 = self.h_h / 2
 
-
         # ゲームの初期化
         self.initMap()
 

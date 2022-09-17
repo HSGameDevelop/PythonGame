@@ -12,7 +12,7 @@ import Map
 #from Script.Display.Character import Character, Player, Enemy
 import Character
 
-CANVAS_WIDTH =  1101
+CANVAS_WIDTH =  1280
 CANVAS_HEIGHT = 960
 
 # 色の設定
@@ -30,7 +30,7 @@ OUT_LINE_COLOR = black      # 枠線の色
 YOUR_COLOR = blue           # あなたのユニットの色
 ENEMY_COLOR = yellow        # 相手のユニットの色
 
-class GameDraw:
+class BattleDraw:
     def __init__(self):
         '''コンストラクタ'''
         self.createWidgets()
@@ -52,7 +52,7 @@ class GameDraw:
         self.createEnemy(self.enemy)
 
     def createWidgets(self):
-        '''ウィジェットを作成・配置する'''
+        '''ウィジェットを作成　main以降する時削除'''
         self.canvas = pygame.display.set_mode((1280, 960))
 
     def drawMap(self, map):
@@ -62,10 +62,14 @@ class GameDraw:
             #canvas.create_polygon( (450, 60), (425, 17), (375, 17), (350, 60), (375, 103), (425, 103))
             # y = map.m_xy[num][1]   x = map.m_xy[num][0]
             if map.m_xy[num][1] == 0 or map.m_xy[num][1] == 21 or map.m_xy[num][0] == 0 or map.m_xy[num][0] == 1 or map.m_xy[num][0] == 2 or map.m_xy[num][0] == 23 or map.m_xy[num][0] == 24 or map.m_xy[num][0] == 25:
+                # 内側描画
                 pygame.draw.polygon( self.canvas, DEAD_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])])  #fill=DEAD_COLOR, outline=OUT_LINE_COLOR)
+                # 枠線描画
                 pygame.draw.polygon( self.canvas, OUT_LINE_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])], 1)
             else:
+                # 内側描画
                 pygame.draw.polygon( self.canvas, BOARD_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])]) #fill=BOARD_COLOR, outline=OUT_LINE_COLOR)
+                # 枠線描画
                 pygame.draw.polygon( self.canvas, OUT_LINE_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])], 1)
 
     def createPlayer(self, player):
@@ -101,8 +105,21 @@ class GameDraw:
                 self.canvas.blit(text, [enemy.xy[num][3] - 10, enemy.xy[num][4]])
                 #self.canvas.create_text( enemy.xy[num][3] + 4, enemy.xy[num][4] + 10, text=enemy.xy[num][7], anchor=tk.NW)
 
-#    def updateDraw(self, player_infos):
-        
+    def updateDraw(self, player):
+        for num in range(6):
+            font = pygame.font.Font(None, 15)
+            #[num, self.xl[num], self.yl[num], xc, yc, tagname]
+            pygame.draw.circle(self.canvas, blue, (player.xy[num][3] * 1.5, player.xy[num][4] * 1.5), 21)
+            #self.canvas.create_oval(player.xy[num][3], player.xy[num][4], player.xy[num][5], player.xy[num][6], fill=YOUR_COLOR)
+            tag_length = len(player.xy[num][5])
+            if tag_length == 6:
+                text = font.render(player.xy[num][5], True, (255,255,255))
+                self.canvas.blit(text, [player.xy[num][3] * 1.5 - 12, player.xy[num][4] * 1.5])
+                #self.canvas.create_text( player.xy[num][3] + 4, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
+            elif tag_length == 7:
+                text = font.render(player.xy[num][5], True, (255,255,255))
+                self.canvas.blit(text, [player.xy[num][3] * 1.5 - 15, player.xy[num][4] * 1.5])
+                #self.canvas.create_text( player.xy[num][3] + 2, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
 
     #def updateEnemy(self, player_infos):
     #    for x, y in player_infos:
@@ -113,7 +130,7 @@ class GameDraw:
     #        )
 
 pygame.init()
-game = GameDraw()
+game = BattleDraw()
 
 # ゲームループ
 while True:
@@ -123,6 +140,8 @@ while True:
     #game.Draw()
     
     # 画面を更新
+    pygame.display.update()
+    game.updateDraw(game.enemy)
     pygame.display.update()
     # 終了イベントを確認 --- (*5)
     for event in pygame.event.get():

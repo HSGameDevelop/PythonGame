@@ -50,8 +50,7 @@ class Character:
 
         self.xl = xl
         self.yl = yl
-        print(xl)
-        print(yl)
+
 
     def prepareUnit(self, xl, yl):
         # (x,y)のマスの中心座標を計算
