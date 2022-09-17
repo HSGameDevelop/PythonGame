@@ -1,4 +1,7 @@
 import sys, os
+import pygame
+
+from Script.System.IO.InputKeyboard import InputKeyboard
 sys.path.append('../../Display/')
 from Script.Display.GameDraw import GameDraw
 
@@ -21,8 +24,13 @@ class Game:
 
     # ゲーム全般の更新処理
     def Update(self):
+        self.pgLib.Update()
         self.gameSequence.Update()
-        return
+
+        # キー入力確認用
+        pushKey = self.pgLib.GetInputManager().GetKeyboard().GetPushKey()
+        if pushKey:
+            print("Push Key : ", pygame.key.name(pushKey))
 
     # ゲーム全般の描画処理
     def Draw(self):
@@ -33,7 +41,6 @@ class Game:
 
         # 描画終了
         self.pgLib.DrawEnd()
-        return
 
     # ゲームの終了確認
     def CheckEnd(self) -> bool:

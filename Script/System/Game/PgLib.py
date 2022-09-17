@@ -2,8 +2,8 @@ import pygame
 from pygame import constants
 
 import sys
-sys.path.append('/Script/System/Util/')
-from Script.System.Util.Singleton import Singleton
+sys.path.append('../Util/')
+from ..Util.Singleton import Singleton
 
 sys.path.append('../IO/')
 from ..IO.InputManager import InputManager
@@ -23,6 +23,10 @@ class PgLib(Singleton):
     # スクリーンの取得
     def GetScreen(self):
         return self.screen
+
+    # 入力情報管理インスタンスの取得
+    def GetInputManager(self) -> InputManager:
+        return self.inputManager
     
     # 背景色の色を設定
     def SetBgColor(self, r, g, b):
@@ -44,12 +48,9 @@ class PgLib(Singleton):
 
     # 終了確認
     def CheckEnd(self) -> bool:
-        # 画面を更新
-        pygame.display.update()
         # 終了イベントを確認
-        for event in pygame.event.get():
-            if event.type == constants.QUIT:
-                pygame.quit()
-                return True
-
+        if pygame.event.get(constants.QUIT):
+            pygame.quit()
+            return True
+        
         return False

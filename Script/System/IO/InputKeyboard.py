@@ -16,16 +16,16 @@ class InputKeyboard:
         
     # キーボードの情報の更新処理
     def Update(self):
-        for event in pygame.event.get():
-            if event.type == constants.KEYDOWN: # キーを押した時
-                self.key = event.key
-            elif event.type == constants.KEYUP: # キーを離した時
-                self.key = None
-
+        event = pygame.event.get(constants.KEYDOWN) # キーを押した時
+        if event:
+            self.key = event[0].key
+        elif pygame.event.get(constants.KEYUP): # キーを離した時
+            self.key = None
+ 
     # 現在押しているキーを取得する
     def GetPushKey(self):
         return self.key
 
     # 現在押しているキーが指定したキーかどうかを返す(true:押している/false:押していない)
-    def CheckPushKey(self, key : InputKeyList):
+    def CheckPushKey(self, key : InputKeyList) -> bool:
         return self.GetPushKey() == key
