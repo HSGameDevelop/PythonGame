@@ -1,11 +1,11 @@
 import sys, os
-sys.path.append('../../Script/Display/')
+sys.path.append('../../Display/')
 from Script.Display.GameDraw import GameDraw
 
-sys.path.append('../../Script/System/')
-from Script.System.PgLib import PgLib
+sys.path.append('../../System/')
+from Script.System.Game.PgLib import PgLib
 
-sys.path.append('../../Script/System/IO/')
+sys.path.append('../../System/IO/')
 from Script.System.IO.InputManager import InputManager
 
 WIDTH = 640
