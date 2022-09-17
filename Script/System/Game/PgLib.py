@@ -1,5 +1,4 @@
 import pygame
-from pygame import display
 from pygame import constants
 
 import sys
