@@ -23,10 +23,17 @@ def rand_ints_check(xl,yl):
                     return False
     return True
 
-h_w = 45
-h_w1_4 = 45 / 4
-h_w1_2 = 45 / 2
-h_w3_4 = 45 * (3 / 4)
+h_w = 51.2
+h_w1_4 = h_w / 4
+h_w1_2 = h_w / 2
+h_w3_4 = h_w * (3 / 4)
+h_w1_10 = h_w / 10
+
+h_h = 59.2
+h_h3_4 = h_h * (3 / 4)
+h_h1_4 = h_h / 4
+h_h1_2 = h_h / 2
+h_h1_10 = h_h / 10
 
 class Character:
     def __init__(self, x_i, x_j, y_i, y_j):
@@ -44,40 +51,29 @@ class Character:
         self.xl = xl
         self.yl = yl
 
+
     def prepareUnit(self, xl, yl):
         # (x,y)のマスの中心座標を計算
         self.xy = []
         for num in range(6):
             # 開始・終了座標を計算
             if yl[num] % 2 == 0:
-                # 左上のx
-                xns = h_w * xl[num] - h_w1_2 + 5
-                # 左上のy
-                yn = h_w3_4 * yl[num] - h_w1_4 + 5
-                # 右下のx
-                xne = h_w * (xl[num] + 1) - h_w1_2 - 5
-                # 右下のy
-                yw = h_w + (h_w3_4 * yl[num]) - h_w1_4 - 5 
+                xc = h_w * xl[num]
+                yc = h_h3_4 * yl[num] + h_h1_4
             elif yl[num] % 2 == 1:
-                # 左上のx
-                xns = (h_w * xl[num]) + h_w1_2 - h_w1_2 + 5
-                # 左上のy
-                yn = h_w3_4 * yl[num] - h_w1_4 + 5
-                # 右下のx
-                xne = h_w * (xl[num] + 1) + h_w1_2 - h_w1_2 - 5
-                # 右下のy
-                yw = h_w1_4 + (h_w3_4 * (yl[num] +1)) - h_w1_4 - 5
+                xc = h_w1_2 + (xl[num] * h_w)
+                yc = h_h1_4 + (h_h3_4 * yl[num])
             
             # (x, y)座標
             tagname = "(" + str(xl[num]) + "," + str(yl[num]) + ")"
-            self.xy.append([num, xl[num], yl[num], xns, yn, xne, yw, tagname])
+            self.xy.append([num, xl[num], yl[num], xc, yc, tagname])
 
         return self.xy
 
 
 class Player(Character):
     def __init__(self):
-        super().__init__(6, 15, 16, 20)
+        super().__init__(8, 17, 16, 20)
 
 #    def preparePlayer(self):
 #        # (x,y)のマスの中心座標を計算
@@ -112,7 +108,7 @@ class Player(Character):
 
 class Enemy(Character):
     def __init__(self):
-        super().__init__(6, 15, 1, 5)
+        super().__init__(8, 17, 1, 5)
 
 #    def prepareEnemy(self):
 #            # (x,y)のマスの中心座標を計算

@@ -3,7 +3,7 @@ import pygame
 
 from Script.System.IO.InputKeyboard import InputKeyboard
 sys.path.append('../../Display/')
-from Script.Display.GameDraw import GameDraw
+from Script.Display.BattleDraw import BattleDraw
 
 sys.path.append('../../System/')
 from Script.System.Game.PgLib import PgLib
