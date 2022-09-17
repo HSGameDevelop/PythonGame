@@ -1,26 +1,26 @@
 from enum import Enum
-import tkinter
+import pygame
+from pygame import constants
 
+# キー入力管理クラス
 class InputKeyboard:
     class InputKeyList(Enum):
-        Up = 'up'
-        Left = 'Left'
-        Right = 'Right'
-        Donw = 'Down'
+        Up = constants.K_UP
+        Left = constants.K_LEFT
+        Right = constants.K_RIGHT
+        Donw = constants.K_DOWN
 
-    def __init__(self, tkInstance : tkinter) -> None:
+    # 初期化
+    def __init__(self) -> None:
         self.key = None
         
-        tkInstance.bind('<KeyPress>', self.KeyPush)
-        tkInstance.bind('<KeyRelease>', self.KeyPop)
-
-    # キーを押下時の処理
-    def KeyPush(self, e):
-        self.key = e.keysym
-    
-    # キーを離した時の処理
-    def KeyPop(self, e):
-        self.key = None
+    # キーボードの情報の更新処理
+    def Update(self):
+        for event in pygame.event.get():
+            if event.type == constants.KEYDOWN: # キーを押した時
+                self.key = event.key
+            elif event.type == constants.KEYUP: # キーを離した時
+                self.key = None
 
     # 現在押しているキーを取得する
     def GetPushKey(self):
