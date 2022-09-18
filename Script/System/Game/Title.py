@@ -18,7 +18,7 @@ class Title(GameSequenceBase):
 
         # アイコンのリサイズ
         self.bladeImage = pgLib.ResizeImage(self.bladeImage, 128, 128)
-        self.bladeX = 0
+        self.bladeX = -100
         self.bladeY = 390
         self.bladeEndX = 890
 
