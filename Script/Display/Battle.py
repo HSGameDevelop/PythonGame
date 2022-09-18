@@ -2,6 +2,7 @@ from enum import Enum
 import time
 import pygame
 from pygame.locals import *
+from math import pi
 import sys, os
 # マップ表示のクラス
 from .Map import Map
@@ -21,12 +22,14 @@ CANVAS_HEIGHT = 960
 TIMER_X = 1230
 TIMER_Y = 50
 
+
 # 色の設定
 white = (255,255,255)
 black = (0,0,0)
 gray = (128, 128, 128)
 blue = (0, 0, 255)
-red = (122, 0, 0)
+red_down = (122, 0, 0)
+red = (255, 0, 0)
 yellow = (255, 255, 0)
 purple = (255, 0, 255)
 green = (0, 255, 0)
@@ -36,7 +39,7 @@ pale_black = (50, 50, 50)
 
 BOARD_COLOR = gray          # 盤面全体（見えない位置）
 VISIBLE_COLOR = white       # ユニットから見える範囲（カラー）
-DEAD_COLOR = red          # 侵入不可エリア
+DEAD_COLOR = red_down          # 侵入不可エリア
 DEAD_OUT_LINE_COLOR = black# 侵入不可エリア枠線
 OUT_LINE_COLOR = black      # 枠線の色
 YOUR_COLOR = blue           # あなたのユニットの色
@@ -68,7 +71,7 @@ class Battle(GameSequenceBase):
             self.state = self.BattleState.Counter
             return
         elif self.state == self.BattleState.Counter:
-            self.counter = 180
+            self.counter = 180 * 60
             self.state = self.BattleState.Think
             return
         elif self.state == self.BattleState.Think:
@@ -82,34 +85,36 @@ class Battle(GameSequenceBase):
     def Draw(self):
         if self.state == self.BattleState.Start:
             # マップの描画
-            self.drawMap(self.map)
+            self.DrawMap(self.map)
             # プレイヤーの描画
-            self.createPlayer(self.player)
+            self.CreatePlayer(self.player)
             # エネミーの描画
-            self.createEnemy(self.enemy)
+            self.CreateEnemy(self.enemy)
         elif self.state == self.BattleState.Counter:
             # マップの描画
-            self.drawMap(self.map)
+            self.DrawMap(self.map)
             # プレイヤーの描画
-            self.createPlayer(self.player)
+            self.CreatePlayer(self.player)
             # エネミーの描画
-            self.createEnemy(self.enemy)
+            self.CreateEnemy(self.enemy)
             # 上部円タイマー
-            self.setCircleTimer()
+            self.DrawCircleTimer()
             # 数字タイマー
-            self.setCountTimer()
+            self.DrawCountTimer()
         elif self.state == self.BattleState.Think:
             # マップの描画
-            self.drawMap(self.map)
+            self.DrawMap(self.map)
             # プレイヤーの描画
-            self.createPlayer(self.player)
+            self.CreatePlayer(self.player)
             # エネミーの描画
-            self.createEnemy(self.enemy)
-            time.sleep(1)
-            self.TimerCountDown()
+            self.CreateEnemy(self.enemy)
+            # 上部円タイマー
+            self.DrawCircleTimer()
+            # 数字タイマー
+            self.DrawCountTimer()
 
 
-    def drawMap(self, map):
+    def DrawMap(self, map):
         # ６点指定 六角形
         for num in range(660):
             #pygame.draw.polygon(surface, (255,255,255), [(450, 60), (425, 17), (375, 17), (350, 60), (375, 103), (425, 103)], 0)
@@ -127,7 +132,7 @@ class Battle(GameSequenceBase):
                 pygame.draw.polygon( self.screen, OUT_LINE_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])], 1)
 
 
-    def createPlayer(self, player):
+    def CreatePlayer(self, player):
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
@@ -144,7 +149,7 @@ class Battle(GameSequenceBase):
                 #self.screen.create_text( player.xy[num][3] + 2, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
 
 
-    def createEnemy(self, enemy):
+    def CreateEnemy(self, enemy):
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
@@ -161,51 +166,17 @@ class Battle(GameSequenceBase):
                 #self.screen.create_text( enemy.xy[num][3] + 4, enemy.xy[num][4] + 10, text=enemy.xy[num][7], anchor=tk.NW)
 
 
-    def updatePlayer(self, player):
-        for num in range(6):
-            font = pygame.font.Font(None, 15)
-            #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-            pygame.draw.circle(self.screen, blue, (player.xy[num][3], player.xy[num][4]), 21)
-            #self.screen.create_oval(player.xy[num][3], player.xy[num][4], player.xy[num][5], player.xy[num][6], fill=YOUR_COLOR)
-            tag_length = len(player.xy[num][5])
-            if tag_length == 6:
-                text = font.render(player.xy[num][5], True, (255,255,255))
-                self.screen.blit(text, [player.xy[num][3] - 12, player.xy[num][4]])
-                #self.screen.create_text( player.xy[num][3] + 4, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
-            elif tag_length == 7:
-                text = font.render(player.xy[num][5], True, (255,255,255))
-                self.screen.blit(text, [player.xy[num][3] - 15, player.xy[num][4]])
-                #self.screen.create_text( player.xy[num][3] + 2, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
-
-
-    def updateEnemy(self, enemy):
-            for num in range(6):
-                font = pygame.font.Font(None, 15)
-                #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-                pygame.draw.circle(self.screen, yellow, (enemy.xy[num][3], enemy.xy[num][4]), 21)
-                #self.screen.create_oval(enemy.xy[num][3], enemy.xy[num][4], enemy.xy[num][5], enemy.xy[num][6], fill=ENEMY_COLOR)
-                tag_length = len(enemy.xy[num][5])
-                if tag_length == 5:
-                    text = font.render(enemy.xy[num][5], True, (255,0,0))
-                    self.screen.blit(text, [enemy.xy[num][3] - 12, enemy.xy[num][4]])
-                    #self.screen.create_text( enemy.xy[num][3] + 6, enemy.xy[num][4] + 10, text=enemy.xy[num][7], anchor=tk.NW)
-                elif tag_length == 6:
-                    text = font.render(enemy.xy[num][5], True, (255,0,0))
-                    self.screen.blit(text, [enemy.xy[num][3] - 10, enemy.xy[num][4]])
-                    #self.screen.create_text( enemy.xy[num][3] + 4, enemy.xy[num][4] + 10, text=enemy.xy[num][7], anchor=tk.NW)
-
-
     def Turn(self):
         pass
 
 
-    def setCircleTimer(self):
+    def DrawCircleTimer(self):
         pygame.draw.circle(self.screen, yellow, (TIMER_X, TIMER_Y), 40)
         pygame.draw.circle(self.screen, red, (TIMER_X, TIMER_Y), 35)
-        self.timer_green = pygame.draw.circle(self.screen, pale_green, (TIMER_X, TIMER_Y), 35)
+        pygame.draw.arc(self.screen, green, [TIMER_X - 35, TIMER_Y - 35, 70, 70], pi/2, (2*pi)+(pi/2), 100)
 
 
-    def setCountTimer(self):
+    def DrawCountTimer(self):
         self.Timerfont = pygame.font.Font(None, 30)
         self.Timercounter = self.Timerfont.render( str(self.counter), True, black)
         counter_length = len( str(self.Timercounter) )
@@ -215,21 +186,6 @@ class Battle(GameSequenceBase):
             self.screen.blit(self.Timercounter, [TIMER_X - 12, TIMER_Y - 9])
         elif counter_length == 1:
             self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
-
-    def TimerCountDown(self):
-        self.Timerfont = pygame.font.Font(None, 30)
-        self.Timercounter = self.Timerfont.render(str(self.counter), True, black)
-        counter_length = len( str(self.counter) )
-        if counter_length == 3:
-            self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])
-        elif counter_length == 2:
-            self.screen.blit(self.Timercounter, [TIMER_X - 12, TIMER_Y - 9])
-        elif counter_length == 1:
-            self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
-
-        pygame.draw.circle(self.screen, yellow, (TIMER_X, TIMER_Y), 40)
-        pygame.draw.circle(self.screen, red, (TIMER_X, TIMER_Y), 35)
-        self.timer_green = pygame.draw.circle(self.screen, pale_green, (TIMER_X, TIMER_Y), 35)
         
 
 
