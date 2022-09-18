@@ -3,6 +3,7 @@ import time
 import pygame
 from pygame.locals import *
 from math import pi
+import math
 import sys, os
 # マップ表示のクラス
 from .Map import Map
@@ -22,6 +23,13 @@ CANVAS_HEIGHT = 960
 TIMER_X = 1230
 TIMER_Y = 50
 
+MAX_COUNTER = 30
+CIRCLE_WIDTH_OUT = 40
+CIRCLE_WIDTH_IN = 35
+
+TURN_DISPLAY = 150
+
+FPS = 60
 
 # 色の設定
 white = (255,255,255)
@@ -57,12 +65,14 @@ class Battle(GameSequenceBase):
 
     def __init__(self, pgLib : PgLib) -> None:
         '''コンストラクタ'''
+        self.TurnCount = 1
+        self.TurnDisplay = TURN_DISPLAY
         self.pgLib = pgLib
         self.map = Map()
         self.player = Player()
         self.enemy = Enemy()
         self.screen = self.pgLib.GetScreen()
-        self.counter = 180 
+        self.counter = MAX_COUNTER * FPS
         self.state = self.BattleState.Start
 
 
@@ -71,15 +81,26 @@ class Battle(GameSequenceBase):
             self.state = self.BattleState.Counter
             return
         elif self.state == self.BattleState.Counter:
-            self.counter = 180 * 60
-            self.state = self.BattleState.Think
+            self.TurnDisplay -= 1
+            self.counter = MAX_COUNTER * FPS
+            if self.TurnDisplay == 0:
+                self.state = self.BattleState.Think
+            else:
+                self.state = self.BattleState.Counter
             return
         elif self.state == self.BattleState.Think:
             self.counter -= 1
             if self.counter == 0:
                 self.state = self.BattleState.Stop
             return
-        #elif self.state == self.BattleState.Stop:
+        elif self.state == self.BattleState.Stop:
+            self.TurnCount += 1
+            if self.TurnCount == 7:
+                self.state = self.BattleState.End
+            else:
+                self.TurnDisplay = TURN_DISPLAY
+                self.state = self.BattleState.Counter
+            return
 
 
     def Draw(self):
@@ -91,6 +112,19 @@ class Battle(GameSequenceBase):
             # エネミーの描画
             self.CreateEnemy(self.enemy)
         elif self.state == self.BattleState.Counter:
+            # マップの描画
+            self.DrawMap(self.map)
+            # プレイヤーの描画
+            self.CreatePlayer(self.player)
+            # エネミーの描画
+            self.CreateEnemy(self.enemy)
+            # ターン経過
+            self.DrawTurn()
+            # 上部円タイマー
+            self.DrawCircleTimer()
+            # 数字タイマー
+            self.DrawCountTimer()
+        elif self.state == self.BattleState.Think:
             # マップの描画
             self.DrawMap(self.map)
             # プレイヤーの描画
@@ -166,20 +200,29 @@ class Battle(GameSequenceBase):
                 #self.screen.create_text( enemy.xy[num][3] + 4, enemy.xy[num][4] + 10, text=enemy.xy[num][7], anchor=tk.NW)
 
 
-    def Turn(self):
-        pass
+    def DrawTurn(self):
+        if self.TurnDisplay > 20:
+            self.Turnfont = pygame.font.Font(None, 100)
+            self.Turncounter = self.Turnfont.render( "Turn" + str(self.TurnCount), True, black)
+            self.screen.blit(self.Turncounter, [CANVAS_WIDTH / 2 - 70, CANVAS_HEIGHT / 2 - 25])
+        else:
+            self.Turnfont = pygame.font.Font(None, 100)
+            self.Turncounter = self.Turnfont.render( "Start", True, black)
+            self.screen.blit(self.Turncounter, [CANVAS_WIDTH / 2 - 70, CANVAS_HEIGHT / 2 - 25])
 
 
     def DrawCircleTimer(self):
-        pygame.draw.circle(self.screen, yellow, (TIMER_X, TIMER_Y), 40)
-        pygame.draw.circle(self.screen, red, (TIMER_X, TIMER_Y), 35)
-        pygame.draw.arc(self.screen, green, [TIMER_X - 35, TIMER_Y - 35, 70, 70], pi/2, (2*pi)+(pi/2), 100)
+        pygame.draw.circle(self.screen, yellow, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_OUT)
+        pygame.draw.circle(self.screen, red, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_IN)
+        pygame.draw.arc(self.screen, green, [TIMER_X - CIRCLE_WIDTH_IN, TIMER_Y - CIRCLE_WIDTH_IN, CIRCLE_WIDTH_IN * 2, CIRCLE_WIDTH_IN * 2], pi/2, (pi/2) + (2*pi) * self.counter / (MAX_COUNTER * FPS), CIRCLE_WIDTH_IN)
 
 
     def DrawCountTimer(self):
         self.Timerfont = pygame.font.Font(None, 30)
-        self.Timercounter = self.Timerfont.render( str(self.counter), True, black)
-        counter_length = len( str(self.Timercounter) )
+        count = math.floor(self.counter / FPS)
+        self.Timercounter = self.Timerfont.render( str(count), True, black)
+        counter_length = len( str(count) )
+        #self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])               #映らない時用
         if counter_length == 3:
             self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])
         elif counter_length == 2:
