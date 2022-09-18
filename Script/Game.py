@@ -30,7 +30,6 @@ class Game:
             print("Push Key : ", pygame.key.name(pushKey))
             
 
-
     # ゲーム全般の描画処理
     def Draw(self):
         # 描画開始
