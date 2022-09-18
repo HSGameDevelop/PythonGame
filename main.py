@@ -12,7 +12,6 @@ game = Game()
 print(gd.GetCharacterDataFromId(1).characterName)
 print(gd.GetWeaponDataFromId(1).weaponName)
 
-
 # ゲームループ
 while not game.CheckEnd():
     game.Update()
