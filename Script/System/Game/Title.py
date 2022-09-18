@@ -1,4 +1,7 @@
 import sys
+from enum import Enum
+
+from Script.System.IO.InputKeyboard import InputKeyboard
 from .GameSequenceBase import GameSequenceBase
 from .PgLib import PgLib
 import pygame
@@ -8,8 +11,16 @@ TITLE_BG = "test_bg.jpg"
 TITLE_LOGO = "TitleLogo.png"
 TITLE_ICON_BLADE = "Icon_Blade.png"
 
+
+
 ICON_MOVE_SPEED = 10
 class Title(GameSequenceBase):
+    class TitleState(Enum):
+        Start = 0
+        LogoIn = 1
+        Run = 2
+        End = 3
+
     def __init__(self, pgLib : PgLib) -> None:
         #画像の読み込み
         self.bgImage = pgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_BG)
@@ -18,16 +29,34 @@ class Title(GameSequenceBase):
 
         # アイコンのリサイズ
         self.bladeImage = pgLib.ResizeImage(self.bladeImage, 128, 128)
-        self.bladeX = 0
+        self.bladeX = -100
         self.bladeY = 390
         self.bladeEndX = 890
 
+        # ステートの初期化
+        self.state : Title.TitleState = Title.TitleState.Start
+
         self.pgLib = pgLib
 
+    # 更新処理
     def Update(self):
-        if self.bladeX < self.bladeEndX:
-            self.bladeX += ICON_MOVE_SPEED
-        pass
+
+        if self.state == Title.TitleState.Start:
+            self.state = Title.TitleState.LogoIn
+            return
+        elif self.state == Title.TitleState.LogoIn:
+            if self.bladeX < self.bladeEndX:
+                self.bladeX += ICON_MOVE_SPEED
+            
+            if self.pgLib.GetInputManager().GetKeyboard().GetPushKey():
+                self.bladeX = self.bladeEndX
+                self.state = Title.TitleState.Run
+            return
+        elif self.state == Title.TitleState.Run:
+            self.state = Title.TitleState.LogoIn
+            return
+        elif self.state == Title.TitleState.End:
+            return
 
     def Draw(self):
         screen = self.pgLib.GetScreen()

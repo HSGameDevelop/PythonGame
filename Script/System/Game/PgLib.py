@@ -8,14 +8,14 @@ from ..Util.Singleton import Singleton
 
 sys.path.append('../IO/')
 from ..IO.InputManager import InputManager
-
    
 class PgLib(Singleton):
     # 初期化(幅・高さ)
-    def __init__(self, title : str, width : int, height : int) -> None:
+    def __init__(self, title : str, width : int, height : int, fps : int) -> None:
         # ゲーム画面を初期化
         pygame.init()
         pygame.display.set_caption(title)
+        pygame.time.Clock().tick(fps)
         self.screen = pygame.display.set_mode((width, height))
         self.bgColor = (0, 0, 0)
 

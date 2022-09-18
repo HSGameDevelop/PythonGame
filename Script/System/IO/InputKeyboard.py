@@ -9,6 +9,7 @@ class InputKeyboard:
         Left = constants.K_LEFT
         Right = constants.K_RIGHT
         Donw = constants.K_DOWN
+        Space = constants.K_SPACE
 
     # 初期化
     def __init__(self) -> None:
