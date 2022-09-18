@@ -33,6 +33,20 @@ class PgLib(Singleton):
     def SetBgColor(self, r, g, b):
         self.bgColor = (r, g, b)
 
+    # 画像の読み込み(画像のインスタンスを返す)
+    def LoadImage(self, filePath):
+        return pygame.image.load(filePath)
+
+    # 画像をスクリーンの中心に表示する
+    def DrawImageCenter(self, image : pygame.surface):
+        imageSize = image.get_rect().size
+        screenSize = self.screen.get_rect().size
+        x = screenSize[0] / 2 - imageSize[0] / 2
+        y = screenSize[1] / 2 - imageSize[1] / 2
+        w = screenSize[0] / 2 + imageSize[0] / 2
+        h = screenSize[1] / 2 + imageSize[1] / 2
+        self.screen.blit(image, (x, y, w, h))
+
     # ライブラリの更新処理
     def Update(self):
         self.inputManager.Update()
