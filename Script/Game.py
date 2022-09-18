@@ -16,14 +16,13 @@ GAME_TITLE = "ActKing"
 class Game:    
     def __init__(self):
         self.pgLib = PgLib(GAME_TITLE, WIDTH, HEIGHT)
-        self.gameSequence : GameSequenceBase = Battle(self.pgLib)
-        #self.gameBattle = Battle(self.pgLib)
+        #self.gameSequence : GameSequenceBase = Battle(self.pgLib)
+        self.gameSequence : GameSequenceBase = Title(self.pgLib)
 
     # ゲーム全般の更新処理
     def Update(self):
         self.pgLib.Update()
         self.gameSequence.Update()
-        #self.gameBattle.Update()
 
         # キー入力確認用
         pushKey = self.pgLib.GetInputManager().GetKeyboard().GetPushKey()
@@ -38,7 +37,6 @@ class Game:
         self.pgLib.DrawStart()
 
         self.gameSequence.Draw()
-        #self.gameBattle.Draw()
         # 描画終了
         self.pgLib.DrawEnd()
                 
