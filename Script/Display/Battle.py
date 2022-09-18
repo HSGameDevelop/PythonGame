@@ -55,27 +55,21 @@ class Battle(GameSequenceBase):
     def __init__(self, pgLib : PgLib) -> None:
         '''コンストラクタ'''
         self.pgLib = pgLib
-        #self.createWidgets()
         self.map = Map()
-        #self.map = Map.Map()
-  
-
-        #self.characters = []
         self.player = Player()
         self.enemy = Enemy()
-        #self.player = Character.Player()
-        #self.enemy = Character.Enemy()
-
+        self.screen = self.pgLib.GetScreen()
+        self.counter = 180 
         self.state = self.BattleState.Start
 
 
     def Update(self):
         if self.state == self.BattleState.Start:
-            self.state == self.BattleState.Counter
+            self.state = self.BattleState.Counter
             return
         elif self.state == self.BattleState.Counter:
             self.counter = 180
-            self.state == self.BattleState.Think
+            self.state = self.BattleState.Think
             return
         elif self.state == self.BattleState.Think:
             self.counter -= 1
@@ -83,13 +77,17 @@ class Battle(GameSequenceBase):
                 self.state = self.BattleState.Stop
             return
         #elif self.state == self.BattleState.Stop:
-            
 
 
     def Draw(self):
         if self.state == self.BattleState.Start:
-            self.screen = self.pgLib.GetScreen()
-            self.counter = 180
+            # マップの描画
+            self.drawMap(self.map)
+            # プレイヤーの描画
+            self.createPlayer(self.player)
+            # エネミーの描画
+            self.createEnemy(self.enemy)
+        elif self.state == self.BattleState.Counter:
             # マップの描画
             self.drawMap(self.map)
             # プレイヤーの描画
@@ -100,8 +98,14 @@ class Battle(GameSequenceBase):
             self.setCircleTimer()
             # 数字タイマー
             self.setCountTimer()
-            print(self.counter)
         elif self.state == self.BattleState.Think:
+            # マップの描画
+            self.drawMap(self.map)
+            # プレイヤーの描画
+            self.createPlayer(self.player)
+            # エネミーの描画
+            self.createEnemy(self.enemy)
+            time.sleep(1)
             self.TimerCountDown()
 
 
@@ -222,6 +226,11 @@ class Battle(GameSequenceBase):
             self.screen.blit(self.Timercounter, [TIMER_X - 12, TIMER_Y - 9])
         elif counter_length == 1:
             self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
+
+        pygame.draw.circle(self.screen, yellow, (TIMER_X, TIMER_Y), 40)
+        pygame.draw.circle(self.screen, red, (TIMER_X, TIMER_Y), 35)
+        self.timer_green = pygame.draw.circle(self.screen, pale_green, (TIMER_X, TIMER_Y), 35)
+        
 
 
 #    counter = 100
