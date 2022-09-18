@@ -72,12 +72,16 @@ class Battle(GameSequenceBase):
     def Update(self):
         if self.state == self.BattleState.Start:
             self.state == self.BattleState.Counter
+            return
         elif self.state == self.BattleState.Counter:
             self.counter = 180
+            self.state == self.BattleState.Think
+            return
         elif self.state == self.BattleState.Think:
             self.counter -= 1
             if self.counter == 0:
                 self.state = self.BattleState.Stop
+            return
         #elif self.state == self.BattleState.Stop:
             
 
@@ -96,17 +100,9 @@ class Battle(GameSequenceBase):
             self.setCircleTimer()
             # 数字タイマー
             self.setCountTimer()
-        elif self.state == self.BattleState.Counter:
-            self.TimerCountDown()
-
+            print(self.counter)
         elif self.state == self.BattleState.Think:
-            self.counter -= 1
-            if self.counter == 0:
-                self.state = self.BattleState.Stop
-        elif self.state == self.BattleState.Stop:
-            self.counter = 180
-
-
+            self.TimerCountDown()
 
 
     def drawMap(self, map):
