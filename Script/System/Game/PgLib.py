@@ -1,3 +1,4 @@
+from ctypes import resize
 import pygame
 from pygame import constants
 
@@ -25,6 +26,15 @@ class PgLib(Singleton):
     def GetScreen(self):
         return self.screen
 
+    # スクリーンのサイズを取得
+    def GetScreenSize(self):
+        return self.screen.get_rect().size
+
+    # スクリーンの中心座標を取得
+    def GetScreenCenterPos(self):
+        screenSize = self.screen.get_rect().size
+        return (screenSize[0] / 2, screenSize[1] / 2)
+
     # 入力情報管理インスタンスの取得
     def GetInputManager(self) -> InputManager:
         return self.inputManager
@@ -36,16 +46,33 @@ class PgLib(Singleton):
     # 画像の読み込み(画像のインスタンスを返す)
     def LoadImage(self, filePath):
         return pygame.image.load(filePath)
+    
+    # 画像のリサイズ
+    def ResizeImage(self, image : pygame.surface, width : int, height : int):
+        imageSize = image.get_rect().size
+        imageWidth = imageSize[0]
+        imageHeight = imageSize[1]
+        if width > 0 :
+            imageWidth = width
+        if height > 0:
+            imageHeight = height
+        return pygame.transform.scale(image, (imageWidth, imageHeight))
 
     # 画像をスクリーンの中心に表示する
-    def DrawImageCenter(self, image : pygame.surface):
-        imageSize = image.get_rect().size
+    def DrawImageCenter(self, image : pygame.surface, width : int = 0, height : int = 0):
+        # 画像データの設定
+        drawImage = self.ResizeImage(image, width, height)
+        
+        # 中心座標の計算
+        imageSize = drawImage.get_rect().size
         screenSize = self.screen.get_rect().size
         x = screenSize[0] / 2 - imageSize[0] / 2
         y = screenSize[1] / 2 - imageSize[1] / 2
         w = screenSize[0] / 2 + imageSize[0] / 2
         h = screenSize[1] / 2 + imageSize[1] / 2
-        self.screen.blit(image, (x, y, w, h))
+        
+        # 画像の描画
+        self.screen.blit(drawImage, (x, y, w, h))
 
     # ライブラリの更新処理
     def Update(self):
