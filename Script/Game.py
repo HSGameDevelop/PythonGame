@@ -10,12 +10,13 @@ from Script.Display.Battle import Battle
 
 WIDTH = 1280
 HEIGHT = 960
+FPS = 60
 GAME_TITLE = "ActKing"
 
 # ゲーム全般を扱うクラス
 class Game:    
     def __init__(self):
-        self.pgLib = PgLib(GAME_TITLE, WIDTH, HEIGHT)
+        self.pgLib = PgLib(GAME_TITLE, WIDTH, HEIGHT, FPS)
         self.gameSequence : GameSequenceBase = Battle(self.pgLib)
         #self.gameBattle = Battle(self.pgLib)
 
