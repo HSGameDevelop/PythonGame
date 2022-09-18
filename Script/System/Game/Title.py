@@ -1,12 +1,20 @@
 import sys
 from .GameSequenceBase import GameSequenceBase
+from .PgLib import PgLib
+import pygame
+
+
 
 class Title(GameSequenceBase):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, pgLib : PgLib) -> None:
+        #画像の読み込み
+        self.bgImage = pygame.image.load("Resource/Image/test_bg.jpg")
+        self.pgLib = pgLib
 
     def Update(self):
-        return super().Update()
+        pass
 
     def Draw(self):
-        return super().Draw()
+        screen = self.pgLib.GetScreen()
+
+        screen.blit(self.bgImage, (0, 0, 1280, 960))

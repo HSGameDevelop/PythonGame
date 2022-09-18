@@ -11,9 +11,10 @@ from ..IO.InputManager import InputManager
    
 class PgLib(Singleton):
     # 初期化(幅・高さ)
-    def __init__(self, width, height) -> None:
+    def __init__(self, title : str, width : int, height : int) -> None:
         # ゲーム画面を初期化
         pygame.init()
+        pygame.display.set_caption(title)
         self.screen = pygame.display.set_mode((width, height))
         self.bgColor = (0, 0, 0)
 

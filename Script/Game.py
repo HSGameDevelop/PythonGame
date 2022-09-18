@@ -7,16 +7,13 @@ from Script.System.Game.Title import Title
 
 WIDTH = 1280
 HEIGHT = 960
+GAME_TITLE = "ActKing"
 
 # ゲーム全般を扱うクラス
 class Game:    
     def __init__(self):
-        self.pgLib = PgLib(WIDTH, HEIGHT)
-        self.gameSequence = Title()
-        #self.tkIntance = tkIntance
-        #self.gameSequence = Battle()
-        #self.inputManager = InputManager(tkIntance)
-        return
+        self.pgLib = PgLib(GAME_TITLE, WIDTH, HEIGHT)
+        self.gameSequence = Title(self.pgLib)
 
     # ゲーム全般の更新処理
     def Update(self):
@@ -33,7 +30,7 @@ class Game:
         # 描画開始
         self.pgLib.DrawStart()
 
-        self.gameSequence.Update()
+        self.gameSequence.Draw()
 
         # 描画終了
         self.pgLib.DrawEnd()
