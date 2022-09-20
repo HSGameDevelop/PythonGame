@@ -204,7 +204,7 @@ class Battle(GameSequenceBase):
 
     def DrawCountTimer(self):
         self.Timerfont = pygame.font.Font(None, 30)
-        count = math.ceil(self.counter / FPS - 1)
+        count = math.ceil(self.counter / FPS)
         self.Timercounter = self.Timerfont.render( str(count), True, ColorList.BLACK.value)
         counter_length = len( str(count) )
         #self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])               #映らない時用
