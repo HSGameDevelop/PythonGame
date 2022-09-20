@@ -14,6 +14,7 @@ sys.path.append('../../System/Game/')
 from Script.System.Game.PgLib import PgLib
 from Script.System.Game.GameSequenceBase import GameSequenceBase
 from Script.System.IO.InputKeyboard import InputKeyboard
+from Script.System.IO.InputMouse import InputMouse
 # カラーリスト
 sys.path.append('../../Data/')
 from Script.Data.ColorList import ColorList
@@ -128,17 +129,8 @@ class Battle(GameSequenceBase):
             self.DrawCircleTimer()
             # 数字タイマー
             self.DrawCountTimer()
-        elif self.state == self.BattleState.Think:
-            # マップの描画
-            self.DrawMap(self.map)
-            # プレイヤーの描画
-            self.CreatePlayer(self.player)
-            # エネミーの描画
-            self.CreateEnemy(self.enemy)
-            # 上部円タイマー
-            self.DrawCircleTimer()
-            # 数字タイマー
-            self.DrawCountTimer()
+            # マウスチェック
+            self.UnitData()
 
 
     def DrawMap(self, map):
@@ -212,7 +204,7 @@ class Battle(GameSequenceBase):
 
     def DrawCountTimer(self):
         self.Timerfont = pygame.font.Font(None, 30)
-        count = math.floor(self.counter / FPS)
+        count = math.ceil(self.counter / FPS - 1)
         self.Timercounter = self.Timerfont.render( str(count), True, ColorList.BLACK.value)
         counter_length = len( str(count) )
         #self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])               #映らない時用
@@ -223,6 +215,12 @@ class Battle(GameSequenceBase):
         elif counter_length == 1:
             self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
 
+    def UnitData(self):
+        # キー入力確認用
+        Point = self.pgLib.GetInputManager().GetMouse().GetPosMouce()
+        pushClick = self.pgLib.GetInputManager().GetMouse().GetPushClick()
+        if pushClick:
+            print("Push Click : ", str(Point))
 
 
 #    counter = 100
