@@ -8,8 +8,9 @@ from ..Util.Singleton import Singleton
 
 sys.path.append('../IO/')
 from ..IO.InputManager import InputManager
-   
-class PgLib(Singleton):
+
+# pygameのラッパーライブラリの中身
+class PgLibImpl(Singleton):
     # 初期化(幅・高さ)
     def __init__(self, title : str, width : int, height : int, fps : int) -> None:
         # ゲーム画面を初期化
@@ -96,3 +97,78 @@ class PgLib(Singleton):
             return True
         
         return False
+
+# pygameのラッパーライブラリの読び出す部分
+pgLib : PgLibImpl = None
+class PgLib:
+    # 初期化
+    @staticmethod
+    def Initialize(title : str, width : int, height : int, fps : int):
+        global pgLib
+        if pgLib == None:
+            pgLib = PgLibImpl(title, width, height, fps)
+
+    # インスタンス取得
+    @staticmethod
+    def GetInstance():
+        return pgLib
+
+    # スクリーンの取得
+    @staticmethod
+    def GetScreen():
+        return PgLib.GetInstance().GetScreen()
+
+    # スクリーンのサイズを取得
+    @staticmethod
+    def GetScreenSize():
+        return PgLib.GetInstance().GetScreenSize()
+
+    # スクリーンの中心座標を取得
+    @staticmethod
+    def GetScreenCenterPos():
+        return PgLib.GetInstance().GetScreenCenterPos()
+
+    # 入力情報管理インスタンスの取得
+    @staticmethod
+    def GetInputManager() -> InputManager:
+        return PgLib.GetInstance().GetInputManager()
+    
+    # 背景色の色を設定
+    @staticmethod
+    def SetBgColor(r, g, b):
+        PgLib.GetInstance().SetBgColor(r, g, b)
+
+    # 画像の読み込み(画像のインスタンスを返す)
+    @staticmethod
+    def LoadImage( filePath):
+        return PgLib.GetInstance().LoadImage(filePath)
+    
+    # 画像のリサイズ
+    @staticmethod
+    def ResizeImage(image : pygame.surface, width : int, height : int):
+        return PgLib.GetInstance().ResizeImage(image, width, height)
+
+    # 画像をスクリーンの中心に表示する
+    @staticmethod
+    def DrawImageCenter(image : pygame.surface, width : int = 0, height : int = 0):
+        PgLib.GetInstance().DrawImageCenter(image, width, height)
+
+    # ライブラリの更新処理
+    @staticmethod
+    def Update():
+        PgLib.GetInstance().Update()
+
+    # 描画開始
+    @staticmethod
+    def DrawStart():
+        PgLib.GetInstance().DrawStart()
+
+    # 描画終了
+    @staticmethod
+    def DrawEnd():
+        PgLib.GetInstance().DrawEnd()
+
+    # 終了確認
+    @staticmethod
+    def CheckEnd() -> bool:
+        return PgLib.GetInstance().CheckEnd()

@@ -16,30 +16,31 @@ GAME_TITLE = "ActKing"
 # ゲーム全般を扱うクラス
 class Game:    
     def __init__(self):
-        self.pgLib = PgLib(GAME_TITLE, WIDTH, HEIGHT, FPS)
-        #self.gameSequence : GameSequenceBase = Title(self.pgLib)
-        self.gameSequence : GameSequenceBase = Battle(self.pgLib)
+        PgLib.Initialize(GAME_TITLE, WIDTH, HEIGHT, FPS)
+        
+        #self.gameSequence : GameSequenceBase = Title()
+        self.gameSequence : GameSequenceBase = Battle()
 
     # ゲーム全般の更新処理
     def Update(self):
-        self.pgLib.Update()
+        PgLib.Update()
         self.gameSequence.Update()
 
         # キー入力確認用
-        pushKey = self.pgLib.GetInputManager().GetKeyboard().GetPushKey()
+        pushKey = PgLib.GetInputManager().GetKeyboard().GetPushKey()
         if pushKey:
             print("Push Key : ", pygame.key.name(pushKey))
         
     # ゲーム全般の描画処理
     def Draw(self):
         # 描画開始
-        self.pgLib.DrawStart()
+        PgLib.DrawStart()
 
         self.gameSequence.Draw()
         # 描画終了
-        self.pgLib.DrawEnd()
+        PgLib.DrawEnd()
                 
 
     # ゲームの終了確認
     def CheckEnd(self) -> bool:
-        return self.pgLib.CheckEnd()
+        return PgLib.CheckEnd()

@@ -56,15 +56,14 @@ class Battle(GameSequenceBase):
         Load = 5
         End = 10
 
-    def __init__(self, pgLib : PgLib) -> None:
+    def __init__(self) -> None:
         '''コンストラクタ'''
         self.TurnCount = 1
         self.TurnDisplay = TURN_DISPLAY
-        self.pgLib = pgLib
         self.map = Map()
         self.player = Player()
         self.enemy = Enemy()
-        self.screen = self.pgLib.GetScreen()
+        self.screen = PgLib.GetScreen()
         self.counter = MAX_COUNTER * FPS
         self.state = self.BattleState.Start
 
@@ -217,8 +216,8 @@ class Battle(GameSequenceBase):
 
     def UnitData(self):
         # キー入力確認用
-        Point = self.pgLib.GetInputManager().GetMouse().GetPosMouce()
-        pushClick = self.pgLib.GetInputManager().GetMouse().GetPushClick()
+        Point = PgLib.GetInputManager().GetMouse().GetPosMouce()
+        pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
         if pushClick:
             print("Push Click : ", str(Point))
 
