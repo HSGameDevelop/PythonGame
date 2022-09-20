@@ -10,23 +10,22 @@ class InputMouse:
         Right = constants.BUTTON_RIGHT
         Up = constants.BUTTON_WHEELUP
         Down = constants.BUTTON_WHEELDOWN
-    
+
     # 初期化
     def __init__(self) -> None:
         self.click = None
-        self.pos = []
+        self.pos = [0,0]
         
     # Mouseの情報の更新処理
     def Update(self):
         event = pygame.event.get(constants.MOUSEBUTTONDOWN) # キーを押した時
         if event:
             self.click = event[0].button
-            self.pos = event.pos
+            self.pos = event[0].pos
         elif pygame.event.get(constants.MOUSEBUTTONUP): # キーを離した時
             self.click = None
             self.pos = None
-            if pygame.event.get(constants.MOUSEMOTION): #マウス追跡
-                self.pos = event.pos
+
  
     # マウスクリックを取得する
     def GetPushClick(self):
