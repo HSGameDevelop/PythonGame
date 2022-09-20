@@ -33,7 +33,7 @@ TURN_DISPLAY = 150
 
 FPS = 60
 
-MINUS1 = (MAX_COUNTER * FPS) / 360
+MINUS1 = (MAX_COUNTER * FPS) / 90
 
 # 色の設定
 BOARD_COLOR = ColorList.GRAY.value              # 盤面全体（見えない位置）
@@ -43,6 +43,7 @@ DEAD_OUT_LINE_COLOR = ColorList.BLACK.value     # 侵入不可エリア枠線
 OUT_LINE_COLOR = ColorList.BLACK.value          # 枠線の色
 YOUR_COLOR = ColorList.BLUE.value               # あなたのユニットの色
 ENEMY_COLOR = ColorList.YELLOW.value            # 相手のユニットの色
+
 
 class Battle(GameSequenceBase):
     class BattleState(Enum):
@@ -206,7 +207,7 @@ class Battle(GameSequenceBase):
     def DrawCircleTimer(self):
         pygame.draw.circle(self.screen, ColorList.YELLOW.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_OUT)
         pygame.draw.circle(self.screen, ColorList.RED.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_IN)
-        pygame.draw.arc(self.screen, ColorList.LIME.value, [TIMER_X - CIRCLE_WIDTH_IN, TIMER_Y - CIRCLE_WIDTH_IN, CIRCLE_WIDTH_IN * 2, CIRCLE_WIDTH_IN * 2], pi/2, (pi/2) + (2*pi) * (self.counter - MINUS1) / (MAX_COUNTER * FPS), CIRCLE_WIDTH_IN)
+        pygame.draw.arc(self.screen, ColorList.LIME.value, [TIMER_X - CIRCLE_WIDTH_IN, TIMER_Y - CIRCLE_WIDTH_IN, CIRCLE_WIDTH_IN * 2, CIRCLE_WIDTH_IN * 2], pi/2, (pi/2) + (2*pi) * (self.counter * 0.98) / (MAX_COUNTER * FPS), CIRCLE_WIDTH_IN)
 
 
     def DrawCountTimer(self):
