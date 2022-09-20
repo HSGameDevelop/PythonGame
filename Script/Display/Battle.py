@@ -84,7 +84,7 @@ class Battle(GameSequenceBase):
         elif self.state == self.BattleState.Think:
             # キー入力取得期間
             self.counter -= 1
-            if self.counter == 0:
+            if self.counter == -1:
                 self.state = self.BattleState.Stop
             return
         elif self.state == self.BattleState.Stop:
