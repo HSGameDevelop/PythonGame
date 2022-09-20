@@ -3,12 +3,6 @@
 NUM_WIDTH = 30
 NUM_HEIGHT = 22
 
-# 色の設定
-BOARD_COLOR = 'gray'        # 盤面全体（見えない位置）
-VISIBLE_COLOR = 'white'     # ユニットから見える範囲（カラー）
-DEAD_COLOR = 'red'          # 侵入不可エリア
-OUT_LINE_COLOR = 'black'    # 枠線の色
-
 # 中央座標の取り方
 # (x,y)の時、(h_w*x, h_w1_4 + h_w3_4*y)
 

@@ -7,14 +7,16 @@ import math
 import sys, os
 # マップ表示のクラス
 from .Map import Map
-#import Map
 
 # プレイヤー表示のクラス
 from .Character import Character, Player, Enemy
-#import Character
 sys.path.append('../../System/Game/')
 from Script.System.Game.PgLib import PgLib
 from Script.System.Game.GameSequenceBase import GameSequenceBase
+from Script.System.IO.InputKeyboard import InputKeyboard
+# カラーリスト
+sys.path.append('../../Data/')
+from Script.Data.ColorList import ColorList
 
 CANVAS_WIDTH =  1280
 CANVAS_HEIGHT = 960
@@ -31,27 +33,16 @@ TURN_DISPLAY = 150
 
 FPS = 60
 
-# 色の設定
-white = (255,255,255)
-black = (0,0,0)
-gray = (128, 128, 128)
-blue = (0, 0, 255)
-red_down = (122, 0, 0)
-red = (255, 0, 0)
-yellow = (255, 255, 0)
-purple = (255, 0, 255)
-green = (0, 255, 0)
-orange = (200, 100, 0)
-pale_green = (0, 255, 100)
-pale_black = (50, 50, 50)
+MINUS1 = (MAX_COUNTER * FPS) / 360
 
-BOARD_COLOR = gray          # 盤面全体（見えない位置）
-VISIBLE_COLOR = white       # ユニットから見える範囲（カラー）
-DEAD_COLOR = red_down          # 侵入不可エリア
-DEAD_OUT_LINE_COLOR = black# 侵入不可エリア枠線
-OUT_LINE_COLOR = black      # 枠線の色
-YOUR_COLOR = blue           # あなたのユニットの色
-ENEMY_COLOR = yellow        # 相手のユニットの色
+# 色の設定
+BOARD_COLOR = ColorList.GRAY.value              # 盤面全体（見えない位置）
+VISIBLE_COLOR = ColorList.WHITE.value           # ユニットから見える範囲（カラー）
+DEAD_COLOR = ColorList.MAROON.value             # 侵入不可エリア
+DEAD_OUT_LINE_COLOR = ColorList.BLACK.value     # 侵入不可エリア枠線
+OUT_LINE_COLOR = ColorList.BLACK.value          # 枠線の色
+YOUR_COLOR = ColorList.BLUE.value               # あなたのユニットの色
+ENEMY_COLOR = ColorList.YELLOW.value            # 相手のユニットの色
 
 class Battle(GameSequenceBase):
     class BattleState(Enum):
@@ -89,6 +80,7 @@ class Battle(GameSequenceBase):
                 self.state = self.BattleState.Counter
             return
         elif self.state == self.BattleState.Think:
+            # キー入力取得期間
             self.counter -= 1
             if self.counter == 0:
                 self.state = self.BattleState.Stop
@@ -170,7 +162,7 @@ class Battle(GameSequenceBase):
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-            pygame.draw.circle(self.screen, blue, (player.xy[num][3], player.xy[num][4]), 21)
+            pygame.draw.circle(self.screen, ColorList.BLUE.value, (player.xy[num][3], player.xy[num][4]), 21)
             #self.screen.create_oval(player.xy[num][3], player.xy[num][4], player.xy[num][5], player.xy[num][6], fill=YOUR_COLOR)
             tag_length = len(player.xy[num][5])
             if tag_length == 6:
@@ -187,7 +179,7 @@ class Battle(GameSequenceBase):
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-            pygame.draw.circle(self.screen, yellow, (enemy.xy[num][3], enemy.xy[num][4]), 21)
+            pygame.draw.circle(self.screen, ColorList.YELLOW.value, (enemy.xy[num][3], enemy.xy[num][4]), 21)
             #self.screen.create_oval(enemy.xy[num][3], enemy.xy[num][4], enemy.xy[num][5], enemy.xy[num][6], fill=ENEMY_COLOR)
             tag_length = len(enemy.xy[num][5])
             if tag_length == 5:
@@ -203,24 +195,24 @@ class Battle(GameSequenceBase):
     def DrawTurn(self):
         if self.TurnDisplay > 20:
             self.Turnfont = pygame.font.Font(None, 100)
-            self.Turncounter = self.Turnfont.render( "Turn" + str(self.TurnCount), True, black)
+            self.Turncounter = self.Turnfont.render( "Turn" + str(self.TurnCount), True, ColorList.BLACK.value)
             self.screen.blit(self.Turncounter, [CANVAS_WIDTH / 2 - 70, CANVAS_HEIGHT / 2 - 25])
         else:
             self.Turnfont = pygame.font.Font(None, 100)
-            self.Turncounter = self.Turnfont.render( "Start", True, black)
+            self.Turncounter = self.Turnfont.render( "Start", True, ColorList.BLACK.value)
             self.screen.blit(self.Turncounter, [CANVAS_WIDTH / 2 - 70, CANVAS_HEIGHT / 2 - 25])
 
 
     def DrawCircleTimer(self):
-        pygame.draw.circle(self.screen, yellow, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_OUT)
-        pygame.draw.circle(self.screen, red, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_IN)
-        pygame.draw.arc(self.screen, green, [TIMER_X - CIRCLE_WIDTH_IN, TIMER_Y - CIRCLE_WIDTH_IN, CIRCLE_WIDTH_IN * 2, CIRCLE_WIDTH_IN * 2], pi/2, (pi/2) + (2*pi) * self.counter / (MAX_COUNTER * FPS), CIRCLE_WIDTH_IN)
+        pygame.draw.circle(self.screen, ColorList.YELLOW.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_OUT)
+        pygame.draw.circle(self.screen, ColorList.RED.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_IN)
+        pygame.draw.arc(self.screen, ColorList.LIME.value, [TIMER_X - CIRCLE_WIDTH_IN, TIMER_Y - CIRCLE_WIDTH_IN, CIRCLE_WIDTH_IN * 2, CIRCLE_WIDTH_IN * 2], pi/2, (pi/2) + (2*pi) * (self.counter - MINUS1) / (MAX_COUNTER * FPS), CIRCLE_WIDTH_IN)
 
 
     def DrawCountTimer(self):
         self.Timerfont = pygame.font.Font(None, 30)
         count = math.floor(self.counter / FPS)
-        self.Timercounter = self.Timerfont.render( str(count), True, black)
+        self.Timercounter = self.Timerfont.render( str(count), True, ColorList.BLACK.value)
         counter_length = len( str(count) )
         #self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])               #映らない時用
         if counter_length == 3:
@@ -229,7 +221,7 @@ class Battle(GameSequenceBase):
             self.screen.blit(self.Timercounter, [TIMER_X - 12, TIMER_Y - 9])
         elif counter_length == 1:
             self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
-        
+
 
 
 #    counter = 100
