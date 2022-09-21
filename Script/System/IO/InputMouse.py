@@ -14,17 +14,20 @@ class InputMouse:
     # 初期化
     def __init__(self) -> None:
         self.click = None
-        self.pos = [0,0]
+        self.pos_x = None
+        self.pos_y = None
+        #self.pos = [self.pos_x, self.pos_y]
         
     # Mouseの情報の更新処理
     def Update(self):
         event = pygame.event.get(constants.MOUSEBUTTONDOWN) # キーを押した時
         if event:
             self.click = event[0].button
-            self.pos = event[0].pos
+            self.pos_x, self.pos_y = event[0].pos
         elif pygame.event.get(constants.MOUSEBUTTONUP): # キーを離した時
             self.click = None
-            self.pos = None
+            self.pos_x = None
+            self.pos_y = None
 
  
     # マウスクリックを取得する
@@ -33,7 +36,7 @@ class InputMouse:
     
     # マウスの位置を取得する
     def GetPosMouce(self):
-        return self.pos
+        return self.pos_x, self.pos_y
 
     # 現在押しているキーが指定したキーかどうかを返す(true:押している/false:押していない)
     def CheckPushClick(self, click : InputClickList) -> bool:

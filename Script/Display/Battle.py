@@ -137,7 +137,7 @@ class Battle(GameSequenceBase):
             # 数字タイマー
             self.DrawCountTimer()
             # マウスチェック
-            self.UnitData()
+            self.UnitData(self.player, self.enemy)
 
 
     def DrawMap(self, map):
@@ -222,16 +222,31 @@ class Battle(GameSequenceBase):
         elif counter_length == 1:
             self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
 
-    def UnitData(self):
+    def UnitData(self, player, enemy):
         # キー入力確認用
-        Point = PgLib.GetInputManager().GetMouse().GetPosMouce()
-        self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+        Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
+        self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()        
         if self.pushClick != self.before_pushClick:
             if  self.flag == False:
-                print("Push Click : ", str(Point))
-                self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
-                self.flag = True
+                print("Push Click :  x:", str(Point_x) + " y:" + str(Point_y))
+                #font = pygame.font.Font(None, 15)
+                if Point_x != None and Point_y !=  None:
+                    for p_num in range(6):
+                        p_x = math.floor(player.xy[p_num][3])
+                        p_y = math.floor(player.xy[p_num][4])
+                        #[num, self.xl[num], self.yl[num], xc, yc, tagname]
+                        if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
+                            print(player.xy[p_num])
+
+                    for e_num in range(6):
+                        e_x = math.floor(enemy.xy[e_num][3])
+                        e_y = math.floor(enemy.xy[e_num][4])
+                        #[num, self.xl[num], self.yl[num], xc, yc, tagname]
+                        if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
+                            print(enemy.xy[e_num])
                 
+                self.flag = True
+                self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
 
 
 

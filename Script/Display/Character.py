@@ -47,13 +47,7 @@ class Character:
                 break
         self.xl = xl
         self.yl = yl
-        self.xc = None
-        self.yc = None
-        self.xy_pos = []
-
         self.prepareUnit(xl, yl)
-        
-        print(self.xy_pos)
 
 
     def prepareUnit(self, xl, yl):
