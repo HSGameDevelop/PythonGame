@@ -66,7 +66,10 @@ class Battle(GameSequenceBase):
         self.screen = PgLib.GetScreen()
         self.counter = MAX_COUNTER * FPS
         self.state = self.BattleState.Start
-
+        self.flg_counter = 10
+        self.flag = False
+        self.pushClick = None
+        self.before_pushClick = None
 
     def Update(self):
         if self.state == self.BattleState.Start:
@@ -83,6 +86,11 @@ class Battle(GameSequenceBase):
         elif self.state == self.BattleState.Think:
             # キー入力取得期間
             self.counter -= 1
+            if self.flag == True:
+                self.flg_counter -= 1
+            if self.flg_counter == 0:
+                self.flag = False
+                self.flg_counter = 10
             if self.counter == -1:
                 self.state = self.BattleState.Stop
             return
@@ -217,9 +225,14 @@ class Battle(GameSequenceBase):
     def UnitData(self):
         # キー入力確認用
         Point = PgLib.GetInputManager().GetMouse().GetPosMouce()
-        pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
-        if pushClick:
-            print("Push Click : ", str(Point))
+        self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+        if self.pushClick != self.before_pushClick:
+            if  self.flag == False:
+                print("Push Click : ", str(Point))
+                self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+                self.flag = True
+                
+
 
 
 #    counter = 100

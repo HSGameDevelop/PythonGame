@@ -45,11 +45,15 @@ class Character:
             z = rand_ints_check(xl, yl)
             if z == True:
                 break
-
-        self.prepareUnit(xl, yl)
-
         self.xl = xl
         self.yl = yl
+        self.xc = None
+        self.yc = None
+        self.xy_pos = []
+
+        self.prepareUnit(xl, yl)
+        
+        print(self.xy_pos)
 
 
     def prepareUnit(self, xl, yl):
@@ -58,18 +62,17 @@ class Character:
         for num in range(6):
             # 開始・終了座標を計算
             if yl[num] % 2 == 0:
-                xc = h_w * xl[num]
-                yc = h_h3_4 * yl[num] + h_h1_4
+                self.xc = h_w * xl[num]
+                self.yc = h_h3_4 * yl[num] + h_h1_4
             elif yl[num] % 2 == 1:
-                xc = h_w1_2 + (xl[num] * h_w)
-                yc = h_h1_4 + (h_h3_4 * yl[num])
+                self.xc = h_w1_2 + (xl[num] * h_w)
+                self.yc = h_h1_4 + (h_h3_4 * yl[num])
             
             # (x, y)座標
             tagname = "(" + str(xl[num]) + "," + str(yl[num]) + ")"
-            self.xy.append([num, xl[num], yl[num], xc, yc, tagname])
+            self.xy.append([num, xl[num], yl[num], self.xc, self.yc, tagname])
 
         return self.xy
-
 
 class Player(Character):
     def __init__(self):
