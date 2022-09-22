@@ -265,8 +265,9 @@ class Battle(GameSequenceBase):
 
     def MoveData(self):
         # リストでそれぞれの行動データを生成
-        # list = [player or enemy, unit_id, action_number(行動番号), kinds(攻撃・移動・防御(auto)), consumption(行動力消費量), x, y(移動先(今いる場所)), weapon_direction(武器向き), weapon(武器),weapon_direction(盾向き), weapon(盾)]
+        # list = [player or enemy, unit_id, action_number(行動番号), kinds(攻撃・移動・防御(auto)), consumption(行動力消費量), x, y(移動先(今いる場所)), weapon_direction(武器向き), weapon(武器), shield_direction(盾向き), shield(盾)]
         pass
+    
 
     def MoveUnit(self, move, unit):
         pass
