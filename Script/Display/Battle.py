@@ -7,7 +7,6 @@ import math
 import sys, os
 # マップ表示のクラス
 from .Map import Map
-
 # プレイヤー表示のクラス
 from .Character import Character, Player, Enemy
 sys.path.append('../../System/Game/')
@@ -18,20 +17,6 @@ from Script.System.IO.InputMouse import InputMouse
 # カラーリスト
 sys.path.append('../../Data/')
 from Script.Data.ColorList import ColorList
-
-# 覚書  武器用の攻撃範囲で利用すると思われるDataに攻撃範囲が何°かを設定表に入力
-#   pi = 180
-#   5 * pi / 6 = 150°
-#   2 * pi / 3 = 120°
-#   pi / 2 = 90°
-#   pi / 3 = 60°
-#   pi / 4 = 45°
-#   pi / 6 = 30°
-#   pi / 9 = 20°
-#   pi / 10 = 18°
-#   pi / 12 = 15°
-#   pi / 18 = 10°
-
 
 CANVAS_WIDTH =  1280
 CANVAS_HEIGHT = 960
@@ -70,6 +55,7 @@ class Battle(GameSequenceBase):
         Load = 5
         End = 10
 
+
     def __init__(self) -> None:
         '''コンストラクタ'''
         self.TurnCount = 1                          # ターンのカウント
@@ -84,6 +70,7 @@ class Battle(GameSequenceBase):
         self.click_flag = False                     # クリックした時のフラグ
         self.pushClick = None                       # クリックしたイベントの取得
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
+
 
     def Update(self):
         if self.state == self.BattleState.Start:
@@ -171,7 +158,6 @@ class Battle(GameSequenceBase):
 
 
     def CreatePlayer(self, player):
-        return
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
@@ -189,7 +175,6 @@ class Battle(GameSequenceBase):
 
 
     def CreateEnemy(self, enemy):
-        return
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
@@ -207,7 +192,6 @@ class Battle(GameSequenceBase):
 
 
     def DrawTurn(self):
-        return
         if self.TurnDisplay > 20:
             self.Turnfont = pygame.font.Font(None, 100)
             self.Turncounter = self.Turnfont.render( "Turn" + str(self.TurnCount), True, ColorList.BLACK.value)
@@ -219,14 +203,12 @@ class Battle(GameSequenceBase):
 
 
     def DrawCircleTimer(self):
-        return
         pygame.draw.circle(self.screen, ColorList.YELLOW.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_OUT)
         pygame.draw.circle(self.screen, ColorList.RED.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_IN)
         pygame.draw.arc(self.screen, ColorList.LIME.value, [TIMER_X - CIRCLE_WIDTH_IN, TIMER_Y - CIRCLE_WIDTH_IN, CIRCLE_WIDTH_IN * 2, CIRCLE_WIDTH_IN * 2], pi/2, (pi/2) + (2*pi) * (self.counter * 0.98) / (MAX_COUNTER * FPS), CIRCLE_WIDTH_IN)
 
 
     def DrawCountTimer(self):
-        return
         self.Timerfont = pygame.font.Font(None, 30)
         count = math.ceil(self.counter / FPS)
         self.Timercounter = self.Timerfont.render( str(count), True, ColorList.BLACK.value)
