@@ -37,24 +37,23 @@ class Title(GameSequenceBase):
         self.state : Title.TitleState = Title.TitleState.Start
 
     # 更新処理
-    def Update(self):
+    def Update(self) -> bool:
 
         if self.state == Title.TitleState.Start:
             self.state = Title.TitleState.LogoIn
-            return
         elif self.state == Title.TitleState.LogoIn:
             if self.bladeX < self.bladeEndX:
                 self.bladeX += ICON_MOVE_SPEED
             
-            if PgLib.GetInputManager().GetKeyboard().GetPushKey():
+            if PgLib.GetInputManager().GetMouse().GetPushClick() != None:
                 self.bladeX = self.bladeEndX
                 self.state = Title.TitleState.Run
-            return
         elif self.state == Title.TitleState.Run:
-            self.state = Title.TitleState.LogoIn
-            return
+            self.state = Title.TitleState.End
         elif self.state == Title.TitleState.End:
-            return
+            return True
+        
+        return False
 
     def Draw(self):
         screen = PgLib.GetScreen()

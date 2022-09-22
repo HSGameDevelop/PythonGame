@@ -12,7 +12,7 @@ class GameSequenceBase(metaclass=ABCMeta):
 
     # 更新処理
     @abstractmethod
-    def Update(self):
+    def Update(self) -> bool:
         pass
 
     # 描画処理

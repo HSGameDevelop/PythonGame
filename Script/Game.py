@@ -24,7 +24,8 @@ class Game:
     # ゲーム全般の更新処理
     def Update(self):
         PgLib.Update()
-        self.gameSequence.Update()
+        if self.gameSequence.Update():
+            self.gameSequence = Battle()
 
         # キー入力確認用
         pushKey = PgLib.GetInputManager().GetKeyboard().GetPushKey()
