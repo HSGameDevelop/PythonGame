@@ -151,6 +151,7 @@ class Battle(GameSequenceBase):
 
 
     def CreatePlayer(self, player):
+        return
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
@@ -168,6 +169,7 @@ class Battle(GameSequenceBase):
 
 
     def CreateEnemy(self, enemy):
+        return
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
@@ -185,6 +187,7 @@ class Battle(GameSequenceBase):
 
 
     def DrawTurn(self):
+        return
         if self.TurnDisplay > 20:
             self.Turnfont = pygame.font.Font(None, 100)
             self.Turncounter = self.Turnfont.render( "Turn" + str(self.TurnCount), True, ColorList.BLACK.value)
@@ -196,12 +199,14 @@ class Battle(GameSequenceBase):
 
 
     def DrawCircleTimer(self):
+        return
         pygame.draw.circle(self.screen, ColorList.YELLOW.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_OUT)
         pygame.draw.circle(self.screen, ColorList.RED.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_IN)
         pygame.draw.arc(self.screen, ColorList.LIME.value, [TIMER_X - CIRCLE_WIDTH_IN, TIMER_Y - CIRCLE_WIDTH_IN, CIRCLE_WIDTH_IN * 2, CIRCLE_WIDTH_IN * 2], pi/2, (pi/2) + (2*pi) * (self.counter * 0.98) / (MAX_COUNTER * FPS), CIRCLE_WIDTH_IN)
 
 
     def DrawCountTimer(self):
+        return
         self.Timerfont = pygame.font.Font(None, 30)
         count = math.ceil(self.counter / FPS)
         self.Timercounter = self.Timerfont.render( str(count), True, ColorList.BLACK.value)

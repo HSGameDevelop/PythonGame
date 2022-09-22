@@ -18,8 +18,8 @@ class Game:
     def __init__(self):
         PgLib.Initialize(GAME_TITLE, WIDTH, HEIGHT, FPS)
         
-        #self.gameSequence : GameSequenceBase = Title()
-        self.gameSequence : GameSequenceBase = Battle()
+        self.gameSequence : GameSequenceBase = Title()
+        #self.gameSequence : GameSequenceBase = Battle()
 
     # ゲーム全般の更新処理
     def Update(self):
