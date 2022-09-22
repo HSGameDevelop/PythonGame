@@ -1,5 +1,7 @@
 import random
 
+# キャラの視界を設定マップへ反映するように追加
+
 #  player 重複なし
 def rand_ints_x(i, j):
     xl = []

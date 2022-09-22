@@ -19,6 +19,20 @@ from Script.System.IO.InputMouse import InputMouse
 sys.path.append('../../Data/')
 from Script.Data.ColorList import ColorList
 
+# 覚書  武器用の攻撃範囲で利用すると思われるDataに攻撃範囲が何°かを設定表に入力
+#   pi = 180
+#   5 * pi / 6 = 150°
+#   2 * pi / 3 = 120°
+#   pi / 2 = 90°
+#   pi / 3 = 60°
+#   pi / 4 = 45°
+#   pi / 6 = 30°
+#   pi / 9 = 20°
+#   pi / 10 = 18°
+#   pi / 12 = 15°
+#   pi / 18 = 10°
+
+
 CANVAS_WIDTH =  1280
 CANVAS_HEIGHT = 960
 
@@ -58,18 +72,18 @@ class Battle(GameSequenceBase):
 
     def __init__(self) -> None:
         '''コンストラクタ'''
-        self.TurnCount = 1
-        self.TurnDisplay = TURN_DISPLAY
-        self.map = Map()
-        self.player = Player()
-        self.enemy = Enemy()
-        self.screen = PgLib.GetScreen()
-        self.counter = MAX_COUNTER * FPS
-        self.state = self.BattleState.Start
-        self.flg_counter = 10
-        self.flag = False
-        self.pushClick = None
-        self.before_pushClick = None
+        self.TurnCount = 1                          # ターンのカウント
+        self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
+        self.map = Map()                            # Map管理
+        self.player = Player()                      # Playerユニット
+        self.enemy = Enemy()                        # Enemyユニット
+        self.screen = PgLib.GetScreen()             # スクリーンの設定
+        self.counter = MAX_COUNTER * FPS            # シーン「Think」の時間設定
+        self.state = self.BattleState.Start         # バトルのステイト
+        self.click_flag_counter = 10                # クリックのフラグが立っている間受付拒否時間
+        self.click_flag = False                     # クリックした時のフラグ
+        self.pushClick = None                       # クリックしたイベントの取得
+        self.before_pushClick = None                # 1つ前のクリックイベントの取得
 
     def Update(self):
         if self.state == self.BattleState.Start:
@@ -86,11 +100,11 @@ class Battle(GameSequenceBase):
         elif self.state == self.BattleState.Think:
             # キー入力取得期間
             self.counter -= 1
-            if self.flag == True:
-                self.flg_counter -= 1
-            if self.flg_counter == 0:
-                self.flag = False
-                self.flg_counter = 10
+            if self.click_flag == True:
+                self.click_flag_counter -= 1
+            if self.click_flag_counter == 0:
+                self.click_flag = False
+                self.click_flag_counter = 10
             if self.counter == -1:
                 self.state = self.BattleState.Stop
             return
@@ -223,11 +237,12 @@ class Battle(GameSequenceBase):
             self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
 
     def UnitData(self, player, enemy):
-        # キー入力確認用
+        # 
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()        
         if self.pushClick != self.before_pushClick:
-            if  self.flag == False:
+            if  self.click_flag == False:
+                # キー入力確認用
                 print("Push Click :  x:", str(Point_x) + " y:" + str(Point_y))
                 #font = pygame.font.Font(None, 15)
                 if Point_x != None and Point_y !=  None:
@@ -245,9 +260,19 @@ class Battle(GameSequenceBase):
                         if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
                             print(enemy.xy[e_num])
                 
-                self.flag = True
+                self.click_flag = True
                 self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
 
+    def MoveData(self):
+        # リストでそれぞれの行動データを生成
+        # list = [player or enemy, unit_id, action_number(行動番号), kinds(攻撃・移動・防御(auto)), consumption(行動力消費量), x, y(移動先(今いる場所)), weapon_direction(武器向き), weapon(武器),weapon_direction(盾向き), weapon(盾)]
+        pass
+
+    def MoveUnit(self, move, unit):
+        pass
+        # 行動数の減り方は、攻撃方法や移動で異なる
+        # 行動終了時のplayer or enemy .xy[num][1, 2]に移動先のデータを入れ替え
+        # 移動時の計算も必要
 
 
 #    counter = 100
