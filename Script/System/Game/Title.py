@@ -7,8 +7,8 @@ from .PgLib import PgLib
 import pygame
 
 TITLE_IMAGE_DIRECTORY = "Resource/Image/Title/"
-TITLE_BG = "test_bg.jpg"
-TITLE_LOGO = "TitleLogo.png"
+TITLE_BG = "Title_Bg.png"
+TITLE_LOGO = "Title_Logo.png"
 TITLE_ICON_BLADE = "Icon_Blade.png"
 
 
@@ -64,6 +64,6 @@ class Title(GameSequenceBase):
          # 武器アイコンを表示
         screen.blit(self.bladeImage, (self.bladeX, self.bladeY))
         # タイトルロゴの描画(中心に配置)
-        PgLib.DrawImageCenter(self.Logo, 960, 720)
+        PgLib.DrawImageCenter(self.Logo)
 
        
