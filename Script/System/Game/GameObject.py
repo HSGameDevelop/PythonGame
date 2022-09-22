@@ -67,5 +67,4 @@ class GameObject:
     # 画像の設定
     def SetImage(self, image : pygame.surface):
         self.image = image
-
     
