@@ -1,3 +1,4 @@
+import pygame.surface
 
 # ゲームに使用するオブジェクトのクラス
 class GameObject:
@@ -30,10 +31,11 @@ class GameObject:
         self.position = GameObject.Position()
         self.size = GameObject.Size()
         self.direction = GameObject.Direction()
+        self.image : pygame.surface = None
 
     # 座標の取得
     def GetPos(self) -> Position:
-        return position
+        return self.position
 
     # 座標の設定
     def SetPos(self, x : int, y : int):
@@ -57,4 +59,13 @@ class GameObject:
     def SetDir(self, x, y):
         self.direction.x = x
         self.direction.y = y
+
+    # 画像の取得
+    def GetImage(self) -> pygame.surface:
+        return self.image
+
+    # 画像の設定
+    def SetImage(self, image : pygame.surface):
+        self.image = image
+
     
