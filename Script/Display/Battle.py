@@ -157,8 +157,6 @@ class Battle(GameSequenceBase):
     def DrawMap(self, map):
         # ６点指定 六角形
         for num in range(660):
-            #pygame.draw.polygon(surface, (255,255,255), [(450, 60), (425, 17), (375, 17), (350, 60), (375, 103), (425, 103)], 0)
-            #canvas.create_polygon( (450, 60), (425, 17), (375, 17), (350, 60), (375, 103), (425, 103))
             # y = map.m_xy[num][1]   x = map.m_xy[num][0]
             if map.m_xy[num][1] == 0 or map.m_xy[num][1] == 21 or map.m_xy[num][0] == 0 or map.m_xy[num][0] == 1 or map.m_xy[num][0] == 2 or map.m_xy[num][0] == 23 or map.m_xy[num][0] == 24 or map.m_xy[num][0] == 25:
                 # 内側描画
@@ -236,8 +234,8 @@ class Battle(GameSequenceBase):
         elif counter_length == 1:
             self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
 
+
     def UnitData(self, player, enemy):
-        # 
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()        
         if self.pushClick != self.before_pushClick:
@@ -245,108 +243,33 @@ class Battle(GameSequenceBase):
                 # キー入力確認用
                 print("Push Click :  x:", str(Point_x) + " y:" + str(Point_y))
                 #font = pygame.font.Font(None, 15)
+                #[num, self.xl[num], self.yl[num], xc, yc, tagname]
                 if Point_x != None and Point_y !=  None:
                     for p_num in range(6):
                         p_x = math.floor(player.xy[p_num][3])
                         p_y = math.floor(player.xy[p_num][4])
-                        #[num, self.xl[num], self.yl[num], xc, yc, tagname]
                         if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
                             print(player.xy[p_num])
 
                     for e_num in range(6):
                         e_x = math.floor(enemy.xy[e_num][3])
                         e_y = math.floor(enemy.xy[e_num][4])
-                        #[num, self.xl[num], self.yl[num], xc, yc, tagname]
                         if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
                             print(enemy.xy[e_num])
-                
+
                 self.click_flag = True
                 self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+
 
     def MoveData(self):
         # リストでそれぞれの行動データを生成
         # list = [player or enemy, unit_id, action_number(行動番号), kinds(攻撃・移動・防御(auto)), consumption(行動力消費量), x, y(移動先(今いる場所)), weapon_direction(武器向き), weapon(武器), shield_direction(盾向き), shield(盾)]
         pass
-    
+
 
     def MoveUnit(self, move, unit):
         pass
         # 行動数の減り方は、攻撃方法や移動で異なる
         # 行動終了時のplayer or enemy .xy[num][1, 2]に移動先のデータを入れ替え
         # 移動時の計算も必要
-
-
-#    counter = 100
-#    text = font.render(str(counter), True, (0, 128, 0))
-#
-#    timer_event = pygame.USEREVENT+1
-#    pygame.time.set_timer(timer_event, 1000)
-#
-#    def drawArc(surf, color, center, radius, width, end_angle):
-#        arc_rect = pygame.Rect(0, 0, radius*2, radius*2)
-#        arc_rect.center = center
-#        pygame.draw.arc(surf, color, arc_rect, 0, end_angle, width)
-#
-#    run = True
-#    while run:
-#        clock.tick(60)
-#        for event in pygame.event.get():
-#            if event.type == pygame.QUIT:
-#                run = False
-#            elif event.type == timer_event:
-#                counter -= 1
-#                text = font.render(str(counter), True, (0, 128, 0))
-#                if counter == 0:
-#                    pygame.time.set_timer(timer_event, 0)                
-#
-#        window.fill((255, 255, 255))
-#        text_rect = text.get_rect(center = window.get_rect().center)
-#        window.blit(text, text_rect)
-#        drawArc(window, (255, 0, 0), (100, 100), 90, 10, 2*math.pi*counter/100)
-#        pygame.display.flip()
-
-
-#    def updateDraw(self, player):
-#        for num in range(6):
-#            font = pygame.font.Font(None, 15)
-#            #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-#            pygame.draw.circle(screen, blue, (player.xy[num][3] * 1.5, player.xy[num][4] * 1.5), 21)
-#            #screen.create_oval(player.xy[num][3], player.xy[num][4], player.xy[num][5], player.xy[num][6], fill=YOUR_COLOR)
-#            tag_length = len(player.xy[num][5])
-#            if tag_length == 6:
-#                text = font.render(player.xy[num][5], True, (255,255,255))
-#                screen.blit(text, [player.xy[num][3] * 1.5 - 12, player.xy[num][4] * 1.5])
-#                #screen.create_text( player.xy[num][3] + 4, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
-#            elif tag_length == 7:
-#                text = font.render(player.xy[num][5], True, (255,255,255))
-#                screen.blit(text, [player.xy[num][3] * 1.5 - 15, player.xy[num][4] * 1.5])
-                #screen.create_text( player.xy[num][3] + 2, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
-
-    #def updateEnemy(self, player_infos):
-    #    for x, y in player_infos:
-    #        screen.create_oval(
-    #            xs, ys,
-    #            xe, ye,
-    #            fill=YOUR_COLOR
-    #        )
-
-#pygame.init()
-#game = BattleDraw()
-#
-## ゲームループ
-#while True:
-#    #game.canvas.fill(black) # 背景を黒で塗りつぶす
-#
-#    #game.Update()
-#    #game.Draw()
-#    
-#    # 画面を更新
-#    pygame.display.update()
-#    game.updateDraw(game.enemy)
-#    pygame.display.update()
-#    # 終了イベントを確認 --- (*5)
-#    for event in pygame.event.get():
-#        if event.type == QUIT:
-#            pygame.quit()
-#            sys.exit()
 
