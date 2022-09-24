@@ -1,5 +1,6 @@
 import sys
 from enum import Enum
+from turtle import pos
 
 from Script.System.IO.InputKeyboard import InputKeyboard
 from .GameSequenceBase import GameSequenceBase
@@ -27,11 +28,9 @@ class Title(GameSequenceBase):
         #画像の読み込み
         self.bgImage = PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_BG)
         self.Logo = PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_LOGO)
-        self.blade = GameObject(size=(128, 128) , image=PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_ICON_BLADE))
+        self.blade = GameObject(size=(128, 128) , image=PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_ICON_BLADE), moveSpeed=ICON_MOVE_SPEED, position=(-100, 390))
 
         # アイコンのリサイズ
-        self.bladeX = -100
-        self.bladeY = 390
         self.bladeEndX = 890
 
         # ステートの初期化
@@ -43,13 +42,12 @@ class Title(GameSequenceBase):
         if self.state == Title.TitleState.Start:
             self.state = Title.TitleState.LogoIn
         elif self.state == Title.TitleState.LogoIn:
-            if self.bladeX < self.bladeEndX:
-                self.bladeX += ICON_MOVE_SPEED
-                self.blade.SetPos(self.bladeX, self.bladeY)
+            if self.blade.GetPos().x < self.bladeEndX:
+                self.blade.Update()
 
             if PgLib.GetInputManager().GetMouse().GetPushClick() != None:
-                self.bladeX = self.bladeEndX
-                self.blade.SetPos(self.bladeX, self.bladeY)
+                self.blade.SetMoveSpeed(0.0)
+                self.blade.SetPos(self.bladeEndX , 390)
                 self.state = Title.TitleState.Run
         elif self.state == Title.TitleState.Run:
             self.state = Title.TitleState.End
