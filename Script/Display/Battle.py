@@ -9,11 +9,13 @@ import sys, os
 from .Map import Map
 # プレイヤー表示のクラス
 from .Character import Character, Player, Enemy
-sys.path.append('../../System/Game/')
-from Script.System.Game.PgLib import PgLib
-from Script.System.Game.GameSequenceBase import GameSequenceBase
-from Script.System.IO.InputKeyboard import InputKeyboard
-from Script.System.IO.InputMouse import InputMouse
+sys.path.append('../System/Game/')
+from ..System.Game.GameSequenceBase import GameSequenceBase
+sys.path.append('../System/Util/')
+from ..System.Util.PgLib import PgLib
+sys.path.append('../System/IO/')
+from ..System.IO.InputKeyboard import InputKeyboard
+from ..System.IO.InputMouse import InputMouse
 # カラーリスト
 sys.path.append('../../Data/')
 from Script.Data.ColorList import ColorList

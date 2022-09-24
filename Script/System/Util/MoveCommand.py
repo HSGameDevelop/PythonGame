@@ -1,8 +1,8 @@
 import numpy as np
 from enum import Enum
 
-from ..Game.GameDefine import GameDefine
-from ..Game.GameObject import GameObject
+from .Define import Define
+from .GameObject import GameObject
 from .Command import Command
 
 # 移動命令制御クラス
@@ -31,7 +31,7 @@ class MoveCommand:
                 self.DeleteCommand(command)
             
     # 指定座標に向かって移動する
-    def MoveToPosition(self, gameObject : GameObject, targetPos : GameDefine.Position, moveSpeed : float) -> bool:
+    def MoveToPosition(self, gameObject : GameObject, targetPos : Define.Position, moveSpeed : float) -> bool:
         # 現在の座標を取得
         pos = gameObject.GetPos()
 
@@ -44,13 +44,13 @@ class MoveCommand:
         targetDir = np.array([targetPos.x - pos.x, targetPos.y - pos.y])
 
         # 内積を求める
-        dot = np.dot(GameDefine.DEFAULT_DIRECTION, targetDir)
+        dot = np.dot(Define.DEFAULT_DIRECTION, targetDir)
         
         # ベクトルの長さを計算
         dis = np.linalg.norm(targetDir)
         
         # 角度をラジアンから度に変換
-        degree = np.degrees(np.arccos(dot / (GameDefine.DEFAULT_DISTANCE * dis))) 
+        degree = np.degrees(np.arccos(dot / (Define.DEFAULT_DISTANCE * dis))) 
 
         # 座標の計算
         x = pos.x + np.cos(degree) * moveSpeed

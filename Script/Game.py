@@ -3,10 +3,11 @@ import sys, os
 import pygame
 from Script.System.Game.GameSequenceBase import GameSequenceBase
 
-sys.path.append('../../System/')
-from Script.System.Game.PgLib import PgLib
-from Script.System.Game.Title import Title
-from Script.System.Util.CommandUtil import CommandUtil
+sys.path.append('./System/Util/')
+from .System.Util.PgLib import PgLib
+from .System.Util.CommandUtil import CommandUtil
+sys.path.append('./System/Game/')
+from .System.Game.Title import Title
 sys.path.append('../../Display/')
 from Script.Display.Battle import Battle
 

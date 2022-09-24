@@ -1,13 +1,11 @@
 from abc import ABCMeta, abstractmethod
-
-from Script.System.Game.PgLib import PgLib
+import sys
 
 # ゲームの流れのベース(各シーンはこれを継承して実装する)
 class GameSequenceBase(metaclass=ABCMeta):
     # 初期化
     @abstractmethod
-    def __init__(self, pgLib : PgLib) -> None:
-        self.pgLib = pgLib
+    def __init__(self) -> None:
         pass
 
     # 更新処理

@@ -3,7 +3,7 @@ import pygame.surface
 
 from Script.Data.ColorList import ColorList
 from .PgLib import PgLib
-from .GameDefine import GameDefine
+from .Define import Define
 
 # ゲームに使用するオブジェクトのクラス
 class GameObject:
@@ -20,13 +20,13 @@ class GameObject:
         image : pygame.surface = None,
         moveSpeed : float = 0.0
      ) -> None:
-        self.position = GameDefine.Position(position[0], position[1])
-        self.size = GameDefine.Size(size[0], size[1])
-        self.direction = GameDefine.Direction(direction[0], direction[1])
+        self.position = Define.Position(position[0], position[1])
+        self.size = Define.Size(size[0], size[1])
+        self.direction = Define.Direction(direction[0], direction[1])
         self.image : pygame.surface = image
 
     # 座標の取得
-    def GetPos(self) -> GameDefine.Position:
+    def GetPos(self) -> Define.Position:
         return self.position
 
     # 座標の設定
@@ -35,7 +35,7 @@ class GameObject:
         self.position.y = y
 
     # サイズの取得
-    def GetSize(self) -> GameDefine.Size:
+    def GetSize(self) -> Define.Size:
         return self.size
 
     # サイズの設定
@@ -44,7 +44,7 @@ class GameObject:
         self.size.height = height
 
     # 向きの取得
-    def GetDir(self) -> GameDefine.Direction:
+    def GetDir(self) -> Define.Direction:
         return self.direction
     
     # 向きの設定

@@ -1,6 +1,6 @@
 import numpy as np
 
-class GameDefine:
+class Define:
     # 座標
     class Position:
         def __init__(self, x : float = 0, y : float = 0) -> None:

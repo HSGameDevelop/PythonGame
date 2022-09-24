@@ -22,7 +22,7 @@ class CommandUtil:
     @staticmethod
     def Initialize():
         global commandUtil
-        if commandUtil == None
+        if commandUtil == None:
             commandUtil = CommandUtilImpl()
 
     # インスタンス取得
