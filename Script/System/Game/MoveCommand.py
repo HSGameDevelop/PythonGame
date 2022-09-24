@@ -4,32 +4,41 @@ from enum import Enum
 from .GameDefine import GameDefine
 from .GameObject import GameObject
 
+# 命令クラス todo:後々各コマンドのインターフェースに移す予定
 class Command:
+        # 初期化
         def __init__(self, func, *args) -> None:
             self.func = func
             self.args = args
 
+        # コールバック呼び出し
         def Handler(self):
             return self.func(*self.args)
 
+# 移動命令制御クラス
 class MoveCommand:
+    # 移動の種類
     class MoveType(Enum):
-        Normal = 0
+        NormalToPosition = 0
 
+    # 初期化
     def __init__(self) -> None:
         self.commandList : list = []
 
+    # コマンドの追加
     def AddCommand(self, type : MoveType, *args):
-        if type == MoveCommand.MoveType.Normal:
+        if type == MoveCommand.MoveType.NormalToPosition:
             self.commandList.append(Command(self.MoveToPosition, *args))
 
+    # コマンドの削除
     def DeleteCommand(self, command : Command):
         self.commandList.remove(command)
 
+    # 更新処理
     def Update(self):
         for command in self.commandList:
             if command.Handler():
-                self.commandList.remove(command)
+                self.DeleteCommand(command)
             
     # 指定座標に向かって移動する
     def MoveToPosition(self, gameObject : GameObject, targetPos : GameDefine.Position, moveSpeed : float) -> bool:

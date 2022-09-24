@@ -41,11 +41,10 @@ class Title(GameSequenceBase):
     # 更新処理
     def Update(self) -> bool:
         if self.state == Title.TitleState.Start:
-            self.moveCommand.AddCommand(MoveCommand.MoveType.Normal, self.blade, BLADE_ROGO_POS, ICON_MOVE_SPEED)
+            self.moveCommand.AddCommand(MoveCommand.MoveType.NormalToPosition, self.blade, BLADE_ROGO_POS, ICON_MOVE_SPEED)
             self.state = Title.TitleState.LogoIn
         elif self.state == Title.TitleState.LogoIn:
             # 剣アイコン移動
-            #if self.blade.GetPos().x != BLADE_ROGO_POS.x:
             self.moveCommand.Update()
 
             if PgLib.GetInputManager().GetMouse().GetPushClick() != None:
