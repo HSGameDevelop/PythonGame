@@ -53,11 +53,15 @@ class PgLibImpl(Singleton):
         imageSize = image.get_rect().size
         imageWidth = imageSize[0]
         imageHeight = imageSize[1]
-        if width > 0 :
+        if width > 0:
             imageWidth = width
         if height > 0:
             imageHeight = height
         return pygame.transform.scale(image, (imageWidth, imageHeight))
+
+    # 楕円形の描画
+    def DrawEllipse(self, color : pygame.color.Color, x : int, y : int, width : int, height : int):
+        pygame.draw.ellipse(self.screen, color, (x, y, width, height))
 
     # 画像を描画する
     def DrawImage(self, image : pygame.surface, x : int, y : int, width : int, height : int):
@@ -158,6 +162,11 @@ class PgLib:
     @staticmethod
     def ResizeImage(image : pygame.surface, width : int, height : int):
         return PgLib.GetInstance().ResizeImage(image, width, height)
+
+    # 楕円形を描画する
+    @staticmethod
+    def DrawEllipse(color : pygame.color.Color, x : int, y : int, width : int, height : int):
+        return PgLib.GetInstance().DrawEllipse(color, x, y, width, height)
 
     # 画像を描画する
     @staticmethod
