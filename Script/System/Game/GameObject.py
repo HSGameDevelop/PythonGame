@@ -1,4 +1,6 @@
 import pygame.surface
+
+from Script.Data.ColorList import ColorList
 from .PgLib import PgLib
 
 # ゲームに使用するオブジェクトのクラス
@@ -8,31 +10,31 @@ class GameObject:
 # ########################    
     # 座標
     class Position:
-        def __init__(self) -> None:
-            self.x = 0
-            self.y = 0
+        def __init__(self, x : int = 0, y : int = 0) -> None:
+            self.x = x
+            self.y = y
 
     # サイズ
     class Size:
-        def __init__(self) -> None:
-            self.width = 0
-            self.height = 0
+        def __init__(self, width : int = 0, height : int = 0) -> None:
+            self.width = width
+            self.height = height
 
     # 向き
     class Direction:
-        def __init__(self) -> None:
-            self.x = 0
-            self.y = 0
+        def __init__(self, x : int = 0, y : int = 0) -> None:
+            self.x = x
+            self.y = y
 
 ##########################
 # メソッド
 # ########################
     # 初期化
-    def __init__(self) -> None:
-        self.position = GameObject.Position()
-        self.size = GameObject.Size()
-        self.direction = GameObject.Direction()
-        self.image : pygame.surface = None
+    def __init__(self, position : tuple[int, int] = (0, 0), size : tuple[int, int] = (0, 0), direction : tuple[int, int] = (0, 0), image : pygame.surface = None) -> None:
+        self.position = GameObject.Position(position[0], position[1])
+        self.size = GameObject.Size(size[0], size[1])
+        self.direction = GameObject.Direction(direction[0], direction[1])
+        self.image : pygame.surface = image
 
     # 座標の取得
     def GetPos(self) -> Position:
@@ -74,5 +76,5 @@ class GameObject:
         if self.image:
             PgLib.DrawImage(self.image, self.position.x, self.position.y, self.size.width, self.size.height)
         else:
-            return
+            PgLib.DrawEllipse(ColorList.WHITE, self.position.x, self.position.y, self.size.width, self.size.height)
     
