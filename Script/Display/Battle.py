@@ -142,53 +142,76 @@ class Battle(GameSequenceBase):
 
 
     def DrawMap(self, map):
-        # ６点指定 六角形
-        for num in range(660):
+        # ６点指定 六角形 30*24
+        for num in range(720):
             # y = map.m_xy[num][1]   x = map.m_xy[num][0]
-            if map.m_xy[num][1] == 0 or map.m_xy[num][1] == 21 or map.m_xy[num][0] == 0 or map.m_xy[num][0] == 1 or map.m_xy[num][0] == 2 or map.m_xy[num][0] == 23 or map.m_xy[num][0] == 24 or map.m_xy[num][0] == 25:
-                # 内側描画
-                pygame.draw.polygon( self.screen, DEAD_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])])  #fill=DEAD_COLOR, outline=OUT_LINE_COLOR)
-                # 枠線描画
-                pygame.draw.polygon( self.screen, DEAD_OUT_LINE_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])], 1)
-            else:
-                # 内側描画
-                pygame.draw.polygon( self.screen, BOARD_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])]) #fill=BOARD_COLOR, outline=OUT_LINE_COLOR)
-                # 枠線描画
-                pygame.draw.polygon( self.screen, OUT_LINE_COLOR, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])], 1)
+            if map.m_xy[num][14] == -1:
+                color = DEAD_COLOR
+                outline = DEAD_OUT_LINE_COLOR
+            elif map.m_xy[num][14] == 0:
+                color = BOARD_COLOR
+                outline = OUT_LINE_COLOR
+            elif map.m_xy[num][14] == 1:
+                color = BOARD_COLOR
+                outline = OUT_LINE_COLOR
+            elif map.m_xy[num][14] == 2:
+                color = BOARD_COLOR
+                outline = OUT_LINE_COLOR
+            elif map.m_xy[num][14] == 3:
+                color = BOARD_COLOR
+                outline = OUT_LINE_COLOR
+            elif map.m_xy[num][14] == 4:
+                color = BOARD_COLOR
+                outline = OUT_LINE_COLOR
+
+
+            # 内側描画
+            pygame.draw.polygon( self.screen, color, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])])
+            # 枠線描画
+            pygame.draw.polygon( self.screen, outline, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])], 1)
+
+            if map.m_xy[num][14] == 1:
+                pygame.draw.line( self.screen, outline, (map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][8], map.m_xy[num][9]), 2)
+                pygame.draw.line( self.screen, outline, (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][12], map.m_xy[num][13]), 2)
+            elif map.m_xy[num][14] == 2:
+                pygame.draw.line( self.screen, outline, (map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][8], map.m_xy[num][9]), 4)
+                pygame.draw.line( self.screen, outline, (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][12], map.m_xy[num][13]), 4)
+            elif map.m_xy[num][14] == 3:
+                pygame.draw.line( self.screen, outline, (map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][8], map.m_xy[num][9]), 6)
+                pygame.draw.line( self.screen, outline, (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][12], map.m_xy[num][13]), 6)
+            elif map.m_xy[num][14] == 4:
+                pygame.draw.line( self.screen, outline, (map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][8], map.m_xy[num][9]), 8)
+                pygame.draw.line( self.screen, outline, (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][12], map.m_xy[num][13]), 8)
 
 
     def CreatePlayer(self, player):
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-            pygame.draw.circle(self.screen, ColorList.BLUE.value, (player.xy[num][3], player.xy[num][4]), 21)
+            pygame.draw.circle(self.screen, ColorList.BLUE.value, (player.xy[num][3], player.xy[num][4]), 20)
             #self.screen.create_oval(player.xy[num][3], player.xy[num][4], player.xy[num][5], player.xy[num][6], fill=YOUR_COLOR)
             tag_length = len(player.xy[num][5])
             if tag_length == 6:
                 text = font.render(player.xy[num][5], True, (255,255,255))
-                self.screen.blit(text, [player.xy[num][3] - 12, player.xy[num][4]])
-                #self.screen.create_text( player.xy[num][3] + 4, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
+                self.screen.blit(text, [player.xy[num][3] - 10, player.xy[num][4]])
             elif tag_length == 7:
                 text = font.render(player.xy[num][5], True, (255,255,255))
-                self.screen.blit(text, [player.xy[num][3] - 15, player.xy[num][4]])
-                #self.screen.create_text( player.xy[num][3] + 2, player.xy[num][4] + 10, text=player.xy[num][7], anchor=tk.NW)
+                self.screen.blit(text, [player.xy[num][3] - 14, player.xy[num][4]])
 
 
     def CreateEnemy(self, enemy):
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-            pygame.draw.circle(self.screen, ColorList.YELLOW.value, (enemy.xy[num][3], enemy.xy[num][4]), 21)
+            pygame.draw.circle(self.screen, ColorList.YELLOW.value, (enemy.xy[num][3], enemy.xy[num][4]), 20)
             #self.screen.create_oval(enemy.xy[num][3], enemy.xy[num][4], enemy.xy[num][5], enemy.xy[num][6], fill=ENEMY_COLOR)
             tag_length = len(enemy.xy[num][5])
             if tag_length == 5:
                 text = font.render(enemy.xy[num][5], True, (255,0,0))
-                self.screen.blit(text, [enemy.xy[num][3] - 12, enemy.xy[num][4]])
-                #self.screen.create_text( enemy.xy[num][3] + 6, enemy.xy[num][4] + 10, text=enemy.xy[num][7], anchor=tk.NW)
+                self.screen.blit(text, [enemy.xy[num][3] - 8, enemy.xy[num][4]])
             elif tag_length == 6:
                 text = font.render(enemy.xy[num][5], True, (255,0,0))
                 self.screen.blit(text, [enemy.xy[num][3] - 10, enemy.xy[num][4]])
-                #self.screen.create_text( enemy.xy[num][3] + 4, enemy.xy[num][4] + 10, text=enemy.xy[num][7], anchor=tk.NW)
 
 
     def DrawTurn(self):
@@ -224,7 +247,34 @@ class Battle(GameSequenceBase):
 
     def UnitData(self, player, enemy):
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
-        self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()        
+        self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+        if self.pushClick != self.before_pushClick:
+            if  self.click_flag == False:
+                # キー入力確認用
+                print("Push Click :  x:", str(Point_x) + " y:" + str(Point_y))
+                #font = pygame.font.Font(None, 15)
+                #[num, self.xl[num], self.yl[num], xc, yc, tagname]
+                if Point_x != None and Point_y !=  None:
+                    for p_num in range(6):
+                        p_x = math.floor(player.xy[p_num][3])
+                        p_y = math.floor(player.xy[p_num][4])
+                        if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
+                            print(player.xy[p_num])
+
+                    for e_num in range(6):
+                        e_x = math.floor(enemy.xy[e_num][3])
+                        e_y = math.floor(enemy.xy[e_num][4])
+                        if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
+                            print(enemy.xy[e_num])
+
+                self.click_flag = True
+                self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+
+
+    def CalcReturnPos(self, player, enemy):
+        # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。
+        Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
+        self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
         if self.pushClick != self.before_pushClick:
             if  self.click_flag == False:
                 # キー入力確認用

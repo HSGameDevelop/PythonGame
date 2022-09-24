@@ -1,4 +1,11 @@
 import random
+import sys, os
+sys.path.append('../../System/Data/')
+from Script.Data.GameData import GameData
+
+gd = GameData()
+gd.LoadData()
+print(gd.GetCharacterDataFromId(1).characterName)
 
 # キャラの視界を設定マップへ反映するように追加
 
@@ -25,17 +32,15 @@ def rand_ints_check(xl,yl):
                     return False
     return True
 
-h_w = 51.2
+h_w = 50.15
 h_w1_4 = h_w / 4
 h_w1_2 = h_w / 2
 h_w3_4 = h_w * (3 / 4)
-h_w1_10 = h_w / 10
 
-h_h = 59.2
+h_h = 57.3
 h_h3_4 = h_h * (3 / 4)
 h_h1_4 = h_h / 4
 h_h1_2 = h_h / 2
-h_h1_10 = h_h / 10
 
 class Character:
     def __init__(self, x_i, x_j, y_i, y_j):
@@ -47,6 +52,7 @@ class Character:
             z = rand_ints_check(xl, yl)
             if z == True:
                 break
+        
         self.xl = xl
         self.yl = yl
         self.prepareUnit(xl, yl)
@@ -59,10 +65,10 @@ class Character:
             # 開始・終了座標を計算
             if yl[num] % 2 == 0:
                 self.xc = h_w * xl[num]
-                self.yc = h_h3_4 * yl[num] + h_h1_4
+                self.yc = h_h3_4 * yl[num] - h_h1_4
             elif yl[num] % 2 == 1:
                 self.xc = h_w1_2 + (xl[num] * h_w)
-                self.yc = h_h1_4 + (h_h3_4 * yl[num])
+                self.yc = (h_h3_4 * yl[num]) - h_h1_4
             
             # (x, y)座標
             tagname = "(" + str(xl[num]) + "," + str(yl[num]) + ")"
@@ -72,7 +78,7 @@ class Character:
 
 class Player(Character):
     def __init__(self):
-        super().__init__(8, 17, 16, 20)
+        super().__init__(8, 17, 17, 21)
 
 #    def preparePlayer(self):
 #        # (x,y)のマスの中心座標を計算
@@ -107,7 +113,7 @@ class Player(Character):
 
 class Enemy(Character):
     def __init__(self):
-        super().__init__(8, 17, 1, 5)
+        super().__init__(8, 17, 2, 6)
 
 #    def prepareEnemy(self):
 #            # (x,y)のマスの中心座標を計算
