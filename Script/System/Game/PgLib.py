@@ -59,6 +59,17 @@ class PgLibImpl(Singleton):
             imageHeight = height
         return pygame.transform.scale(image, (imageWidth, imageHeight))
 
+    # 画像を描画する
+    def DrawImage(self, image : pygame.surface, x : int, y : int, width : int, height : int):
+        # 画像データの設定
+        drawImage = self.ResizeImage(image, width, height)
+
+        # 画像サイズの取得
+        imageSize = drawImage.get_rect().size
+
+        # 画像の描画
+        self.screen.blit(drawImage, (x, y, imageSize[0], imageSize[1]))
+
     # 画像をスクリーンの中心に表示する
     def DrawImageCenter(self, image : pygame.surface, width : int = 0, height : int = 0):
         # 画像データの設定
@@ -147,6 +158,11 @@ class PgLib:
     @staticmethod
     def ResizeImage(image : pygame.surface, width : int, height : int):
         return PgLib.GetInstance().ResizeImage(image, width, height)
+
+    # 画像を描画する
+    @staticmethod
+    def DrawImage(image : pygame.surface, x : int, y : int, width : int, height : int):
+        return PgLib.GetInstance().DrawImage(image, x, y, width, height)
 
     # 画像をスクリーンの中心に表示する
     @staticmethod

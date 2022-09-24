@@ -1,4 +1,5 @@
 import pygame.surface
+from .PgLib import PgLib
 
 # ゲームに使用するオブジェクトのクラス
 class GameObject:
@@ -67,4 +68,11 @@ class GameObject:
     # 画像の設定
     def SetImage(self, image : pygame.surface):
         self.image = image
+
+    # 描画
+    def Draw(self):
+        if self.image:
+            PgLib.DrawImage(self.image, self.position.x, self.position.y, self.size.width, self.size.height)
+        else:
+            return
     
