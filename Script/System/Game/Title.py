@@ -7,8 +7,10 @@ from .GameSequenceBase import GameSequenceBase
 from .PgLib import PgLib
 from .GameDefine import GameDefine
 from .GameObject import GameObject
-from .MoveCommand import MoveCommand, Command
-import pygame
+
+sys.path.append('../Util/')
+from ..Util.MoveCommand import MoveCommand
+from ..Util.CommandUtil import CommandUtil
 
 TITLE_IMAGE_DIRECTORY = "Resource/Image/Title/"
 TITLE_BG = "Title_Bg.png"
@@ -33,19 +35,17 @@ class Title(GameSequenceBase):
         self.Logo = PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_LOGO)
         self.blade = GameObject(size=(128, 128) , image=PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_ICON_BLADE), moveSpeed=ICON_MOVE_SPEED, position=(-100, BLADE_ROGO_POS.y))
 
-        self.moveCommand = MoveCommand()
-
         # ステートの初期化
         self.state : Title.TitleState = Title.TitleState.Start
 
     # 更新処理
     def Update(self) -> bool:
         if self.state == Title.TitleState.Start:
-            self.moveCommand.AddCommand(MoveCommand.MoveType.NormalToPosition, self.blade, BLADE_ROGO_POS, ICON_MOVE_SPEED)
+            CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.blade, BLADE_ROGO_POS, ICON_MOVE_SPEED)
             self.state = Title.TitleState.LogoIn
         elif self.state == Title.TitleState.LogoIn:
             # 剣アイコン移動
-            self.moveCommand.Update()
+            CommandUtil.Update()
 
             if PgLib.GetInputManager().GetMouse().GetPushClick() != None:
                 self.blade.SetPos(BLADE_ROGO_POS.x , BLADE_ROGO_POS.y)

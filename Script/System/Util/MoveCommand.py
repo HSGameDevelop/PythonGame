@@ -1,19 +1,9 @@
 import numpy as np
 from enum import Enum
 
-from .GameDefine import GameDefine
-from .GameObject import GameObject
-
-# 命令クラス todo:後々各コマンドのインターフェースに移す予定
-class Command:
-        # 初期化
-        def __init__(self, func, *args) -> None:
-            self.func = func
-            self.args = args
-
-        # コールバック呼び出し
-        def Handler(self):
-            return self.func(*self.args)
+from ..Game.GameDefine import GameDefine
+from ..Game.GameObject import GameObject
+from .Command import Command
 
 # 移動命令制御クラス
 class MoveCommand:
