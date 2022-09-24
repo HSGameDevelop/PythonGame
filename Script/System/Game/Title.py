@@ -5,7 +5,9 @@ from turtle import pos
 from Script.System.IO.InputKeyboard import InputKeyboard
 from .GameSequenceBase import GameSequenceBase
 from .PgLib import PgLib
+from .GameDefine import GameDefine
 from .GameObject import GameObject
+from .MoveCommand import MoveCommand, Command
 import pygame
 
 TITLE_IMAGE_DIRECTORY = "Resource/Image/Title/"
@@ -13,6 +15,7 @@ TITLE_BG = "Title_Bg.png"
 TITLE_LOGO = "Title_Logo.png"
 TITLE_ICON_BLADE = "Icon_Blade.png"
 
+BLADE_ROGO_POS = GameDefine.Position(890, 390)
 
 
 ICON_MOVE_SPEED = 10
@@ -28,26 +31,25 @@ class Title(GameSequenceBase):
         #画像の読み込み
         self.bgImage = PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_BG)
         self.Logo = PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_LOGO)
-        self.blade = GameObject(size=(128, 128) , image=PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_ICON_BLADE), moveSpeed=ICON_MOVE_SPEED, position=(-100, 390))
+        self.blade = GameObject(size=(128, 128) , image=PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_ICON_BLADE), moveSpeed=ICON_MOVE_SPEED, position=(-100, BLADE_ROGO_POS.y))
 
-        # アイコンのリサイズ
-        self.bladeEndX = 890
+        self.moveCommand = MoveCommand()
 
         # ステートの初期化
         self.state : Title.TitleState = Title.TitleState.Start
 
     # 更新処理
     def Update(self) -> bool:
-
         if self.state == Title.TitleState.Start:
+            self.moveCommand.AddCommand(MoveCommand.MoveType.Normal, self.blade, BLADE_ROGO_POS, ICON_MOVE_SPEED)
             self.state = Title.TitleState.LogoIn
         elif self.state == Title.TitleState.LogoIn:
-            if self.blade.GetPos().x < self.bladeEndX:
-                self.blade.Update()
+            # 剣アイコン移動
+            #if self.blade.GetPos().x != BLADE_ROGO_POS.x:
+            self.moveCommand.Update()
 
             if PgLib.GetInputManager().GetMouse().GetPushClick() != None:
-                self.blade.SetMoveSpeed(0.0)
-                self.blade.SetPos(self.bladeEndX , 390)
+                self.blade.SetPos(BLADE_ROGO_POS.x , BLADE_ROGO_POS.y)
                 self.state = Title.TitleState.Run
         elif self.state == Title.TitleState.Run:
             self.state = Title.TitleState.End

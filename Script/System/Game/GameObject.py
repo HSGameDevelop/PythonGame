@@ -3,29 +3,10 @@ import pygame.surface
 
 from Script.Data.ColorList import ColorList
 from .PgLib import PgLib
+from .GameDefine import GameDefine
 
 # ゲームに使用するオブジェクトのクラス
 class GameObject:
-##########################
-# パラメータ用クラス
-# ########################    
-    # 座標
-    class Position:
-        def __init__(self, x : float = 0, y : float = 0) -> None:
-            self.x = x
-            self.y = y
-
-    # サイズ
-    class Size:
-        def __init__(self, width : float = 0, height : float = 0) -> None:
-            self.width = width
-            self.height = height
-
-    # 向き
-    class Direction:
-        def __init__(self, x : float = 0, y : float = 0) -> None:
-            self.x = x
-            self.y = y
 
 ##########################
 # メソッド
@@ -39,14 +20,13 @@ class GameObject:
         image : pygame.surface = None,
         moveSpeed : float = 0.0
      ) -> None:
-        self.position = GameObject.Position(position[0], position[1])
-        self.size = GameObject.Size(size[0], size[1])
-        self.direction = GameObject.Direction(direction[0], direction[1])
+        self.position = GameDefine.Position(position[0], position[1])
+        self.size = GameDefine.Size(size[0], size[1])
+        self.direction = GameDefine.Direction(direction[0], direction[1])
         self.image : pygame.surface = image
-        self.moveSpeed = moveSpeed
 
     # 座標の取得
-    def GetPos(self) -> Position:
+    def GetPos(self) -> GameDefine.Position:
         return self.position
 
     # 座標の設定
@@ -55,7 +35,7 @@ class GameObject:
         self.position.y = y
 
     # サイズの取得
-    def GetSize(self) -> Size:
+    def GetSize(self) -> GameDefine.Size:
         return self.size
 
     # サイズの設定
@@ -64,7 +44,7 @@ class GameObject:
         self.size.height = height
 
     # 向きの取得
-    def GetDir(self) -> Direction:
+    def GetDir(self) -> GameDefine.Direction:
         return self.direction
     
     # 向きの設定
@@ -80,36 +60,9 @@ class GameObject:
     def SetImage(self, image : pygame.surface):
         self.image = image
 
-    # 移動速度の取得
-    def GetMoveSpeed(self) -> float:
-        return self.moveSpeed
-
-    # 移動速度の設定
-    def SetMoveSpeed(self, moveSpeed : float):
-        self.moveSpeed = moveSpeed
-
     # 更新
     def Update(self):
-        if self.moveSpeed > 0.0:
-            # 内積を求める
-            defaultDir = np.array([1, 0])
-            dir = np.array([self.direction.x, self.direction.y]) 
-            dot = np.dot(defaultDir, dir)
-            
-            # ベクトルの長さを計算
-            defaultDis = np.linalg.norm(defaultDir)
-            dis = np.linalg.norm(dir)
-            
-            # 角度をラジアンから度に変換
-            degree = np.degrees(np.arccos(dot / (defaultDis * dis))) 
-
-            # 座標の計算
-            pos = self.GetPos()
-            x = pos.x + np.cos(degree) * self.moveSpeed
-            y = pos.y + np.sin(degree) * self.moveSpeed
-
-            self.SetPos(x, y)
-
+        pass
 
     # 描画
     def Draw(self):
