@@ -138,7 +138,7 @@ class Battle(GameSequenceBase):
             # 数字タイマー
             self.DrawCountTimer()
             # マウスチェック
-            self.UnitData(self.player, self.enemy)
+            self.CalcReturnPos(self.player, self.enemy, self.map)
 
 
     def DrawMap(self, map):
@@ -163,7 +163,6 @@ class Battle(GameSequenceBase):
             elif map.m_xy[num][14] == 4:
                 color = BOARD_COLOR
                 outline = OUT_LINE_COLOR
-
 
             # 内側描画
             pygame.draw.polygon( self.screen, color, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])])
@@ -245,33 +244,15 @@ class Battle(GameSequenceBase):
             self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
 
 
-    def UnitData(self, player, enemy):
-        Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
-        self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
-        if self.pushClick != self.before_pushClick:
-            if  self.click_flag == False:
-                # キー入力確認用
-                print("Push Click :  x:", str(Point_x) + " y:" + str(Point_y))
-                #font = pygame.font.Font(None, 15)
-                #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-                if Point_x != None and Point_y !=  None:
-                    for p_num in range(6):
-                        p_x = math.floor(player.xy[p_num][3])
-                        p_y = math.floor(player.xy[p_num][4])
-                        if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
-                            print(player.xy[p_num])
+    def UnitData(self, unit):
+        #CalcReturnPosでユニットの情報を受け渡す（表示等）
+        pass
 
-                    for e_num in range(6):
-                        e_x = math.floor(enemy.xy[e_num][3])
-                        e_y = math.floor(enemy.xy[e_num][4])
-                        if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
-                            print(enemy.xy[e_num])
+    def MapData(self, map):
+        #CalcReturnPosでマップの情報を受け渡す（表示等）
+        pass
 
-                self.click_flag = True
-                self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
-
-
-    def CalcReturnPos(self, player, enemy):
+    def CalcReturnPos(self, player, enemy, map):
         # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
@@ -294,9 +275,21 @@ class Battle(GameSequenceBase):
                         if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
                             print(enemy.xy[e_num])
 
+                    for m_num in range(720):
+                        # [x, y, xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, board_number]
+                        pass
+
+
+
+                        #m_x = math.floor(map.xy[m_num][3])
+                        #m_y = math.floor(map.xy[m_num][4])
+                        #if m_x - 21 < Point_x and Point_x < m_x + 21 and m_y - 21 < Point_y and Point_y < m_y + 21:
+                        #    print(map.xy[e_num])
+
                 self.click_flag = True
                 self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
 
+    
 
     def MoveData(self):
         # リストでそれぞれの行動データを生成

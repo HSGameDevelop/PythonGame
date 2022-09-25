@@ -73,17 +73,17 @@ class Map:
                     xn = self.h_w1_2 + (self.h_w * x) - self.h_w1_2
                     yn = self.h_h3_4 * y - self.h_h3_4
                     #   北西の点
-                    xns = self.h_w * x - self.h_w1_2   #0スタートなので、最初は0でいい
-                    yns = yne
+                    xnw = self.h_w * x - self.h_w1_2   #0スタートなので、最初は0でいい
+                    ynw = yne
                     #   南西の点
-                    xws = xns
-                    yws = (self.h_h3_4 * (y + 1)) - self.h_h3_4
+                    xsw = xnw
+                    ysw = (self.h_h3_4 * (y + 1)) - self.h_h3_4
                     #   南の点
-                    xw = xn
-                    yw = self.h_h + (self.h_h3_4 * y) - self.h_h3_4
+                    xs = xn
+                    ys = self.h_h + (self.h_h3_4 * y) - self.h_h3_4
                     #   南東の点
-                    xwe = xne
-                    ywe = yws
+                    xse = xne
+                    yse = ysw
                 elif y % 2 == 1:
                     #   北東の点
                     xne = self.h_w * (x + 1) + self.h_w1_2 - self.h_w1_2
@@ -92,20 +92,20 @@ class Map:
                     xn = self.h_w * (x + 1) - self.h_w1_2
                     yn = self.h_h3_4 * y - self.h_h3_4
                     #   北西の点
-                    xns = (self.h_w * x) + self.h_w1_2 - self.h_w1_2    #yが奇数なので、最初は22.5から
-                    yns = yne
+                    xnw = (self.h_w * x) + self.h_w1_2 - self.h_w1_2    #yが奇数なので、最初は22.5から
+                    ynw = yne
                     #   南西の点
-                    xws = xns
-                    yws = self.h_h3_4 * (y + 1) - self.h_h3_4
+                    xsw = xnw
+                    ysw = self.h_h3_4 * (y + 1) - self.h_h3_4
                     #   南の点
-                    xw = xn
-                    yw = self.h_h1_4 + (self.h_h3_4 * (y + 1)) - self.h_h3_4
+                    xs = xn
+                    ys = self.h_h1_4 + (self.h_h3_4 * (y + 1)) - self.h_h3_4
                     #   南東の点
-                    xwe = xne
-                    ywe = yws
+                    xse = xne
+                    yse = ysw
                 board_number = self.board[y][x]
-                print(board_number)
-                self.m_xy.append([x, y, xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, board_number])
+
+                self.m_xy.append([x, y, xne, yne, xn, yn, xnw, ynw, xsw, ysw, xs, ys, xse, yse, board_number])
         return self.m_xy
 
 
