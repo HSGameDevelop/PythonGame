@@ -1,10 +1,13 @@
+from distutils.cmd import Command
 import sys, os
 import pygame
 from Script.System.Game.GameSequenceBase import GameSequenceBase
 
-sys.path.append('../../System/')
-from Script.System.Game.PgLib import PgLib
-from Script.System.Game.Title import Title
+sys.path.append('./System/Util/')
+from .System.Util.PgLib import PgLib
+from .System.Util.CommandUtil import CommandUtil
+sys.path.append('./System/Game/')
+from .System.Game.Title import Title
 sys.path.append('../../Display/')
 from Script.Display.Battle import Battle
 
@@ -17,6 +20,7 @@ GAME_TITLE = "ActKing"
 class Game:    
     def __init__(self):
         PgLib.Initialize(GAME_TITLE, WIDTH, HEIGHT, FPS)
+        CommandUtil.Initialize()
         
         self.gameSequence : GameSequenceBase = Title()
         #self.gameSequence : GameSequenceBase = Battle()

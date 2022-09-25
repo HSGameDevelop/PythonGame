@@ -113,7 +113,7 @@ class PgLibImpl(Singleton):
         
         return False
 
-# pygameのラッパーライブラリの読び出す部分
+# pygameのラッパーライブラリの呼び出す部分
 pgLib : PgLibImpl = None
 class PgLib:
     # 初期化
