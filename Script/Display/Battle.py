@@ -74,6 +74,7 @@ class Battle(GameSequenceBase):
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
 
 
+
     def Update(self):
         if self.state == self.BattleState.Start:
             self.state = self.BattleState.Counter
