@@ -1,13 +1,13 @@
 import random
 import sys, os
-sys.path.append('../../System/Data/')
-from Script.Data.GameData import GameData
-sys.path.append('../../System/Util/')
-from ..System.Util.GameObject import GameObject
 
-gd = GameData()
-gd.LoadData()
-print(gd.GetCharacterDataFromId(1).characterName)
+sys.path.append('../System/Util/')
+from ..System.Util.GameObject import GameObject
+sys.path.append('../System/Data/')
+from ..Data.GameData import GameData
+
+#sys.path.append('../../System/Util/')
+#from ..System.Util.GameObject import GameObject
 
 # キャラの視界を設定マップへ反映するように追加
 
@@ -44,8 +44,12 @@ h_h3_4 = h_h * (3 / 4)
 h_h1_4 = h_h / 4
 h_h1_2 = h_h / 2
 
+PLAYER = 0
+ENEMY = 1
+move_speed = 10
+
 class Character(GameObject):
-    def __init__(self, x_i, x_j, y_i, y_j):
+    def __init__(self, x_i, x_j, y_i, y_j, side):
         super().__init__()
 
         #self.p_w = 40
@@ -56,13 +60,17 @@ class Character(GameObject):
             z = rand_ints_check(xl, yl)
             if z == True:
                 break
-        
-        self.xl = xl
-        self.yl = yl
-        self.prepareUnit(xl, yl)
+
+        self.gd = GameData()
+        self.gd.LoadData()
+        self.unit_side = side
+
+        self.prepareUnit(xl, yl, self.unit_side, self.gd.GetCharacterDataFromId(1).characterId )
+        #self.unit = GameObject(size=(20, 20) , image=None, moveSpeed=move_speed, position=(self.xc, self.yc))
+        #print(self.gd.GetCharacterDataFromId(1).characterName)
 
 
-    def prepareUnit(self, xl, yl):
+    def prepareUnit(self, xl, yl, unit, id):
         # (x,y)のマスの中心座標を計算
         self.xy = []
         for num in range(6):
@@ -78,15 +86,17 @@ class Character(GameObject):
             
             # (x, y)座標
             tagname = "(" + str(xl[num]) + "," + str(yl[num]) + ")"
-            self.xy.append([num, xl[num], yl[num], x, y, tagname])
+            self.xy.append([id, xl[num], yl[num], x, y, tagname])
 
         return self.xy
 
+
 class Player(Character):
     def __init__(self):
-        super().__init__(8, 17, 17, 21)
+        super().__init__(8, 17, 17, 21, PLAYER)
+
 
 class Enemy(Character):
     def __init__(self):
-        super().__init__(8, 17, 2, 6)
+        super().__init__(8, 17, 2, 6, ENEMY)
 
