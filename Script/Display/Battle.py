@@ -66,7 +66,11 @@ class Battle(GameSequenceBase):
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
         self.map = Map()                            # Map管理
         self.player : list = []                     # Playerユニット
+<<<<<<< HEAD
         self.enemy : list = []                      # Enemyユニット
+=======
+        self.enemy = Enemy()                        # Enemyユニット
+>>>>>>> ad18ddbf1f7d740b90dbcfb14c3d7a47823bcbb8
         self.screen = PgLib.GetScreen()             # スクリーンの設定
         self.counter = MAX_COUNTER * FPS            # シーン「Think」の時間設定
         self.state = self.BattleState.Start         # バトルのステイト
