@@ -8,7 +8,7 @@ import sys, os
 # マップ表示のクラス
 from .Map import Map
 # プレイヤー表示のクラス
-from .Character import Character, Player, Enemy
+from .Character import Character, Player, Enemy, CharacterManager
 sys.path.append('../System/Game/')
 from ..System.Game.GameSequenceBase import GameSequenceBase
 sys.path.append('../System/Util/')
@@ -39,6 +39,13 @@ MINUS1 = (MAX_COUNTER * FPS) / 90
 
 UNIT_NUM = 6
 
+UNIT_X_START = 8
+UNIT_X_END = 17
+PLAYER_Y_START = 17
+PLAYER_Y_END = 21
+ENEMY_Y_START = 2
+ENEMY_Y_END = 6
+
 # 色の設定
 BOARD_COLOR = ColorList.GRAY.value              # 盤面全体（見えない位置）
 VISIBLE_COLOR = ColorList.WHITE.value           # ユニットから見える範囲（カラー）
@@ -65,7 +72,9 @@ class Battle(GameSequenceBase):
         self.TurnCount = 1                          # ターンのカウント
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
         self.map = Map()                            # Map管理
+        self.Player_Characters = CharacterManager(UNIT_X_START, UNIT_X_END, PLAYER_Y_START, PLAYER_Y_END)
         self.player : list = []                     # Playerユニット
+        self.Enemy_Characters = CharacterManager(UNIT_X_START, UNIT_X_END, ENEMY_Y_START, ENEMY_Y_END)
         self.enemy : list = []                      # Enemyユニット
         self.screen = PgLib.GetScreen()             # スクリーンの設定
         self.counter = MAX_COUNTER * FPS            # シーン「Think」の時間設定
@@ -75,17 +84,16 @@ class Battle(GameSequenceBase):
         self.pushClick = None                       # クリックしたイベントの取得
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
 
-        # プレイヤーの初期設定
+       # プレイヤーの初期設定
         for num in range(UNIT_NUM):
-            self.player.append(Player())
+            self.player.append(Player(self.Player_Characters.xl[num], self.Player_Characters.yl[num]))
             self.player[num].SetSize(20, 20)
             
         # エネミーの初期設定
         for num in range(UNIT_NUM):
-            self.enemy.append(Enemy())
+            self.enemy.append(Enemy(self.Enemy_Characters.xl[num], self.Enemy_Characters.yl[num]))
             self.enemy[num].SetSize(20, 20)
-        print(self.player[num].xy)
-        print(self.enemy[num].xy)
+
 
     def Update(self):
         if self.state == self.BattleState.Start:
@@ -199,18 +207,18 @@ class Battle(GameSequenceBase):
 
 
     def CreatePlayer(self, player):
-        #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-        for num in range(6):            
+        #[id, xl, yl, x, y, tagname]
+        for num in range(6):
             self.player[num].Draw(ColorList.BLUE)
             pos = self.player[num].GetPos()
 
             font = pygame.font.Font(None, 15)
-            tag_length = len(player[num].xy[num][5])
+            tag_length = len(player[num].tagname)
             if tag_length == 6:
-                text = font.render(player[num].xy[num][5], True, ColorList.WHITE.value)
+                text = font.render(player[num].tagname, True, ColorList.WHITE.value)
                 self.screen.blit(text, [pos.x - 10, pos.y])
             elif tag_length == 7:
-                text = font.render(player[num].xy[num][5], True, ColorList.WHITE.value)
+                text = font.render(player[num].tagname, True, ColorList.WHITE.value)
                 self.screen.blit(text, [pos.x - 14, pos.y])
 
 
@@ -222,12 +230,12 @@ class Battle(GameSequenceBase):
             #pygame.draw.circle(self.screen, ColorList.YELLOW.value, (enemy.xy[num][3], enemy.xy[num][4]), 20)
             
             font = pygame.font.Font(None, 15)
-            tag_length = len(self.enemy[num].xy[num][5])
+            tag_length = len(self.enemy[num].tagname)
             if tag_length == 5:
-                text = font.render(enemy[num].xy[num][5], True, ColorList.RED.value)
+                text = font.render(enemy[num].tagname, True, ColorList.RED.value)
                 self.screen.blit(text, [pos.x  - 8, pos.y])
             elif tag_length == 6:
-                text = font.render(enemy[num].xy[num][5], True, ColorList.RED.value)
+                text = font.render(enemy[num].tagname, True, ColorList.RED.value)
                 self.screen.blit(text, [pos.x  - 10, pos.y])
 
 

@@ -48,54 +48,56 @@ PLAYER = 0
 ENEMY = 1
 move_speed = 10
 
-
-class Character(GameObject):
-    def __init__(self, x_i, x_j, y_i, y_j, side):
-        super().__init__()
-
-        # ユニットが同じ位置に生成されないように確認
+class CharacterManager():
+    def __init__(self, xi, xj, yi, yj):
+         # ユニットが同じ位置に生成されないように確認
         while True:
-            xl = rand_ints_x(x_i, x_j)
-            yl = rand_ints_y(y_i, y_j)
-            z = rand_ints_check(xl, yl)
+            xl = rand_ints_x(xi, xj)
+            yl = rand_ints_y(yi, yj)
+            z = rand_ints_check(xl,yl)
             if z == True:
                 break
+        self.xl = xl
+        self.yl = yl
+
+
+class Character(GameObject):
+    def __init__(self, xl, yl, side):
+        super().__init__()
 
         self.gd = GameData()
         self.gd.LoadData()
         self.unit_side = side
 
-        self.prepareUnit(xl, yl, self.gd.GetCharacterDataFromId(1).characterId )
+        self.id, self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl, self.gd.GetCharacterDataFromId(1).characterId )
         #self.unit = GameObject(size=(20, 20) , image=None, moveSpeed=move_speed, position=(self.xc, self.yc))
         #print(self.gd.GetCharacterDataFromId(1).characterName)
 
 
     def prepareUnit(self, xl, yl, id):
         # (x,y)のマスの中心座標を計算
-        self.xy = []
-        for num in range(6):
-            if yl[num] % 2 == 0:
-                x = h_w * xl[num]
-                y = h_h3_4 * yl[num] - h_h1_4
-                self.SetPos(x, y)
-            elif yl[num] % 2 == 1:
-                x = h_w1_2 + (xl[num] * h_w)
-                y = (h_h3_4 * yl[num]) - h_h1_4
-                self.SetPos(x, y)
-            
-            # (x, y)座標
-            tagname = "(" + str(xl[num]) + "," + str(yl[num]) + ")"
-            self.xy.append([id, xl[num], yl[num], x, y, tagname])
-
-        return self.xy
+        #self.xy = []
+        if yl % 2 == 0:
+            x = h_w * xl
+            y = h_h3_4 * yl - h_h1_4
+            self.SetPos(x, y)
+        elif yl % 2 == 1:
+            x = h_w1_2 + (xl * h_w)
+            y = (h_h3_4 * yl) - h_h1_4
+            self.SetPos(x, y)
+        
+        # (x, y)座標
+        tagname = "(" + str(xl) + "," + str(yl) + ")"
+        #self.xy.append([id, xl, yl, x, y, tagname])
+        return id, xl, yl, x, y, tagname
 
 
 class Player(Character):
-    def __init__(self):
-        super().__init__(8, 17, 17, 21, PLAYER)
+    def __init__(self, xl, yl):
+        super().__init__(xl, yl, PLAYER)
 
 
 class Enemy(Character):
-    def __init__(self):
-        super().__init__(8, 17, 2, 6, ENEMY)
+    def __init__(self, xl, yl):
+        super().__init__(xl, yl, ENEMY)
 
