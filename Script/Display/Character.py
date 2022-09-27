@@ -2,6 +2,8 @@ import random
 import sys, os
 sys.path.append('../../System/Data/')
 from Script.Data.GameData import GameData
+sys.path.append('../../System/Util/')
+from ..System.Util.GameObject import GameObject
 
 gd = GameData()
 gd.LoadData()
@@ -42,8 +44,10 @@ h_h3_4 = h_h * (3 / 4)
 h_h1_4 = h_h / 4
 h_h1_2 = h_h / 2
 
-class Character:
+class Character(GameObject):
     def __init__(self, x_i, x_j, y_i, y_j):
+        super().__init__()
+
         #self.p_w = 40
         # ユニットが同じ位置に生成されないように確認
         while True:
@@ -64,15 +68,17 @@ class Character:
         for num in range(6):
             # 開始・終了座標を計算
             if yl[num] % 2 == 0:
-                self.xc = h_w * xl[num]
-                self.yc = h_h3_4 * yl[num] - h_h1_4
+                x = h_w * xl[num]
+                y = h_h3_4 * yl[num] - h_h1_4
+                self.SetPos(x, y)
             elif yl[num] % 2 == 1:
-                self.xc = h_w1_2 + (xl[num] * h_w)
-                self.yc = (h_h3_4 * yl[num]) - h_h1_4
+                x = h_w1_2 + (xl[num] * h_w)
+                y = (h_h3_4 * yl[num]) - h_h1_4
+                self.SetPos(x, y)
             
             # (x, y)座標
             tagname = "(" + str(xl[num]) + "," + str(yl[num]) + ")"
-            self.xy.append([num, xl[num], yl[num], self.xc, self.yc, tagname])
+            self.xy.append([num, xl[num], yl[num], x, y, tagname])
 
         return self.xy
 
@@ -80,107 +86,7 @@ class Player(Character):
     def __init__(self):
         super().__init__(8, 17, 17, 21)
 
-#    def preparePlayer(self):
-#        # (x,y)のマスの中心座標を計算
-#        self.p_xy = []
-#        for num in range(6):
-#            # 開始・終了座標を計算
-#            if self.p_yl[num] % 2 == 0:
-#                # 左上のx
-#                xns = self.h_w * self.p_xl[num] - self.h_w1_2 + 5
-#                # 左上のy
-#                yn = self.h_w3_4 * self.p_yl[num] - self.h_w1_4 + 5
-#                # 右下のx
-#                xne = self.h_w * (self.p_xl[num] + 1) - self.h_w1_2 - 5
-#                # 右下のy
-#                yw = self.h_w + (self.h_w3_4 * self.p_yl[num]) - self.h_w1_4 - 5 
-#            elif self.p_yl[num] % 2 == 1:
-#                # 左上のx
-#                xns = (self.h_w * self.p_xl[num]) + self.h_w1_2 - self.h_w1_2 + 5
-#                # 左上のy
-#                yn = self.h_w3_4 * self.p_yl[num] - self.h_w1_4 + 5
-#                # 右下のx
-#                xne = self.h_w * (self.p_xl[num] + 1) + self.h_w1_2 - self.h_w1_2 - 5
-#                # 右下のy
-#                yw = self.h_w1_4 + (self.h_w3_4 * (self.p_yl[num] +1)) - self.h_w1_4 - 5
-#            
-#            # (x, y)座標
-#            tagname = "(" + str(self.p_xl[num]) + "," + str(self.p_yl[num]) + ")"
-#            self.p_xy.append([num, self.p_xl[num], self.p_yl[num], xns, yn, xne, yw, tagname])
-#
-#        return self.p_xy
-
-
 class Enemy(Character):
     def __init__(self):
         super().__init__(8, 17, 2, 6)
-
-#    def prepareEnemy(self):
-#            # (x,y)のマスの中心座標を計算
-#        self.e_xy = []
-#        for num in range(6):
-#            # 開始・終了座標を計算
-#            if self.e_yl[num] % 2 == 0:
-#                # 左上のx
-#                xns = self.h_w * self.e_xl[num] - self.h_w1_2 + 5
-#                # 左上のy
-#                yn = self.h_w3_4 * self.e_yl[num] - self.h_w1_4 + 5
-#                # 右下のx
-#                xne = self.h_w * (self.e_xl[num] + 1) - self.h_w1_2 - 5
-#                # 右下のy
-#                yw = self.h_w + (self.h_w3_4 * self.e_yl[num]) - self.h_w1_4 - 5 
-#            elif self.e_yl[num] % 2 == 1:
-#                # 左上のx
-#                xns = (self.h_w * self.e_xl[num]) + self.h_w1_2 - self.h_w1_2 + 5
-#                # 左上のy
-#                yn = self.h_w3_4 * self.e_yl[num] - self.h_w1_4 + 5
-#                # 右下のx
-#                xne = self.h_w * (self.e_xl[num] + 1) + self.h_w1_2 - self.h_w1_2 - 5
-#                # 右下のy
-#                yw = self.h_w1_4 + (self.h_w3_4 * (self.e_yl[num] +1)) - self.h_w1_4 - 5
-#            
-#            # (x, y)座標
-#            tagname = "(" + str(self.e_xl[num]) + "," + str(self.e_yl[num]) + ")"
-#            self.e_xy.append([num, self.e_xl[num], self.e_yl[num], xns, yn, xne, yw, tagname])
-#
-#        return self.e_xy
-
-#    def updatePlayer(self, num):    #　行動力でforの回数が変更される予定
-        # ほぼ同時に動かす想定なので、その辺を考えましょう
-        # 移動先を配列で管理して描画する設定
-#        for num in range(6):
-            # 開始・終了座標を計算
-#            if self.p_xy[num][2] % 2 == 0:
-                # 左上のx
-#                xns = self.h_w * self.p_xy[num][1] - self.h_w1_2 + 5
-                # 左上のy
-#                yn = self.h_w3_4 * self.p_xy[num][2] - self.h_w1_4 + 5
-                # 右下のx
-#                xne = self.h_w * (self.p_xy[num][1] + 1) - self.h_w1_2 - 5
-                # 右下のy
-#                yw = self.h_w + (self.h_w3_4 * self.p_xy[num][2]) - self.h_w1_4 - 5 
-#            elif self.p_xy[num][2] % 2 == 1:
-                # 左上のx
-#                xns = (self.h_w * self.p_xy[num][1]) + self.h_w1_2 - self.h_w1_2 + 5
-                # 左上のy
-#                yn = self.h_w3_4 * self.p_xy[num][2] - self.h_w1_4 + 5
-                # 右下のx
-#                xne = self.h_w * (self.p_xy[num][1] + 1) + self.h_w1_2 - self.h_w1_2 - 5
-                # 右下のy
-#                yw = self.h_w1_4 + (self.h_w3_4 * (self.p_xy[num][2] +1)) - self.h_w1_4 - 5
-            
-            # (x, y)座標
-#            tagname = "(" + str(self.p_xy[num][1]) + "," + str(self.p_xy[num][2]) + ")"
-#            self.p_xy[num][1] = self.p_u_xy[num][1]
-#            self.p_xy[num][2] = self.p_u_xy[num][2]
-#            self.p_xy[num][3] = xns
-#            self.p_xy[num][4] = yn
-#            self.p_xy[num][5] = xne
-#            self.p_xy[num][6] = xne
-#            self.p_xy[num][7] = tagname
-            #self.p_xy.append([num, self.p_xy[num][1], self.p_xy[num][2], , , xne, yw, tagname])
-
-#        return self.p_xy
-
-
 
