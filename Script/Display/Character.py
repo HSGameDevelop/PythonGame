@@ -46,12 +46,20 @@ enemy = 1
 move_speed = 10
 
 class Character:
-    def __init__(self, xl, yl, side):
+    def __init__(self, x_i, x_j, y_i, y_j, side):
         #self.p_w = 40
         # ユニットが同じ位置に生成されないように確認
+        while True:
+            xl = rand_ints_x(x_i, x_j)
+            yl = rand_ints_y(y_i, y_j)
+            z = rand_ints_check(xl, yl)
+            if z == True:
+                break
+
         self.gd = GameData()
         self.gd.LoadData()
         self.unit_side = side
+
         self.prepareUnit(xl, yl, self.unit_side, self.gd.GetCharacterDataFromId(1).characterId )
         #self.unit = GameObject(size=(20, 20) , image=None, moveSpeed=move_speed, position=(self.xc, self.yc))
         #print(self.gd.GetCharacterDataFromId(1).characterName)
@@ -60,35 +68,25 @@ class Character:
     def prepareUnit(self, xl, yl, unit, id):
         # (x,y)のマスの中心座標を計算
         self.xy = []
-        # 開始・終了座標を計算
-        if yl % 2 == 0:
-            self.xc = h_w * xl
-            self.yc = h_h3_4 * yl - h_h1_4
-        elif yl % 2 == 1:
-            self.xc = h_w1_2 + (xl * h_w)
-            self.yc = (h_h3_4 * yl) - h_h1_4
-        
-        # (x, y)座標
-        tagname = "(" + str(xl) + "," + str(yl) + ")"
-        self.xy.append([id, xl, yl, self.xc, self.yc, tagname])
-        print(self.xy)
+        for num in range(6):
+            # 開始・終了座標を計算
+            if yl[num] % 2 == 0:
+                self.xc = h_w * xl[num]
+                self.yc = h_h3_4 * yl[num] - h_h1_4
+            elif yl[num] % 2 == 1:
+                self.xc = h_w1_2 + (xl[num] * h_w)
+                self.yc = (h_h3_4 * yl[num]) - h_h1_4
+            
+            # (x, y)座標
+            tagname = "(" + str(xl[num]) + "," + str(yl[num]) + ")"
+            self.xy.append([id, xl[num], yl[num], self.xc, self.yc, tagname])
 
         return self.xy
 
 
 class Player(Character):
     def __init__(self):
-        while True:
-            xl = rand_ints_x(8, 17)
-            yl = rand_ints_y(17, 21)
-            z = rand_ints_check(xl, yl)
-            if z == True:
-                break
-        
-        for num in range(6):
-            self.xl = xl[num]
-            self.yl = yl[num]
-            super().__init__(xl[num], yl[num], player)
+        super().__init__(8, 17, 17, 21, player)
 
 
 #    def preparePlayer(self):
@@ -124,18 +122,7 @@ class Player(Character):
 
 class Enemy(Character):
     def __init__(self):
-        while True:
-            xl = rand_ints_x(8, 17)
-            yl = rand_ints_y(2, 6)
-            z = rand_ints_check(xl, yl)
-            if z == True:
-                break
-        
-        for num in range(6):
-            self.xl = xl[num]
-            self.yl = yl[num]
-            super().__init__(xl[num], yl[num], player)
-        #super().__init__(8, 17, 2, 6, enemy)
+        super().__init__(8, 17, 2, 6, enemy)
 
 #    def prepareEnemy(self):
 #            # (x,y)のマスの中心座標を計算
