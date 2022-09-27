@@ -65,8 +65,8 @@ class Battle(GameSequenceBase):
         self.TurnCount = 1                          # ターンのカウント
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
         self.map = Map()                            # Map管理
-        self.player : list = []                   # Playerユニット
-        self.enemy = Enemy()                        # Enemyユニット
+        self.player : list = []                     # Playerユニット
+        self.enemy : list = []                      # Enemyユニット
         self.screen = PgLib.GetScreen()             # スクリーンの設定
         self.counter = MAX_COUNTER * FPS            # シーン「Think」の時間設定
         self.state = self.BattleState.Start         # バトルのステイト
@@ -79,6 +79,13 @@ class Battle(GameSequenceBase):
         for num in range(UNIT_NUM):
             self.player.append(Player())
             self.player[num].SetSize(20, 20)
+            
+        # エネミーの初期設定
+        for num in range(UNIT_NUM):
+            self.enemy.append(Enemy())
+            self.enemy[num].SetSize(20, 20)
+        print(self.player[num].xy)
+        print(self.enemy[num].xy)
 
     def Update(self):
         if self.state == self.BattleState.Start:
@@ -192,35 +199,36 @@ class Battle(GameSequenceBase):
 
 
     def CreatePlayer(self, player):
-        for num in range(6):
-            font = pygame.font.Font(None, 15)
-            #[num, self.xl[num], self.yl[num], xc, yc, tagname]
+        #[num, self.xl[num], self.yl[num], xc, yc, tagname]
+        for num in range(6):            
             self.player[num].Draw(ColorList.BLUE)
             pos = self.player[num].GetPos()
-            #pygame.draw.circle(self.screen, ColorList.BLUE.value, (player.xy[num][3], player.xy[num][4]), 20)
-            #self.screen.create_oval(player.xy[num][3], player.xy[num][4], player.xy[num][5], player.xy[num][6], fill=YOUR_COLOR)
+
+            font = pygame.font.Font(None, 15)
             tag_length = len(player[num].xy[num][5])
             if tag_length == 6:
-                text = font.render(player[num].xy[num][5], True, (255,255,255))
+                text = font.render(player[num].xy[num][5], True, ColorList.WHITE.value)
                 self.screen.blit(text, [pos.x - 10, pos.y])
             elif tag_length == 7:
-                text = font.render(player[num].xy[num][5], True, (255,255,255))
+                text = font.render(player[num].xy[num][5], True, ColorList.WHITE.value)
                 self.screen.blit(text, [pos.x - 14, pos.y])
 
 
     def CreateEnemy(self, enemy):
+        #[num, self.xl[num], self.yl[num], xc, yc, tagname]
         for num in range(6):
+            self.enemy[num].Draw(ColorList.YELLOW)
+            pos = self.enemy[num].GetPos()
+            #pygame.draw.circle(self.screen, ColorList.YELLOW.value, (enemy.xy[num][3], enemy.xy[num][4]), 20)
+            
             font = pygame.font.Font(None, 15)
-            #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-            pygame.draw.circle(self.screen, ColorList.YELLOW.value, (enemy.xy[num][3], enemy.xy[num][4]), 20)
-            #self.screen.create_oval(enemy.xy[num][3], enemy.xy[num][4], enemy.xy[num][5], enemy.xy[num][6], fill=ENEMY_COLOR)
-            tag_length = len(enemy.xy[num][5])
+            tag_length = len(self.enemy[num].xy[num][5])
             if tag_length == 5:
-                text = font.render(enemy.xy[num][5], True, (255,0,0))
-                self.screen.blit(text, [enemy.xy[num][3] - 8, enemy.xy[num][4]])
+                text = font.render(enemy[num].xy[num][5], True, ColorList.RED.value)
+                self.screen.blit(text, [pos.x  - 8, pos.y])
             elif tag_length == 6:
-                text = font.render(enemy.xy[num][5], True, (255,0,0))
-                self.screen.blit(text, [enemy.xy[num][3] - 10, enemy.xy[num][4]])
+                text = font.render(enemy[num].xy[num][5], True, ColorList.RED.value)
+                self.screen.blit(text, [pos.x  - 10, pos.y])
 
 
     def DrawTurn(self):
@@ -274,16 +282,16 @@ class Battle(GameSequenceBase):
                 #[num, self.xl[num], self.yl[num], xc, yc, tagname]
                 if Point_x != None and Point_y !=  None:
                     for p_num in range(6):
-                        p_x = math.floor(player.xy[p_num][3])
-                        p_y = math.floor(player.xy[p_num][4])
+                        p_x = math.floor(player[p_num].xy[p_num][3])
+                        p_y = math.floor(player[p_num].xy[p_num][4])
                         if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
                             print(player.xy[p_num])
 
                     for e_num in range(6):
-                        e_x = math.floor(enemy.xy[e_num][3])
-                        e_y = math.floor(enemy.xy[e_num][4])
+                        e_x = math.floor(enemy[e_num].xy[e_num][3])
+                        e_y = math.floor(enemy[e_num].xy[e_num][4])
                         if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
-                            print(enemy.xy[e_num])
+                            print(enemy[e_num].xy[e_num])
 
                     for m_num in range(720):
                         # [x, y, xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, board_number]

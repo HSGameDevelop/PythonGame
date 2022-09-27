@@ -48,11 +48,11 @@ PLAYER = 0
 ENEMY = 1
 move_speed = 10
 
+
 class Character(GameObject):
     def __init__(self, x_i, x_j, y_i, y_j, side):
         super().__init__()
 
-        #self.p_w = 40
         # ユニットが同じ位置に生成されないように確認
         while True:
             xl = rand_ints_x(x_i, x_j)
@@ -65,16 +65,15 @@ class Character(GameObject):
         self.gd.LoadData()
         self.unit_side = side
 
-        self.prepareUnit(xl, yl, self.unit_side, self.gd.GetCharacterDataFromId(1).characterId )
+        self.prepareUnit(xl, yl, self.gd.GetCharacterDataFromId(1).characterId )
         #self.unit = GameObject(size=(20, 20) , image=None, moveSpeed=move_speed, position=(self.xc, self.yc))
         #print(self.gd.GetCharacterDataFromId(1).characterName)
 
 
-    def prepareUnit(self, xl, yl, unit, id):
+    def prepareUnit(self, xl, yl, id):
         # (x,y)のマスの中心座標を計算
         self.xy = []
         for num in range(6):
-            # 開始・終了座標を計算
             if yl[num] % 2 == 0:
                 x = h_w * xl[num]
                 y = h_h3_4 * yl[num] - h_h1_4
