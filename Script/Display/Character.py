@@ -41,8 +41,8 @@ h_h3_4 = h_h * (3 / 4)
 h_h1_4 = h_h / 4
 h_h1_2 = h_h / 2
 
-player = 0
-enemy = 1
+PLAYER = 0
+ENEMY = 1
 move_speed = 10
 
 class Character:
@@ -86,7 +86,7 @@ class Character:
 
 class Player(Character):
     def __init__(self):
-        super().__init__(8, 17, 17, 21, player)
+        super().__init__(8, 17, 17, 21, PLAYER)
 
 
 #    def preparePlayer(self):
@@ -122,7 +122,7 @@ class Player(Character):
 
 class Enemy(Character):
     def __init__(self):
-        super().__init__(8, 17, 2, 6, enemy)
+        super().__init__(8, 17, 2, 6, ENEMY)
 
 #    def prepareEnemy(self):
 #            # (x,y)のマスの中心座標を計算
