@@ -37,6 +37,8 @@ FPS = 60
 
 MINUS1 = (MAX_COUNTER * FPS) / 90
 
+UNIT_NUM = 6
+
 # 色の設定
 BOARD_COLOR = ColorList.GRAY.value              # 盤面全体（見えない位置）
 VISIBLE_COLOR = ColorList.WHITE.value           # ユニットから見える範囲（カラー）
@@ -63,7 +65,7 @@ class Battle(GameSequenceBase):
         self.TurnCount = 1                          # ターンのカウント
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
         self.map = Map()                            # Map管理
-        self.player = Player()                      # Playerユニット
+        self.player : list = []                   # Playerユニット
         self.enemy = Enemy()                        # Enemyユニット
         self.screen = PgLib.GetScreen()             # スクリーンの設定
         self.counter = MAX_COUNTER * FPS            # シーン「Think」の時間設定
@@ -73,7 +75,10 @@ class Battle(GameSequenceBase):
         self.pushClick = None                       # クリックしたイベントの取得
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
 
-
+        # プレイヤーの初期設定
+        for num in range(UNIT_NUM):
+            self.player.append(Player())
+            self.player[num].SetSize(20, 20)
 
     def Update(self):
         if self.state == self.BattleState.Start:
@@ -190,15 +195,17 @@ class Battle(GameSequenceBase):
         for num in range(6):
             font = pygame.font.Font(None, 15)
             #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-            pygame.draw.circle(self.screen, ColorList.BLUE.value, (player.xy[num][3], player.xy[num][4]), 20)
+            self.player[num].Draw(ColorList.BLUE)
+            pos = self.player[num].GetPos()
+            #pygame.draw.circle(self.screen, ColorList.BLUE.value, (player.xy[num][3], player.xy[num][4]), 20)
             #self.screen.create_oval(player.xy[num][3], player.xy[num][4], player.xy[num][5], player.xy[num][6], fill=YOUR_COLOR)
-            tag_length = len(player.xy[num][5])
+            tag_length = len(player[num].xy[num][5])
             if tag_length == 6:
-                text = font.render(player.xy[num][5], True, (255,255,255))
-                self.screen.blit(text, [player.xy[num][3] - 10, player.xy[num][4]])
+                text = font.render(player[num].xy[num][5], True, (255,255,255))
+                self.screen.blit(text, [pos.x - 10, pos.y])
             elif tag_length == 7:
-                text = font.render(player.xy[num][5], True, (255,255,255))
-                self.screen.blit(text, [player.xy[num][3] - 14, player.xy[num][4]])
+                text = font.render(player[num].xy[num][5], True, (255,255,255))
+                self.screen.blit(text, [pos.x - 14, pos.y])
 
 
     def CreateEnemy(self, enemy):

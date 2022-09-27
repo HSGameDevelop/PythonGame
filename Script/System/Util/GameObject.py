@@ -65,9 +65,10 @@ class GameObject:
         pass
 
     # 描画
-    def Draw(self):
+    def Draw(self, color : ColorList = ColorList.WHITE):
         if self.image:
             PgLib.DrawImage(self.image, self.position.x, self.position.y, self.size.width, self.size.height)
         else:
-            PgLib.DrawEllipse(ColorList.WHITE, self.position.x, self.position.y, self.size.width, self.size.height)
+            # 横幅を円のサイズとする
+            PgLib.DrawCircle(color.value, self.position.x, self.position.y, self.size.width)
     

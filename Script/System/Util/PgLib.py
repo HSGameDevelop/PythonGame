@@ -4,7 +4,7 @@ from pygame import constants
 
 import sys
 sys.path.append('../Util/')
-from ..Util.Singleton import Singleton
+from .Singleton import Singleton
 
 sys.path.append('../IO/')
 from ..IO.InputManager import InputManager
@@ -58,6 +58,10 @@ class PgLibImpl(Singleton):
         if height > 0:
             imageHeight = height
         return pygame.transform.scale(image, (imageWidth, imageHeight))
+
+    # 円形の描画
+    def DrawCircle(self, color : pygame.color.Color, x : float, y : float, size : float):
+        pygame.draw.circle(self.screen, color, (x, y), size)
 
     # 楕円形の描画
     def DrawEllipse(self, color : pygame.color.Color, x : int, y : int, width : int, height : int):
@@ -162,6 +166,11 @@ class PgLib:
     @staticmethod
     def ResizeImage(image : pygame.surface, width : int, height : int):
         return PgLib.GetInstance().ResizeImage(image, width, height)
+
+    # 円形を描画する
+    @staticmethod
+    def DrawCircle(color : pygame.color.Color, x : float, y : float, size : float):
+        return PgLib.GetInstance().DrawCircle(color, x, y, size)
 
     # 楕円形を描画する
     @staticmethod
