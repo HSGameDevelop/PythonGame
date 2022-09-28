@@ -1,5 +1,7 @@
+from Script.System.Util.GameObject import GameObject
 from .Singleton import Singleton
 from .MoveCommand import MoveCommand
+from .Define import Define
 
 # 命令制御クラスの中身
 class CommandUtilImpl(Singleton):
@@ -32,8 +34,8 @@ class CommandUtil:
 
     # 移動命令の追加
     @staticmethod
-    def AddMoveCommand(type : MoveCommand.MoveType, *args):
-        CommandUtil.GetInstance().AddMoveCommand(type, *args)
+    def AddMoveCommand(type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, moveSpeed : float):
+        CommandUtil.GetInstance().AddMoveCommand(type, *(gameObject, pos, moveSpeed))
 
     # 更新処理
     @staticmethod

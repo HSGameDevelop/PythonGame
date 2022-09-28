@@ -3,14 +3,14 @@ from enum import Enum
 from turtle import pos
 
 from Script.System.IO.InputKeyboard import InputKeyboard
-from .GameSequenceBase import GameSequenceBase
+from ..GameSequenceBase import GameSequenceBase
 
 sys.path.append('../Util/')
-from ..Util.PgLib import PgLib
-from ..Util.MoveCommand import MoveCommand
-from ..Util.CommandUtil import CommandUtil
-from ..Util.Define import Define
-from ..Util.GameObject import GameObject
+from ...Util.PgLib import PgLib
+from ...Util.MoveCommand import MoveCommand
+from ...Util.CommandUtil import CommandUtil
+from ...Util.Define import Define
+from ...Util.GameObject import GameObject
 
 TITLE_IMAGE_DIRECTORY = "Resource/Image/Title/"
 TITLE_BG = "Title_Bg.png"
@@ -20,7 +20,7 @@ TITLE_ICON_BLADE = "Icon_Blade.png"
 BLADE_ROGO_POS = Define.Position(890, 390)
 
 
-ICON_MOVE_SPEED = 10
+ICON_MOVE_SPEED = 30
 class Title(GameSequenceBase):
     class TitleState(Enum):
         Start = 0

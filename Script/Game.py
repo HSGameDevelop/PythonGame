@@ -6,8 +6,8 @@ from Script.System.Game.GameSequenceBase import GameSequenceBase
 sys.path.append('./System/Util/')
 from .System.Util.PgLib import PgLib
 from .System.Util.CommandUtil import CommandUtil
-sys.path.append('./System/Game/')
-from .System.Game.Title import Title
+sys.path.append('./System/Game/Title/')
+from .System.Game.Title.Title import Title
 sys.path.append('../../Display/')
 from Script.Display.Battle import Battle
 
