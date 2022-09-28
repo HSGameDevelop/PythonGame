@@ -38,6 +38,8 @@ FPS = 60
 MINUS1 = (MAX_COUNTER * FPS) / 90
 
 UNIT_NUM = 6
+PLAYER_UNIT_NUM = 6
+ENEMY_UNIT_NUM = 6
 
 UNIT_X_START = 8
 UNIT_X_END = 17
@@ -72,9 +74,9 @@ class Battle(GameSequenceBase):
         self.TurnCount = 1                          # ターンのカウント
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
         self.map = Map()                            # Map管理
-        self.Player_Characters = CharacterManager(UNIT_X_START, UNIT_X_END, PLAYER_Y_START, PLAYER_Y_END)
+        self.Player_Characters = CharacterManager(UNIT_X_START, UNIT_X_END, PLAYER_Y_START, PLAYER_Y_END, PLAYER_UNIT_NUM)
         self.player : list = []                     # Playerユニット
-        self.Enemy_Characters = CharacterManager(UNIT_X_START, UNIT_X_END, ENEMY_Y_START, ENEMY_Y_END)
+        self.Enemy_Characters = CharacterManager(UNIT_X_START, UNIT_X_END, ENEMY_Y_START, ENEMY_Y_END, ENEMY_UNIT_NUM)
         self.enemy : list = []                      # Enemyユニット
         self.screen = PgLib.GetScreen()             # スクリーンの設定
         self.counter = MAX_COUNTER * FPS            # シーン「Think」の時間設定
@@ -85,12 +87,12 @@ class Battle(GameSequenceBase):
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
 
        # プレイヤーの初期設定
-        for num in range(UNIT_NUM):
+        for num in range(PLAYER_UNIT_NUM):
             self.player.append(Player(self.Player_Characters.xl[num], self.Player_Characters.yl[num]))
             self.player[num].SetSize(20, 20)
             
         # エネミーの初期設定
-        for num in range(UNIT_NUM):
+        for num in range(ENEMY_UNIT_NUM):
             self.enemy.append(Enemy(self.Enemy_Characters.xl[num], self.Enemy_Characters.yl[num]))
             self.enemy[num].SetSize(20, 20)
 
@@ -208,7 +210,7 @@ class Battle(GameSequenceBase):
 
     def CreatePlayer(self, player):
         #[id, xl, yl, x, y, tagname]
-        for num in range(6):
+        for num in range(PLAYER_UNIT_NUM):
             self.player[num].Draw(ColorList.BLUE)
             pos = self.player[num].GetPos()
 
@@ -224,7 +226,7 @@ class Battle(GameSequenceBase):
 
     def CreateEnemy(self, enemy):
         #[num, self.xl[num], self.yl[num], xc, yc, tagname]
-        for num in range(6):
+        for num in range(ENEMY_UNIT_NUM):
             self.enemy[num].Draw(ColorList.YELLOW)
             pos = self.enemy[num].GetPos()
             #pygame.draw.circle(self.screen, ColorList.YELLOW.value, (enemy.xy[num][3], enemy.xy[num][4]), 20)

@@ -11,29 +11,6 @@ from ..Data.GameData import GameData
 
 # キャラの視界を設定マップへ反映するように追加
 
-#  player 重複なし
-def rand_ints_x(i, j):
-    xl = []
-    while len(xl) < 6:
-        x = random.randint(i, j)
-        xl.append(x)
-    return xl
-
-def rand_ints_y(i, j):
-    yl = []
-    while len(yl) < 6:
-        y = random.randint(i, j)
-        yl.append(y)
-    return yl
-
-def rand_ints_check(xl,yl):
-    for x in range(6):
-        for y in range(6):
-            if xl[x] == xl[y] and x != y:
-                if yl[x] == yl[y] and x != y:
-                    return False
-    return True
-
 h_w = 50.15
 h_w1_4 = h_w / 4
 h_w1_2 = h_w / 2
@@ -48,17 +25,41 @@ PLAYER = 0
 ENEMY = 1
 move_speed = 10
 
+
 class CharacterManager():
-    def __init__(self, xi, xj, yi, yj):
+    def __init__(self, xi, xj, yi, yj, num):
          # ユニットが同じ位置に生成されないように確認
         while True:
-            xl = rand_ints_x(xi, xj)
-            yl = rand_ints_y(yi, yj)
-            z = rand_ints_check(xl,yl)
+            xl = self.rand_ints_x(xi, xj, num)
+            yl = self.rand_ints_y(yi, yj, num)
+            z = self.rand_ints_check(xl, yl, num)
             if z == True:
                 break
         self.xl = xl
         self.yl = yl
+
+        #  player 重複なし
+    def rand_ints_x(self, i, j, num):
+        xl = []
+        while len(xl) < num:
+            x = random.randint(i, j)
+            xl.append(x)
+        return xl
+
+    def rand_ints_y(self, i, j, num):
+        yl = []
+        while len(yl) < num:
+            y = random.randint(i, j)
+            yl.append(y)
+        return yl
+
+    def rand_ints_check(self, xl, yl, num):
+        for x in range(num):
+            for y in range(num):
+                if xl[x] == xl[y] and x != y:
+                    if yl[x] == yl[y] and x != y:
+                        return False
+        return True
 
 
 class Character(GameObject):
