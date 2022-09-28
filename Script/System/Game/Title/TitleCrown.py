@@ -7,10 +7,11 @@ sys.path.append('../Util/')
 from ...Util.GameObject import GameObject 
 from ...Util.PgLib import PgLib
 from ...Util.CommandUtil import CommandUtil
+from ...Util.Define import Define
 
 TITLE_CROWN_IMAGE_PATH = "Resource/Image/Title/Title_Icon.png"
-TITLE_CROWN_START_POS = (780, -200)
-TITLE_CROWN_END_POS = (780, 480)
+TITLE_CROWN_START_POS = (0, -200)
+TITLE_CROWN_END_POS = (0, 480)
 
 class TitleCrown(GameObject):
     class TitleCrownState(Enum):
@@ -25,7 +26,7 @@ class TitleCrown(GameObject):
 
     def Update(self):
         if self.state == TitleCrown.TitleCrownState.Init:
-            CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, TITLE_CROWN_END_POS, 16)
+            CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TITLE_CROWN_END_POS[0], TITLE_CROWN_END_POS[1]), 16)
             self.state = TitleCrown.TitleCrownState.Move
             return
         elif self.state == TitleCrown.TitleCrownState.Move:

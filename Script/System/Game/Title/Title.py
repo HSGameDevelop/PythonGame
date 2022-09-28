@@ -12,6 +12,8 @@ from ...Util.CommandUtil import CommandUtil
 from ...Util.Define import Define
 from ...Util.GameObject import GameObject
 
+from .TitleCrown import TitleCrown
+
 TITLE_IMAGE_DIRECTORY = "Resource/Image/Title/"
 TITLE_BG = "Title_Bg.png"
 TITLE_LOGO = "Title_Logo.png"
@@ -34,6 +36,7 @@ class Title(GameSequenceBase):
         self.bgImage = PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_BG)
         self.Logo = PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_LOGO)
         self.blade = GameObject(size=(128, 128) , image=PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_ICON_BLADE), moveSpeed=ICON_MOVE_SPEED, position=(-100, BLADE_ROGO_POS.y))
+        self.crown = TitleCrown()
 
         # ステートの初期化
         self.state : Title.TitleState = Title.TitleState.Start
@@ -41,9 +44,10 @@ class Title(GameSequenceBase):
     # 更新処理
     def Update(self) -> bool:
         if self.state == Title.TitleState.Start:
-            CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.blade, BLADE_ROGO_POS, ICON_MOVE_SPEED)
+            #CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.blade, BLADE_ROGO_POS, ICON_MOVE_SPEED)
             self.state = Title.TitleState.LogoIn
         elif self.state == Title.TitleState.LogoIn:
+            self.crown.Update()
             # 剣アイコン移動
             CommandUtil.Update()
 
@@ -63,6 +67,7 @@ class Title(GameSequenceBase):
         screen.blit(self.bgImage, (0, 0, 1280, 960))
         # 武器アイコンを表示
         self.blade.Draw()
+        self.crown.Draw()
         # タイトルロゴの描画(中心に配置)
         PgLib.DrawImageCenter(self.Logo)
 
