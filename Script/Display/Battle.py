@@ -85,6 +85,7 @@ class Battle(GameSequenceBase):
         self.click_flag = False                     # クリックした時のフラグ
         self.pushClick = None                       # クリックしたイベントの取得
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
+        self.isUnitselect = 0                         # ユニットが選択済みかどうか
 
         # プレイヤーの初期設定
         for num in range(PLAYER_UNIT_NUM):
@@ -217,23 +218,29 @@ class Battle(GameSequenceBase):
     def CreatePlayer(self, player):
         #[id, xl, yl, x, y, tagname]
         for num in range(PLAYER_UNIT_NUM):
-            self.player[num].Draw(ColorList.BLUE)
+            #self.player[num].Draw(ColorList.BLUE)
+            self.player[num].GetSelect()
+            self.player[num].GetVisible()
+            self.player[num].PlayerDraw()
             pos = self.player[num].GetPos()
 
             font = pygame.font.Font(None, 15)
             tag_length = len(player[num].tagname)
             if tag_length == 6:
-                text = font.render(player[num].tagname, True, ColorList.WHITE.value)
+                text = font.render(player[num].tagname, True, ColorList.RED.value)
                 self.screen.blit(text, [pos.x - 10, pos.y])
             elif tag_length == 7:
-                text = font.render(player[num].tagname, True, ColorList.WHITE.value)
+                text = font.render(player[num].tagname, True, ColorList.RED.value)
                 self.screen.blit(text, [pos.x - 14, pos.y])
 
 
     def CreateEnemy(self, enemy):
         #[id, xl, yl, x, y, tagname]
         for num in range(ENEMY_UNIT_NUM):
-            self.enemy[num].Draw(ColorList.YELLOW)
+            #self.enemy[num].Draw(ColorList.YELLOW)
+            self.enemy[num].GetSelect()
+            self.enemy[num].GetVisible()
+            self.enemy[num].EnemyDraw()
             pos = self.enemy[num].GetPos()
             #pygame.draw.circle(self.screen, ColorList.YELLOW.value, (enemy.xy[num][3], enemy.xy[num][4]), 20)
             
@@ -293,39 +300,55 @@ class Battle(GameSequenceBase):
         pass
 
     def CalcReturnPos(self, player, enemy, map):
-        # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。
+        # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。        
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
         if self.pushClick != self.before_pushClick:
+            print(self.pushClick)
             if  self.click_flag == False:
                 # キー入力確認用
                 print("Push Click :  x:", str(Point_x) + " y:" + str(Point_y))
                 #font = pygame.font.Font(None, 15)
                 #[id, xl, yl, x, y, tagname]
                 if Point_x != None and Point_y !=  None:
-                    for p_num in range(6):
-                        p_x = math.floor(player[p_num].x)
-                        p_y = math.floor(player[p_num].y)
-                        if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
-                            print(player[p_num].id)
+                    if self.pushClick == 1:
+                        for p_num in range(6):
+                            p_x = math.floor(player[p_num].x)
+                            p_y = math.floor(player[p_num].y)
+                            self.player[p_num].SetSelect(False)
+                            if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
+                                self.player[p_num].SetSelect(True)
 
-                    for e_num in range(6):
-                        e_x = math.floor(enemy[e_num].x)
-                        e_y = math.floor(enemy[e_num].y)
-                        if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
-                            print(enemy[e_num].id)
+                        for e_num in range(6):
+                            e_x = math.floor(enemy[e_num].x)
+                            e_y = math.floor(enemy[e_num].y)
+                            self.enemy[e_num].SetSelect(False)
+                            if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
+                                self.enemy[e_num].SetSelect(True)
 
-                    for m_num in range(720):
-                        # [x, y, xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, board_number]
-                        pass
-                        
-                        #m_x = math.floor(map.xy[m_num][3])
-                        #m_y = math.floor(map.xy[m_num][4])
-                        #if m_x - 21 < Point_x and Point_x < m_x + 21 and m_y - 21 < Point_y and Point_y < m_y + 21:
-                        #    print(map.xy[e_num])
+                        for m_num in range(720):
+                            # [x, y, xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, board_number]
+                            pass
+                            
+                            #m_x = math.floor(map.xy[m_num][3])
+                            #m_y = math.floor(map.xy[m_num][4])
+                            #if m_x - 21 < Point_x and Point_x < m_x + 21 and m_y - 21 < Point_y and Point_y < m_y + 21:
+                            #    print(map.xy[e_num])
+                    elif self.pushClick == 3:
+                        for p_num in range(6):
+                            if self.player[p_num].GetSelect() == True:
+                                self.player[p_num].SetSelect(False)
 
+                        for e_num in range(6):
+                            if self.enemy[e_num].GetSelect() == True:
+                                self.enemy[e_num].SetSelect(False)
+
+                        self.isUnitselect = 0
+                
                 self.click_flag = True
                 self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+
+
 
     
 

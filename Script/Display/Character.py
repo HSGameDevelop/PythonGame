@@ -6,6 +6,7 @@ from ..System.Util.GameObject import GameObject
 sys.path.append('../System/Data/')
 from ..Data.GameData import GameData
 
+from Script.Data.ColorList import ColorList
 #sys.path.append('../../System/Util/')
 #from ..System.Util.GameObject import GameObject
 
@@ -67,6 +68,8 @@ class Character(GameObject):
         self.gd = GameData()
         self.gd.LoadData()
         self.unit_side = side
+        self.isSelect = False
+        self.isVisible = False
 
         self.id, self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl, self.gd.GetCharacterDataFromId(num).characterId )
         self.characterName  = self.gd.GetCharacterDataFromId(num).characterName         # キャラクター名
@@ -81,6 +84,8 @@ class Character(GameObject):
         self.angle          = self.gd.GetWeaponDataFromId(self.weaponId).angle          # 角度
         self.powerFlag      = self.gd.GetWeaponDataFromId(self.weaponId).powerFlag      # ユニットの攻撃力分を加算するかどうか
         self.plusdown       = self.gd.GetWeaponDataFromId(self.weaponId).plusdown       # 武器装備時の行動力の増減
+        self.SetSelect(self.isSelect)
+        self.SetVisible(self.isVisible)
 
 
     def prepareUnit(self, xl, yl, id):
@@ -100,13 +105,49 @@ class Character(GameObject):
         #self.xy.append([id, xl, yl, x, y, tagname])
         return id, xl, yl, x, y, tagname
 
+    def GetSelect(self):
+        return self.isSelect
+
+    def SetSelect(self, select):
+        self.isSelect = select
+
+    def GetVisible(self):
+        return self.isVisible
+
+    def SetVisible(self, visible):
+        self.isVisible = visible
+
 
 class Player(Character):
     def __init__(self, xl, yl, num):
         super().__init__(xl, yl, PLAYER, num)
 
+    def PlayerDraw(self):
+        if self.isVisible == True:
+            if self.isSelect == True:
+                self.Draw(ColorList.LIGHTBLUE)
+            else:
+                self.Draw(ColorList.BLUE)
+        else:
+            if self.isSelect == True:
+                self.Draw(ColorList.BLUE)
+            else:
+                self.Draw(ColorList.DARKBLUE)
+
 
 class Enemy(Character):
     def __init__(self, xl, yl, num, p_num):
         super().__init__(xl, yl, ENEMY, num + p_num)
+
+    def EnemyDraw(self):
+        if self.isVisible == True:
+            if self.isSelect == True:
+                self.Draw(ColorList.LIGHTYELLOW)
+            else:
+                self.Draw(ColorList.YELLOW)
+        else:
+            if self.isSelect == True:
+                self.Draw(ColorList.YELLOW)
+            else:
+                self.Draw(ColorList.OLIVE)
 
