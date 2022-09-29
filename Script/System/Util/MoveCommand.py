@@ -14,7 +14,6 @@ class MoveCommand:
     # 初期化
     def __init__(self) -> None:
         self.commandList : list = []
-        self.degree = 0
 
     # コマンドの追加
     def AddCommand(self, type : MoveType, *args):
@@ -37,35 +36,21 @@ class MoveCommand:
         pos = gameObject.GetPos()
 
         # 不要な計算を省く
-        isX = abs(targetPos.x - pos.x) <= moveSpeed
-        isY = abs(targetPos.y - pos.y) <= moveSpeed
-        if  isX and isY:
+        if  abs(targetPos.x - pos.x) <= moveSpeed and abs(targetPos.y - pos.y) <= moveSpeed:
             gameObject.SetPos(targetPos.x, targetPos.y)
             return True
 
-        if self.degree == 0:
-            # 現在の位置から目標の位置までのベクトルを求める
-            targetDir = np.array([targetPos.x - pos.x, targetPos.y - pos.y])
-
-            # 内積を求める
-            dot = np.dot(Define.DEFAULT_DIRECTION, targetDir)
         
-            # ベクトルの長さを計算
-            dis = np.linalg.norm(targetDir)
-        
-            # 角度をラジアンから度に変換
-            self.degree = np.degrees(np.arccos(dot / (Define.DEFAULT_DISTANCE * dis))) 
+        # 現在の位置から目標の位置までのベクトルを求める
+        targetDir = np.array([targetPos.x - pos.x, targetPos.y - pos.y])
+        # ベクトルの長さを計算
+        dis = np.linalg.norm(targetDir)
+        normX = targetDir[0] / dis
+        normY = targetDir[1] / dis
 
         # 座標の計算
-        if isX:
-            x = pos.x
-        else:
-            x = pos.x + np.cos(self.degree) * moveSpeed
-            
-        if isY:
-            y = pos.y            
-        else:
-            y = pos.y + np.sin(self.degree) * moveSpeed
+        x = pos.x + normX * moveSpeed    
+        y = pos.y + normY * moveSpeed
         
         # 座標の設定
         gameObject.SetPos(x, y)
