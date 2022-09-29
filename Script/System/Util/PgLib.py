@@ -47,6 +47,10 @@ class PgLibImpl(Singleton):
     # 画像の読み込み(画像のインスタンスを返す)
     def LoadImage(self, filePath):
         return pygame.image.load(filePath)
+
+    # 画像のサイズを取得
+    def GetImageSize(self, image: pygame.surface):
+        return image.get_rect().size
     
     # 画像のリサイズ
     def ResizeImage(self, image : pygame.surface, width : int, height : int):
@@ -67,7 +71,7 @@ class PgLibImpl(Singleton):
     def DrawEllipse(self, color : pygame.color.Color, x : int, y : int, width : int, height : int):
         pygame.draw.ellipse(self.screen, color, (x, y, width, height))
 
-    # 画像を描画する
+    # 画像を描画
     def DrawImage(self, image : pygame.surface, x : int, y : int, width : int, height : int):
         # 画像データの設定
         drawImage = self.ResizeImage(image, width, height)
@@ -78,7 +82,7 @@ class PgLibImpl(Singleton):
         # 画像の描画
         self.screen.blit(drawImage, (x, y, imageSize[0], imageSize[1]))
 
-    # 画像をスクリーンの中心に表示する
+    # 画像をスクリーンの中心に表示
     def DrawImageCenter(self, image : pygame.surface, width : int = 0, height : int = 0):
         # 画像データの設定
         drawImage = self.ResizeImage(image, width, height)
@@ -157,6 +161,11 @@ class PgLib:
     def SetBgColor(r, g, b):
         PgLib.GetInstance().SetBgColor(r, g, b)
 
+    # 画像のサイズを取得
+    @staticmethod
+    def GetImageSize(image : pygame.surface):
+        return PgLib.GetInstance().GetImageSize(image)
+
     # 画像の読み込み(画像のインスタンスを返す)
     @staticmethod
     def LoadImage( filePath):
@@ -167,22 +176,22 @@ class PgLib:
     def ResizeImage(image : pygame.surface, width : int, height : int):
         return PgLib.GetInstance().ResizeImage(image, width, height)
 
-    # 円形を描画する
+    # 円形を描画
     @staticmethod
     def DrawCircle(color : pygame.color.Color, x : float, y : float, size : float):
         return PgLib.GetInstance().DrawCircle(color, x, y, size)
 
-    # 楕円形を描画する
+    # 楕円形を描画
     @staticmethod
     def DrawEllipse(color : pygame.color.Color, x : int, y : int, width : int, height : int):
         return PgLib.GetInstance().DrawEllipse(color, x, y, width, height)
 
-    # 画像を描画する
+    # 画像を描画
     @staticmethod
-    def DrawImage(image : pygame.surface, x : int, y : int, width : int, height : int):
-        return PgLib.GetInstance().DrawImage(image, x, y, width, height)
+    def DrawImage(image : pygame.surface, x : float, y : float, width : float, height : float):
+        return PgLib.GetInstance().DrawImage(image, x - width / 2, y - height / 2, width, height)
 
-    # 画像をスクリーンの中心に表示する
+    # 画像をスクリーンの中心に表示
     @staticmethod
     def DrawImageCenter(image : pygame.surface, width : int = 0, height : int = 0):
         PgLib.GetInstance().DrawImageCenter(image, width, height)
