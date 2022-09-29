@@ -10,8 +10,8 @@ from ...Util.CommandUtil import CommandUtil
 from ...Util.Define import Define
 
 TITLE_CROWN_IMAGE_PATH = "Resource/Image/Title/Title_Icon.png"
-TITLE_CROWN_START_POS = (900, -200)
-TITLE_CROWN_END_POS = (700, 480)
+TITLE_CROWN_START_POS = (128 * 7 / 2, -200)
+TITLE_CROWN_END_POS = (128 * 7 / 2, 480)
 
 class TitleCrown(GameObject):
     class TitleCrownState(Enum):
