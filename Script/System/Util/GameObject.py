@@ -18,12 +18,18 @@ class GameObject:
         size : tuple[float, float] = (0, 0),
         direction : tuple[float, float] = (1, 0),
         image : pygame.surface = None,
-        moveSpeed : float = 0.0
      ) -> None:
         self.position = Define.Position(position[0], position[1])
         self.size = Define.Size(size[0], size[1])
         self.direction = Define.Direction(direction[0], direction[1])
         self.image : pygame.surface = image
+
+        # サイズが設定されていないなら画像のサイズで設定する
+        if self.image != None:
+            selfSize = self.GetSize()
+            if(selfSize.width == 0 and selfSize.height == 0):
+                size = PgLib.GetImageSize(self.image)
+                self.SetSize(size[0], size[1])
 
     # 座標の取得
     def GetPos(self) -> Define.Position:
