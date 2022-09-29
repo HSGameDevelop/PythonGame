@@ -10,10 +10,14 @@ from ...Util.CommandUtil import CommandUtil
 from ...Util.Define import Define
 
 TITLE_CROWN_IMAGE_PATH = "Resource/Image/Title/Title_Icon.png"
-TITLE_CROWN_START_POS = (128 * 7 / 2, -200)
-TITLE_CROWN_END_POS = (128 * 7 / 2, 480)
+TITLE_CROWN_START_POS = (900, -200)
+TITLE_CROWN_END_POS = (900, 420)
 
 class TitleCrown(GameObject):
+    IMAGE_SIZE = 128.0
+    IMAGE_NUM_MAX = 6 # ０からの計算
+    IMAGE_NUM_LOOP_START = 4
+
     class TitleCrownState(Enum):
         Init = 0,
         Move = 1,
@@ -21,22 +25,35 @@ class TitleCrown(GameObject):
         LoopAnim = 3
 
     def __init__(self) -> None:
-        super().__init__(image=PgLib.LoadImage(TITLE_CROWN_IMAGE_PATH), position=TITLE_CROWN_START_POS)
+        super().__init__(image=PgLib.LoadImage(TITLE_CROWN_IMAGE_PATH), position=TITLE_CROWN_START_POS, size=(128,128))
+        self.imageNum = 0
+        self.timer = 0
         self.state = TitleCrown.TitleCrownState.Init
 
     def Update(self):
         if self.state == TitleCrown.TitleCrownState.Init:
             CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TITLE_CROWN_END_POS[0], TITLE_CROWN_END_POS[1]), 16)
             self.state = TitleCrown.TitleCrownState.Move
-            return
         elif self.state == TitleCrown.TitleCrownState.Move:
             if self.GetPos().y == TITLE_CROWN_END_POS[1]:
                 self.state = TitleCrown.TitleCrownState.Anim
-            return
         elif self.state == TitleCrown.TitleCrownState.Anim:
-            self.state = TitleCrown.TitleCrownState.LoopAnim
-            return
+            self.timer += 1
+            if self.timer % 6 == 0:
+                self.imageNum += 1
+            if self.imageNum >= TitleCrown.IMAGE_NUM_LOOP_START:
+                self.state = TitleCrown.TitleCrownState.LoopAnim
         elif self.state == TitleCrown.TitleCrownState.LoopAnim:
-            return
+            self.timer += 1
+            if self.timer % 3 == 0:
+                self.imageNum += 1
+            if self.imageNum > TitleCrown.IMAGE_NUM_MAX:
+                self.imageNum = TitleCrown.IMAGE_NUM_LOOP_START
+
+        
                 
 
+    def Draw(self):
+        pos = self.GetPos()
+        size = self.GetSize()
+        PgLib.DrawImageSplit(self.GetImage(), (pos.x, pos.y, size.width, size.height), (self.imageNum * TitleCrown.IMAGE_SIZE, 0, TitleCrown.IMAGE_SIZE, TitleCrown.IMAGE_SIZE))

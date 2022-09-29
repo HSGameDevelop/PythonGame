@@ -35,7 +35,6 @@ class Title(GameSequenceBase):
         #画像の読み込み
         self.bgImage = PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_BG)
         self.Logo = PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_LOGO)
-        self.blade = GameObject(size=(128, 128) , image=PgLib.LoadImage(TITLE_IMAGE_DIRECTORY + TITLE_ICON_BLADE), position=(-100, BLADE_ROGO_POS.y))
         self.crown = TitleCrown()
 
         # ステートの初期化
@@ -44,7 +43,6 @@ class Title(GameSequenceBase):
     # 更新処理
     def Update(self) -> bool:
         if self.state == Title.TitleState.Start:
-            #CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.blade, BLADE_ROGO_POS, ICON_MOVE_SPEED)
             self.state = Title.TitleState.LogoIn
         elif self.state == Title.TitleState.LogoIn:
             self.crown.Update()
@@ -52,7 +50,6 @@ class Title(GameSequenceBase):
             CommandUtil.Update()
 
             if PgLib.GetInputManager().GetMouse().GetPushClick() != None:
-                self.blade.SetPos(BLADE_ROGO_POS.x , BLADE_ROGO_POS.y)
                 self.state = Title.TitleState.Run
         elif self.state == Title.TitleState.Run:
             self.state = Title.TitleState.End
@@ -65,10 +62,12 @@ class Title(GameSequenceBase):
         screen = PgLib.GetScreen()
         # 背景の描画
         screen.blit(self.bgImage, (0, 0, 1280, 960))
-        # 武器アイコンを表示
-        self.blade.Draw()
-        self.crown.Draw()
+
         # タイトルロゴの描画(中心に配置)
         PgLib.DrawImageCenter(self.Logo)
+
+        # 王冠の描画
+        self.crown.Draw()
+        
 
        

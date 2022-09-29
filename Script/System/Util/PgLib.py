@@ -80,7 +80,16 @@ class PgLibImpl(Singleton):
         imageSize = drawImage.get_rect().size
 
         # 画像の描画
-        self.screen.blit(drawImage, (x, y, imageSize[0], imageSize[1]))
+        self.screen.blit(drawImage, (x - width / 2, y - height / 2, imageSize[0], imageSize[1]))
+
+    # 画像を分割描画
+    def DrawImageSplit(self, image : pygame.surface, rect : tuple[float, float, float, float], imageRect : tuple[float, float, float, float]):
+        # 中心座標からの表示にする
+        x = rect[0] - rect[2] * 0.5
+        y = rect[1] - rect[3] * 0.5
+
+        # 画像の描画
+        self.screen.blit(image, (x, y, rect[2], rect[3]), imageRect)
 
     # 画像をスクリーンの中心に表示
     def DrawImageCenter(self, image : pygame.surface, width : int = 0, height : int = 0):
@@ -179,17 +188,22 @@ class PgLib:
     # 円形を描画
     @staticmethod
     def DrawCircle(color : pygame.color.Color, x : float, y : float, size : float):
-        return PgLib.GetInstance().DrawCircle(color, x, y, size)
+        PgLib.GetInstance().DrawCircle(color, x, y, size)
 
     # 楕円形を描画
     @staticmethod
     def DrawEllipse(color : pygame.color.Color, x : int, y : int, width : int, height : int):
-        return PgLib.GetInstance().DrawEllipse(color, x, y, width, height)
+        PgLib.GetInstance().DrawEllipse(color, x, y, width, height)
 
     # 画像を描画
     @staticmethod
     def DrawImage(image : pygame.surface, x : float, y : float, width : float, height : float):
-        return PgLib.GetInstance().DrawImage(image, x - width / 2, y - height / 2, width, height)
+        PgLib.GetInstance().DrawImage(image, x, y, width, height)
+
+    # 画像を分割描画
+    @staticmethod
+    def DrawImageSplit(image : pygame.surface, rect : tuple[float, float, float, float], imageRect : tuple[float, float, float, float]):
+        PgLib.GetInstance().DrawImageSplit(image, rect, imageRect)
 
     # 画像をスクリーンの中心に表示
     @staticmethod
