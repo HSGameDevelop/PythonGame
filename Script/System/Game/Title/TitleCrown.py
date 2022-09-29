@@ -9,11 +9,10 @@ from ...Util.PgLib import PgLib
 from ...Util.CommandUtil import CommandUtil
 from ...Util.Define import Define
 
-TITLE_CROWN_IMAGE_PATH = "Resource/Image/Title/Title_Icon.png"
-TITLE_CROWN_START_POS = (900, -200)
-TITLE_CROWN_END_POS = (900, 420)
-
 class TitleCrown(GameObject):
+    TITLE_CROWN_IMAGE_PATH = "Resource/Image/Title/Title_Icon.png"
+    TITLE_CROWN_START_POS = (1160, -200)
+    TITLE_CROWN_END_POS = (1160, 350)
     IMAGE_SIZE = 128.0
     IMAGE_NUM_MAX = 6 # ０からの計算
     IMAGE_NUM_LOOP_START = 4
@@ -25,17 +24,17 @@ class TitleCrown(GameObject):
         LoopAnim = 3
 
     def __init__(self) -> None:
-        super().__init__(image=PgLib.LoadImage(TITLE_CROWN_IMAGE_PATH), position=TITLE_CROWN_START_POS, size=(128,128))
+        super().__init__(image=PgLib.LoadImage(TitleCrown.TITLE_CROWN_IMAGE_PATH), position=TitleCrown.TITLE_CROWN_START_POS, size=(128,128))
         self.imageNum = 0
         self.timer = 0
         self.state = TitleCrown.TitleCrownState.Init
 
     def Update(self):
         if self.state == TitleCrown.TitleCrownState.Init:
-            CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TITLE_CROWN_END_POS[0], TITLE_CROWN_END_POS[1]), 16)
+            CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TitleCrown.TITLE_CROWN_END_POS[0], TitleCrown.TITLE_CROWN_END_POS[1]), 16)
             self.state = TitleCrown.TitleCrownState.Move
         elif self.state == TitleCrown.TitleCrownState.Move:
-            if self.GetPos().y == TITLE_CROWN_END_POS[1]:
+            if self.GetPos().y == TitleCrown.TITLE_CROWN_END_POS[1]:
                 self.state = TitleCrown.TitleCrownState.Anim
         elif self.state == TitleCrown.TitleCrownState.Anim:
             self.timer += 1
@@ -49,10 +48,7 @@ class TitleCrown(GameObject):
                 self.imageNum += 1
             if self.imageNum > TitleCrown.IMAGE_NUM_MAX:
                 self.imageNum = TitleCrown.IMAGE_NUM_LOOP_START
-
-        
-                
-
+         
     def Draw(self):
         pos = self.GetPos()
         size = self.GetSize()
