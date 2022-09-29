@@ -43,7 +43,7 @@ class MapManager:
         return line
 
 
-map = MapManager()
+#map = MapManager()
 
 
 class Map:
