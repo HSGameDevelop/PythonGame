@@ -31,14 +31,14 @@ class TitleCrown(GameObject):
 
     def Update(self):
         if self.state == TitleCrown.TitleCrownState.Init:
-            CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TitleCrown.TITLE_CROWN_END_POS[0], TitleCrown.TITLE_CROWN_END_POS[1]), 16)
+            CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TitleCrown.TITLE_CROWN_END_POS[0], TitleCrown.TITLE_CROWN_END_POS[1]), 8)
             self.state = TitleCrown.TitleCrownState.Move
         elif self.state == TitleCrown.TitleCrownState.Move:
             if self.GetPos().y == TitleCrown.TITLE_CROWN_END_POS[1]:
                 self.state = TitleCrown.TitleCrownState.Anim
         elif self.state == TitleCrown.TitleCrownState.Anim:
             self.timer += 1
-            if self.timer % 6 == 0:
+            if self.timer % 5 == 0:
                 self.imageNum += 1
             if self.imageNum >= TitleCrown.IMAGE_NUM_LOOP_START:
                 self.state = TitleCrown.TitleCrownState.LoopAnim
