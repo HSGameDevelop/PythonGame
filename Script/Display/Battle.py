@@ -269,7 +269,7 @@ class Battle(GameSequenceBase):
         count = math.ceil(self.counter / FPS)
         self.Timercounter = self.Timerfont.render( str(count), True, ColorList.BLACK.value)
         counter_length = len( str(count) )
-        #self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])               #映らない時用
+        #self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])               #映らない時　用
         if counter_length == 3:
             self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])
         elif counter_length == 2:
