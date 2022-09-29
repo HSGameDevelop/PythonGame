@@ -23,7 +23,6 @@ h_h1_2 = h_h / 2
 
 PLAYER = 0
 ENEMY = 1
-move_speed = 10
 
 
 class CharacterManager():
@@ -71,7 +70,6 @@ class Character(GameObject):
         self.unit_side = side
 
         self.id, self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl, self.gd.GetCharacterDataFromId(1).characterId )
-        #self.unit = GameObject(size=(20, 20) , image=None, moveSpeed=move_speed, position=(self.xc, self.yc))
         #print(self.gd.GetCharacterDataFromId(1).characterName)
 
 
