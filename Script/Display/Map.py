@@ -12,38 +12,17 @@ NUM_HEIGHT = 24
 
 class MapManager:
     def __init__(self):
-        self.board = []
-        xy = []
+        self.board = [ [0 for i in range(NUM_WIDTH)] for j in range(NUM_HEIGHT)]
         for y in range(NUM_HEIGHT):
-            if y != 0 or y != 1 or y != 22 or y != 23:
-                line = self.Board()
+            if y != 0 or y != 1 or y > 22:
                 for x in range(NUM_WIDTH):
                     if x != 0 or x != 1 or x > 22:
-                        xy[x][y] = line[x - 2]
+                        self.board[x][y] = 0
                     else:
-                        xy[x][y] = -1
+                        self.board[x][y] = -1
             else:
                 for x in range(NUM_WIDTH):
-                    xy[x][y] = -1
-
-            self.board.append(xy)
-        print(self.board)
-
-
-    def Board(self):
-        # 1～6の目が出るサイコロ(dice)を用意
-        height = list(range(0,7))
-
-        # 6の目が出やすいように重みを設定する
-        w = [10, 1, 1, 1, 1, 1, 1]
-
-        # 歪んだサイコロを1000回振ってサンプルを得る
-        line = random.choices(height, k = 20, weights = w)
-
-        return line
-
-
-#map = MapManager()
+                    self.board[x][y] = -1
 
 
 class Map:

@@ -62,15 +62,25 @@ class CharacterManager():
 
 
 class Character(GameObject):
-    def __init__(self, xl, yl, side):
+    def __init__(self, xl, yl, side, num):
         super().__init__()
-
         self.gd = GameData()
         self.gd.LoadData()
         self.unit_side = side
 
-        self.id, self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl, self.gd.GetCharacterDataFromId(1).characterId )
-        #print(self.gd.GetCharacterDataFromId(1).characterName)
+        self.id, self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl, self.gd.GetCharacterDataFromId(num).characterId )
+        self.characterName  = self.gd.GetCharacterDataFromId(num).characterName         # キャラクター名
+        self.weaponId       = self.gd.GetCharacterDataFromId(num).weaponId              # 武器ID
+        self.actionPower    = self.gd.GetCharacterDataFromId(num).actionPower           # 行動力
+        self.skillSetId     = self.gd.GetCharacterDataFromId(num).skillSetId            # スキルセットID
+
+        self.weaponName     = self.gd.GetWeaponDataFromId(self.weaponId).weaponName     # 武器名
+        self.range          = self.gd.GetWeaponDataFromId(self.weaponId).range          # 射程距離
+        self.power          = self.gd.GetWeaponDataFromId(self.weaponId).power          # 攻撃力
+        self.consumption    = self.gd.GetWeaponDataFromId(self.weaponId).consumption    # 攻撃時の行動力消費
+        self.angle          = self.gd.GetWeaponDataFromId(self.weaponId).angle          # 角度
+        self.powerFlag      = self.gd.GetWeaponDataFromId(self.weaponId).powerFlag      # ユニットの攻撃力分を加算するかどうか
+        self.plusdown       = self.gd.GetWeaponDataFromId(self.weaponId).plusdown       # 武器装備時の行動力の増減
 
 
     def prepareUnit(self, xl, yl, id):
@@ -92,11 +102,11 @@ class Character(GameObject):
 
 
 class Player(Character):
-    def __init__(self, xl, yl):
-        super().__init__(xl, yl, PLAYER)
+    def __init__(self, xl, yl, num):
+        super().__init__(xl, yl, PLAYER, num)
 
 
 class Enemy(Character):
-    def __init__(self, xl, yl):
-        super().__init__(xl, yl, ENEMY)
+    def __init__(self, xl, yl, num, p_num):
+        super().__init__(xl, yl, ENEMY, num + p_num)
 

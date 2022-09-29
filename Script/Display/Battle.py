@@ -86,14 +86,14 @@ class Battle(GameSequenceBase):
         self.pushClick = None                       # クリックしたイベントの取得
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
 
-       # プレイヤーの初期設定
+        # プレイヤーの初期設定
         for num in range(PLAYER_UNIT_NUM):
-            self.player.append(Player(self.Player_Characters.xl[num], self.Player_Characters.yl[num]))
+            self.player.append(Player(self.Player_Characters.xl[num], self.Player_Characters.yl[num], num))
             self.player[num].SetSize(20, 20)
             
         # エネミーの初期設定
         for num in range(ENEMY_UNIT_NUM):
-            self.enemy.append(Enemy(self.Enemy_Characters.xl[num], self.Enemy_Characters.yl[num]))
+            self.enemy.append(Enemy(self.Enemy_Characters.xl[num], self.Enemy_Characters.yl[num], num, PLAYER_UNIT_NUM))
             self.enemy[num].SetSize(20, 20)
 
 
@@ -231,7 +231,7 @@ class Battle(GameSequenceBase):
 
 
     def CreateEnemy(self, enemy):
-        #[num, self.xl[num], self.yl[num], xc, yc, tagname]
+        #[id, xl, yl, x, y, tagname]
         for num in range(ENEMY_UNIT_NUM):
             self.enemy[num].Draw(ColorList.YELLOW)
             pos = self.enemy[num].GetPos()
@@ -279,8 +279,14 @@ class Battle(GameSequenceBase):
 
 
     def UnitData(self, unit):
-        #CalcReturnPosでユニットの情報を受け渡す（表示等）
+        #   CalcReturnPosでユニットの情報を受け渡す（表示等）
+        #    self.characterName
+        #    self.weaponName
+        #    self.range
+        #    self.power
+        #    self.consumption
         pass
+
 
     def MapData(self, map):
         #CalcReturnPosでマップの情報を受け渡す（表示等）
@@ -295,26 +301,24 @@ class Battle(GameSequenceBase):
                 # キー入力確認用
                 print("Push Click :  x:", str(Point_x) + " y:" + str(Point_y))
                 #font = pygame.font.Font(None, 15)
-                #[num, self.xl[num], self.yl[num], xc, yc, tagname]
+                #[id, xl, yl, x, y, tagname]
                 if Point_x != None and Point_y !=  None:
                     for p_num in range(6):
-                        p_x = math.floor(player[p_num].xy[p_num][3])
-                        p_y = math.floor(player[p_num].xy[p_num][4])
+                        p_x = math.floor(player[p_num].x)
+                        p_y = math.floor(player[p_num].y)
                         if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
-                            print(player.xy[p_num])
+                            print(player[p_num].id)
 
                     for e_num in range(6):
-                        e_x = math.floor(enemy[e_num].xy[e_num][3])
-                        e_y = math.floor(enemy[e_num].xy[e_num][4])
+                        e_x = math.floor(enemy[e_num].x)
+                        e_y = math.floor(enemy[e_num].y)
                         if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
-                            print(enemy[e_num].xy[e_num])
+                            print(enemy[e_num].id)
 
                     for m_num in range(720):
                         # [x, y, xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, board_number]
                         pass
-
-
-
+                        
                         #m_x = math.floor(map.xy[m_num][3])
                         #m_y = math.floor(map.xy[m_num][4])
                         #if m_x - 21 < Point_x and Point_x < m_x + 21 and m_y - 21 < Point_y and Point_y < m_y + 21:
@@ -328,6 +332,7 @@ class Battle(GameSequenceBase):
     def MoveData(self):
         # リストでそれぞれの行動データを生成
         # list = [player or enemy, unit_id, action_number(行動番号), kinds(攻撃・移動・防御(auto)), consumption(行動力消費量), x, y(移動先(今いる場所)), weapon_direction(武器向き), weapon(武器), shield_direction(盾向き), shield(盾)]
+        # CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TITLE_CROWN_END_POS[0], TITLE_CROWN_END_POS[1]), 16)
         pass
 
 
