@@ -90,12 +90,12 @@ class Title(GameSequenceBase):
 
         # タイトルロゴの描画(中心に配置)
         size = PgLib.GetImageSize(self.Logo)
-        PgLib.DrawImage(self.Logo, 900, 400, size[0], size[1])
+        PgLib.DrawImage(self.Logo, 900 - size[0] / 2, 400 - size[1] / 2, size[0], size[1])
 
         pygame.Surface.set_alpha(self.text, self.textAlpha, 0)
-        PgLib.DrawImage(self.text, 400, 820, 640, 64)
+        PgLib.DrawImage(self.text, 400 - 320, 820 - 32, 640, 64)
 
-        PgLib.DrawImageSplit(self.ashiato, (264, 320, self.size[0], self.size[1]), (0, 0, self.size[0], self.size[1]))
+        PgLib.DrawImageSplit(self.ashiato, (264 - self.size[0] / 2, 320 - self.size[1] / 2, self.size[0], self.size[1]), (0, 0, self.size[0], self.size[1]))
 
         # 王冠の描画
         self.crown.Draw()

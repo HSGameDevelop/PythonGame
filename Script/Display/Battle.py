@@ -3,6 +3,9 @@ import pygame
 from pygame.locals import *
 from math import pi
 import math
+import sys, os
+
+from Script.Data.GameData import GameData
 # マップ表示のクラス
 from .Map import Map
 # プレイヤー表示のクラス
@@ -68,6 +71,8 @@ class Battle(GameSequenceBase):
 
     def __init__(self) -> None:
         '''コンストラクタ'''
+        GameData.LoadData()
+        
         self.TurnCount = 1                          # ターンのカウント
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
         self.map = Map()                            # Map管理

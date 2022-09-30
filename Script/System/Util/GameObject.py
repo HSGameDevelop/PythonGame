@@ -72,8 +72,10 @@ class GameObject:
 
     # 描画
     def Draw(self, color : ColorList = ColorList.WHITE):
+        pos = self.GetPos()
+        size = self.GetSize()
         if self.image:
-            PgLib.DrawImage(self.image, self.position.x, self.position.y, self.size.width, self.size.height)
+            PgLib.DrawImage(self.image, pos.x - size.width / 2, pos.y - size.height / 2, size.width, size.height)
         else:
             # 横幅を円のサイズとする
             PgLib.DrawCircle(color.value, self.position.x, self.position.y, self.size.width)
