@@ -30,8 +30,6 @@ class MapManager:
                             # ここで5*5のランダムマップを代入する（後々）
                             self.board[y][x] = 0
 
-mapmana = MapManager()
-
 
 class Map:
     def __init__(self):

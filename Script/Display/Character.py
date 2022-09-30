@@ -1,9 +1,7 @@
 import random
 import sys, os
 
-sys.path.append('../System/Util/')
 from ..System.Util.GameObject import GameObject
-sys.path.append('../System/Data/')
 from ..Data.GameData import GameData
 
 from Script.Data.ColorList import ColorList
