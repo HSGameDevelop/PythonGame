@@ -8,4 +8,8 @@ class Command:
     # コールバック呼び出し
     def Handler(self):
         return self.func(*self.args)
-    
+
+#命令ベースクラス
+class CommandBase:
+    def __init__(self) -> None:
+        pass

@@ -3,32 +3,23 @@ from enum import Enum
 
 from .Define import Define
 from .GameObject import GameObject
-from .Command import Command
+from .Command import Command, CommandBase
 
 # 移動命令制御クラス
-class MoveCommand:
+class MoveCommand(CommandBase):
     # 移動の種類
     class MoveType(Enum):
         NormalToPosition = 0
 
     # 初期化
     def __init__(self) -> None:
-        self.commandList : list = []
+        pass
 
     # コマンドの追加
-    def AddCommand(self, type : MoveType, *args):
+    def GetCommand(self, type : MoveType, *args):
         if type == MoveCommand.MoveType.NormalToPosition:
-            self.commandList.append(Command(self.MoveToPosition, *args))
-
-    # コマンドの削除
-    def DeleteCommand(self, command : Command):
-        self.commandList.remove(command)
-
-    # 更新処理
-    def Update(self):
-        for command in self.commandList:
-            if command.Handler():
-                self.DeleteCommand(command)
+            return Command(self.MoveToPosition, *args)
+        return None
             
     # 指定座標に向かって移動する
     def MoveToPosition(self, gameObject : GameObject, targetPos : Define.Position, moveSpeed : float) -> bool:

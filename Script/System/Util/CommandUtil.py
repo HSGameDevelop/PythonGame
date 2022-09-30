@@ -8,14 +8,20 @@ class CommandUtilImpl(Singleton):
     # 初期化
     def __init__(self) -> None:
         self.moveCommand : MoveCommand = MoveCommand()
+
+        self.commandList : list = []
     
     # 移動命令の追加
     def AddMoveCommand(self, type : MoveCommand.MoveType, *args):
-        self.moveCommand.AddCommand(type, *args)
+        command = self.moveCommand.GetCommand(type, *args)
+        if command != None:
+            self.commandList.append(command)
 
     # 更新処理
     def Update(self):
-        self.moveCommand.Update()
+        for command in self.commandList:
+            if command.Handler():
+                self.commandList.remove(command)
 
 # 命令制御クラスの呼び出す部分
 commandUtil : CommandUtilImpl = None
