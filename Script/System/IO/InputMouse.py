@@ -29,7 +29,6 @@ class InputMouse:
             self.pos_x = None
             self.pos_y = None
 
- 
     # マウスクリックを取得する
     def GetPushClick(self):
         return self.click
