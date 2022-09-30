@@ -52,4 +52,4 @@ class TitleCrown(GameObject):
     def Draw(self):
         pos = self.GetPos()
         size = self.GetSize()
-        PgLib.DrawImageSplit(self.GetImage(), (pos.x, pos.y, size.width, size.height), (self.imageNum * TitleCrown.IMAGE_SIZE, 0, TitleCrown.IMAGE_SIZE, TitleCrown.IMAGE_SIZE))
+        PgLib.DrawImageSplit(self.GetImage(), (pos.x - size.width / 2, pos.y - size.height / 2, size.width, size.height), (self.imageNum * TitleCrown.IMAGE_SIZE, 0, TitleCrown.IMAGE_SIZE, TitleCrown.IMAGE_SIZE))
