@@ -67,10 +67,17 @@ class Character(GameObject):
         self.isSelect = False
         self.isVisible = False
 
+        self.ActionCost = 20        # 行動力
+        self.HitPoint = 20          # ＨＰ      5~15
+        self.AttackPoint = 10       # 攻撃      5~10
+        self.DeffencePoint = 10     # 防御      5~10
+        self.AvoidancePoint = 20    # 回避率    1~15
+        self.Visible = 10           # 視界
+
         self.id, self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl, GameData.GetCharacterDataFromId(num).characterId )
         self.characterName  = GameData.GetCharacterDataFromId(num).characterName         # キャラクター名
         self.weaponId       = GameData.GetCharacterDataFromId(num).weaponId              # 武器ID
-        self.actionPower    = GameData.GetCharacterDataFromId(num).actionPower           # 行動力
+        self.actionPower    = GameData.GetCharacterDataFromId(num).actionPower           # 攻撃時の行動力消費
         self.skillSetId     = GameData.GetCharacterDataFromId(num).skillSetId            # スキルセットID
 
         self.weaponName     = GameData.GetWeaponDataFromId(self.weaponId).weaponName     # 武器名

@@ -30,7 +30,7 @@ CIRCLE_WIDTH_OUT = 40
 CIRCLE_WIDTH_IN = 35
 
 TURN_DISPLAY = 150
-DATA_DISPLAY_WIDTH = 300
+DATA_DISPLAY_WIDTH = 400
 DATA_DISPLAY_HEIGHT = 300
 
 FPS = 60
@@ -290,19 +290,9 @@ class Battle(GameSequenceBase):
         elif counter_length == 1:
             self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
 
-
-    def UnitData(self, unit):
-        pass
-        #   CalcReturnPosでユニットの情報を受け渡す（表示等）
-        #    self.characterName
-        #    self.power         視界ないにいない場合は、表示しない
-        #    self.weaponName    視界ないにいない場合は、表示しない
-        #    self.range         視界ないにいない場合は、表示しない
-        #    self.consumption   視界ないにいない場合は、表示しない
-        #pygame.draw.rect(self.screen, ColorList.BLACK.value, (unit.x, unit.y, DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT))
-
     def MapData(self, map):
         #CalcReturnPosでマップの情報を受け渡す（表示等）
+        #ユニットの表示と同じような処理（ここではできない）
         pass
 
     def CalcReturnPos(self, player, enemy, map):
