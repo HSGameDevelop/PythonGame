@@ -4,8 +4,11 @@ sys.path.append('../../Script/Data/')
 from Script.Data.CharacterData import CharacterData, CharacterDataLoader
 from Script.Data.WeaponData import WeaponData, WeaponDataLoader
 
+sys.path.append('../System/Util/')
+from ..System.Util.Singleton import Singleton
+
 # ゲームのデータ関連を扱うクラス
-class GameData:
+class GameDataImpl(Singleton):
     def __init__(self) -> None:
         characterData = []  # キャラクターデータ
         weaponData = []     # 武器データ
@@ -41,3 +44,34 @@ class GameData:
                 return data
 
         return None
+
+# ゲームのデータ関連を扱うクラス(呼び出し側)
+gameData : GameDataImpl = None
+class GameData:
+    # 初期化
+    @staticmethod
+    def Initialize():
+        global gameData
+        gameData = GameDataImpl()
+
+    # インスタンス取得
+    @staticmethod
+    def GetInstance() -> GameDataImpl:
+        if gameData == None:
+            GameData.Initialize()
+        return gameData;
+
+    # ゲームデータの読み込み
+    @staticmethod
+    def LoadData():
+        GameData.GetInstance().LoadData()
+
+    # キャラクターデータをIdから取得する
+    @staticmethod
+    def GetCharacterDataFromId(characterId) -> CharacterData:
+        return GameData.GetInstance().GetCharacterDataFromId(characterId)
+
+    # 武器データをIdから取得する
+    @staticmethod
+    def GetWeaponDataFromId(weaponId) -> WeaponData:
+        return GameData.GetInstance().GetWeaponDataFromId(weaponId)

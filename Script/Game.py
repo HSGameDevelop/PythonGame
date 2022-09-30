@@ -3,6 +3,8 @@ import sys, os
 import pygame
 from Script.System.Game.GameSequenceBase import GameSequenceBase
 
+sys.path.append('./Data/')
+from .Data.GameData import GameData
 sys.path.append('./System/Util/')
 from .System.Util.PgLib import PgLib
 from .System.Util.CommandUtil import CommandUtil
@@ -21,6 +23,7 @@ class Game:
     def __init__(self):
         PgLib.Initialize(GAME_TITLE, WIDTH, HEIGHT, FPS)
         CommandUtil.Initialize()
+        GameData.Initialize()
         
         self.gameSequence : GameSequenceBase = Title()
         #self.gameSequence : GameSequenceBase = Battle()
