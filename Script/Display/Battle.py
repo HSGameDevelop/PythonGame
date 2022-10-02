@@ -324,21 +324,37 @@ class Battle(GameSequenceBase):
                                 self.datadisp.SetFontsize1(font_size1)
                                 self.datadisp.SetText1(text1)
                                 font_size2 = 30
-                                text2 = "攻撃力：" + player[p_num].power
+                                text2 = "H 　P：" + player[p_num].AttackPoint
                                 self.datadisp.SetFontsize2(font_size2)
                                 self.datadisp.SetText2(text2)
                                 font_size3 = 30
-                                text3 = "武　器：" + player[p_num].weaponName
+                                text3 = "攻撃力：" + player[p_num].AttackPoint
                                 self.datadisp.SetFontsize3(font_size3)
                                 self.datadisp.SetText3(text3)
                                 font_size4 = 30
-                                text4 = "射　程：" + player[p_num].range
+                                text4 = "防御力：" + player[p_num].DeffencePoint
                                 self.datadisp.SetFontsize4(font_size4)
                                 self.datadisp.SetText4(text4)
                                 font_size5 = 30
-                                text5 = "消　費：" + player[p_num].consumption
+                                text5 = "回避力：" + player[p_num].AvoidancePoint
                                 self.datadisp.SetFontsize5(font_size5)
                                 self.datadisp.SetText5(text5)
+                                font_size6 = 30
+                                text6 = "技術力：" + player[p_num].TechnologyPoint
+                                self.datadisp.SetFontsize6(font_size6)
+                                self.datadisp.SetText5(text6)
+                                #font_size3 = 30
+                                #text3 = "武　器：" + player[p_num].weaponName
+                                #self.datadisp.SetFontsize3(font_size3)
+                                #self.datadisp.SetText3(text3)
+                                #font_size4 = 30
+                                #text4 = "射　程：" + player[p_num].range
+                                #self.datadisp.SetFontsize4(font_size4)
+                                #self.datadisp.SetText4(text4)
+                                #font_size5 = 30
+                                #text5 = "消　費：" + player[p_num].actioncost
+                                #self.datadisp.SetFontsize5(font_size5)
+                                #self.datadisp.SetText5(text5)
                                 if player[p_num].GetSelect() == True:
                                     self.isUnitselect = True
                                     flg = True
@@ -357,21 +373,37 @@ class Battle(GameSequenceBase):
                                 self.datadisp.SetFontsize1(font_size1)
                                 self.datadisp.SetText1(text1)
                                 font_size2 = 30
-                                text2 = "攻撃力：" + enemy[e_num].power
+                                text2 = "H 　P：" + enemy[e_num].AttackPoint
                                 self.datadisp.SetFontsize2(font_size2)
                                 self.datadisp.SetText2(text2)
                                 font_size3 = 30
-                                text3 = "武　器：" + enemy[e_num].weaponName
+                                text3 = "攻撃力：" + enemy[e_num].AttackPoint
                                 self.datadisp.SetFontsize3(font_size3)
                                 self.datadisp.SetText3(text3)
                                 font_size4 = 30
-                                text4 = "射　程：" + enemy[e_num].range
+                                text4 = "防御力：" + enemy[e_num].DeffencePoint
                                 self.datadisp.SetFontsize4(font_size4)
                                 self.datadisp.SetText4(text4)
                                 font_size5 = 30
-                                text5 = "消　費：" + enemy[e_num].consumption
+                                text5 = "回避力：" + enemy[e_num].AvoidancePoint
                                 self.datadisp.SetFontsize5(font_size5)
                                 self.datadisp.SetText5(text5)
+                                font_size6 = 30
+                                text6 = "技術力：" + enemy[e_num].TechnologyPoint
+                                self.datadisp.SetFontsize6(font_size6)
+                                self.datadisp.SetText5(text6)
+                                #font_size3 = 30
+                                #text3 = "武　器：" + enemy[e_num].weaponName
+                                #self.datadisp.SetFontsize3(font_size3)
+                                #self.datadisp.SetText3(text3)
+                                #font_size4 = 30
+                                #text4 = "射　程：" + enemy[e_num].range
+                                #self.datadisp.SetFontsize4(font_size4)
+                                #self.datadisp.SetText4(text4)
+                                #font_size5 = 30
+                                #text5 = "消　費：" + enemy[e_num].consumption
+                                #self.datadisp.SetFontsize5(font_size5)
+                                #self.datadisp.SetText5(text5)
                                 if enemy[e_num].GetSelect() == True:
                                     self.isUnitselect = True
                                     flg = True

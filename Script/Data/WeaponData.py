@@ -9,7 +9,7 @@ class WeaponData:
         self.weaponName = ''    # 武器名
         self.range = 0          # 射程距離
         self.power = 0          # 攻撃力
-        self.consumption = 0    # 攻撃時の行動力消費
+        self.actioncost = 0     # 攻撃時の行動力消費
         self.angle = 0          # 角度
         self.powerFlag = 0      # ユニットの攻撃力分を加算するかどうか
         self.plusdown = 0       # 武器装備時の行動力の増減

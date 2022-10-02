@@ -7,9 +7,13 @@ class CharacterData:
     def __init__(self):
         self.characterId = 0    # キャラクターID
         self.characterName = '' # キャラクター名
-        self.weaponId = 0       # 武器ID
-        self.actionPower = 0    # 行動力
-        self.skillSetId = 0     # スキルセットID       
+        self.actionpower = 0    # 行動力
+        self.hitpoint = 0       # HP
+        self.attackpoint = 0    # 攻撃力
+        self.defensepoint = 0   # 防御力
+        self.avoidancepoint = 0 # 回避力
+        self.technologypoint = 0# 技術力
+        self.visible = 0        # 視界
     
 class CharacterDataLoader(DataLoaderBase):
     LOAD_FILE_NAME = 'Character.bin'
