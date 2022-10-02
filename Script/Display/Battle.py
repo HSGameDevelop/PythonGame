@@ -1,5 +1,4 @@
 from enum import Enum
-import time
 import pygame
 from pygame.locals import *
 from math import pi
@@ -13,9 +12,8 @@ from Script.System.Util.MoveCommand import MoveCommand
 from .Map import Map
 # プレイヤー表示のクラス
 from .Character import Character, Player, Enemy, CharacterManager
-sys.path.append('../System/Game/')
+from .DataDisplay import DataDisplay
 from ..System.Game.GameSequenceBase import GameSequenceBase
-sys.path.append('../System/Util/')
 from ..System.Util.PgLib import PgLib
 from ..System.Util.CommandUtil import CommandUtil
 from ..System.Util.Define import Define
@@ -23,7 +21,6 @@ sys.path.append('../System/IO/')
 from ..System.IO.InputKeyboard import InputKeyboard
 from ..System.IO.InputMouse import InputMouse
 # カラーリスト
-sys.path.append('../../Data/')
 from Script.Data.ColorList import ColorList
 
 CANVAS_WIDTH =  1280
@@ -38,6 +35,8 @@ CIRCLE_WIDTH_OUT = 40
 CIRCLE_WIDTH_IN = 35
 
 TURN_DISPLAY = 150
+DATA_DISPLAY_WIDTH = 400
+DATA_DISPLAY_HEIGHT = 300
 
 FPS = 60
 
@@ -93,7 +92,9 @@ class Battle(GameSequenceBase):
         self.click_flag = False                     # クリックした時のフラグ
         self.pushClick = None                       # クリックしたイベントの取得
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
-        self.isUnitselect = 0                         # ユニットが選択済みかどうか
+        self.isUnitselect = False                   # ユニットが選択済みかどうか
+        self.datadisp = DataDisplay()
+
 
         # プレイヤーの初期設定
         for num in range(PLAYER_UNIT_NUM):
@@ -176,6 +177,8 @@ class Battle(GameSequenceBase):
             self.DrawCountTimer()
             # マウスチェック
             self.CalcReturnPos(self.player, self.enemy, self.map)
+            if self.isUnitselect == True:
+                self.datadisp.Draw(ColorList.BLACK, ColorList.RED, ColorList.WHITE)
 
 
     def DrawMap(self, map):
@@ -295,73 +298,146 @@ class Battle(GameSequenceBase):
         elif counter_length == 1:
             self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
 
-
-    def UnitData(self, unit):
-        #   CalcReturnPosでユニットの情報を受け渡す（表示等）
-        #    self.characterName
-        #    self.weaponName
-        #    self.range
-        #    self.power
-        #    self.consumption
-        pass
-
-
     def MapData(self, map):
         #CalcReturnPosでマップの情報を受け渡す（表示等）
+        #ユニットの表示と同じような処理（ここではできない）
         pass
 
     def CalcReturnPos(self, player, enemy, map):
         # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。        
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+        flg = False
         if self.pushClick != self.before_pushClick:
-            print(self.pushClick)
             if  self.click_flag == False:
                 # キー入力確認用
                 print("Push Click :  x:", str(Point_x) + " y:" + str(Point_y))
                 #font = pygame.font.Font(None, 15)
                 #[id, xl, yl, x, y, tagname]
+                self.click_flag = True
+                self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
                 if Point_x != None and Point_y !=  None:
                     if self.pushClick == 1:
                         for p_num in range(6):
                             p_x = math.floor(player[p_num].x)
                             p_y = math.floor(player[p_num].y)
-                            self.player[p_num].SetSelect(False)
+                            player[p_num].SetSelect(False)
                             if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
-                                self.player[p_num].SetSelect(True)
+                                player[p_num].SetSelect(True)
+                                self.datadisp.SetPos(player[p_num].x, player[p_num].y)
+                                self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
+
+                                font_size1 = 30
+                                text1 = "名　前：" + player[p_num].characterName
+                                self.datadisp.SetFontsize1(font_size1)
+                                self.datadisp.SetText1(text1)
+                                font_size2 = 30
+                                text2 = "H 　P：" + player[p_num].AttackPoint
+                                self.datadisp.SetFontsize2(font_size2)
+                                self.datadisp.SetText2(text2)
+                                font_size3 = 30
+                                text3 = "攻撃力：" + player[p_num].AttackPoint
+                                self.datadisp.SetFontsize3(font_size3)
+                                self.datadisp.SetText3(text3)
+                                font_size4 = 30
+                                text4 = "防御力：" + player[p_num].DeffencePoint
+                                self.datadisp.SetFontsize4(font_size4)
+                                self.datadisp.SetText4(text4)
+                                font_size5 = 30
+                                text5 = "回避力：" + player[p_num].AvoidancePoint
+                                self.datadisp.SetFontsize5(font_size5)
+                                self.datadisp.SetText5(text5)
+                                font_size6 = 30
+                                text6 = "技術力：" + player[p_num].TechnologyPoint
+                                self.datadisp.SetFontsize6(font_size6)
+                                self.datadisp.SetText5(text6)
+                                #font_size3 = 30
+                                #text3 = "武　器：" + player[p_num].weaponName
+                                #self.datadisp.SetFontsize3(font_size3)
+                                #self.datadisp.SetText3(text3)
+                                #font_size4 = 30
+                                #text4 = "射　程：" + player[p_num].range
+                                #self.datadisp.SetFontsize4(font_size4)
+                                #self.datadisp.SetText4(text4)
+                                #font_size5 = 30
+                                #text5 = "消　費：" + player[p_num].actioncost
+                                #self.datadisp.SetFontsize5(font_size5)
+                                #self.datadisp.SetText5(text5)
+                                if player[p_num].GetSelect() == True:
+                                    self.isUnitselect = True
+                                    flg = True
 
                         for e_num in range(6):
                             e_x = math.floor(enemy[e_num].x)
                             e_y = math.floor(enemy[e_num].y)
-                            self.enemy[e_num].SetSelect(False)
+                            enemy[e_num].SetSelect(False)
                             if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
-                                self.enemy[e_num].SetSelect(True)
+                                enemy[e_num].SetSelect(True)
+                                self.datadisp.SetPos(enemy[e_num].x, enemy[e_num].y)
+                                self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
 
-                        for m_num in range(720):
+                                font_size1 = 30
+                                text1 = "名　前：" + enemy[e_num].characterName
+                                self.datadisp.SetFontsize1(font_size1)
+                                self.datadisp.SetText1(text1)
+                                font_size2 = 30
+                                text2 = "H 　P：" + enemy[e_num].AttackPoint
+                                self.datadisp.SetFontsize2(font_size2)
+                                self.datadisp.SetText2(text2)
+                                font_size3 = 30
+                                text3 = "攻撃力：" + enemy[e_num].AttackPoint
+                                self.datadisp.SetFontsize3(font_size3)
+                                self.datadisp.SetText3(text3)
+                                font_size4 = 30
+                                text4 = "防御力：" + enemy[e_num].DeffencePoint
+                                self.datadisp.SetFontsize4(font_size4)
+                                self.datadisp.SetText4(text4)
+                                font_size5 = 30
+                                text5 = "回避力：" + enemy[e_num].AvoidancePoint
+                                self.datadisp.SetFontsize5(font_size5)
+                                self.datadisp.SetText5(text5)
+                                font_size6 = 30
+                                text6 = "技術力：" + enemy[e_num].TechnologyPoint
+                                self.datadisp.SetFontsize6(font_size6)
+                                self.datadisp.SetText5(text6)
+                                #font_size3 = 30
+                                #text3 = "武　器：" + enemy[e_num].weaponName
+                                #self.datadisp.SetFontsize3(font_size3)
+                                #self.datadisp.SetText3(text3)
+                                #font_size4 = 30
+                                #text4 = "射　程：" + enemy[e_num].range
+                                #self.datadisp.SetFontsize4(font_size4)
+                                #self.datadisp.SetText4(text4)
+                                #font_size5 = 30
+                                #text5 = "消　費：" + enemy[e_num].consumption
+                                #self.datadisp.SetFontsize5(font_size5)
+                                #self.datadisp.SetText5(text5)
+                                if enemy[e_num].GetSelect() == True:
+                                    self.isUnitselect = True
+                                    flg = True
+
+                        if flg == False:
+                            self.isUnitselect = False
+                        #for m_num in range(720):
                             # [x, y, xne, yne, xn, yn, xns, yns, xws, yws, xw, yw, xwe, ywe, board_number]
-                            pass
+                            #pass
                             
                             #m_x = math.floor(map.xy[m_num][3])
                             #m_y = math.floor(map.xy[m_num][4])
                             #if m_x - 21 < Point_x and Point_x < m_x + 21 and m_y - 21 < Point_y and Point_y < m_y + 21:
                             #    print(map.xy[e_num])
+                        
                     elif self.pushClick == 3:
                         for p_num in range(6):
-                            if self.player[p_num].GetSelect() == True:
-                                self.player[p_num].SetSelect(False)
+                            if player[p_num].GetSelect() == True:
+                                player[p_num].SetSelect(False)
 
                         for e_num in range(6):
-                            if self.enemy[e_num].GetSelect() == True:
-                                self.enemy[e_num].SetSelect(False)
+                            if enemy[e_num].GetSelect() == True:
+                                enemy[e_num].SetSelect(False)
 
-                        self.isUnitselect = 0
-                
-                self.click_flag = True
-                self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+                        self.isUnitselect = False
 
-
-
-    
 
     def MoveData(self):
         # リストでそれぞれの行動データを生成

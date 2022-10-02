@@ -1,9 +1,7 @@
 import random
 import sys, os
 
-sys.path.append('../System/Util/')
 from ..System.Util.GameObject import GameObject
-sys.path.append('../System/Data/')
 from ..Data.GameData import GameData
 
 from Script.Data.ColorList import ColorList
@@ -70,18 +68,22 @@ class Character(GameObject):
         self.isVisible = False
 
         self.id, self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl, GameData.GetCharacterDataFromId(num).characterId )
-        self.characterName  = GameData.GetCharacterDataFromId(num).characterName         # キャラクター名
-        self.weaponId       = GameData.GetCharacterDataFromId(num).weaponId              # 武器ID
-        self.actionPower    = GameData.GetCharacterDataFromId(num).actionPower           # 行動力
-        self.skillSetId     = GameData.GetCharacterDataFromId(num).skillSetId            # スキルセットID
+        self.characterName  = GameData.GetCharacterDataFromId(num).characterName          # キャラクター名
+        self.ActionPower      = GameData.GetCharacterDataFromId(num).actionpower          # 行動力
+        self.HitPoint    = GameData.GetCharacterDataFromId(num).hitpoint                  # HP
+        self.AttackPoint    = GameData.GetCharacterDataFromId(num).attackpoint            # 攻撃力
+        self.DeffencePoint     = GameData.GetCharacterDataFromId(num).defensepoint        # 防御力
+        self.AvoidancePoint       = GameData.GetCharacterDataFromId(num).avoidancepoint   # 回避力
+        self.TechnologyPoint    = GameData.GetCharacterDataFromId(num).technologypoint    # 技術力
+        self.Visible    = GameData.GetCharacterDataFromId(num).visible                    # 視界
 
-        self.weaponName     = GameData.GetWeaponDataFromId(self.weaponId).weaponName     # 武器名
-        self.range          = GameData.GetWeaponDataFromId(self.weaponId).range          # 射程距離
-        self.power          = GameData.GetWeaponDataFromId(self.weaponId).power          # 攻撃力
-        self.consumption    = GameData.GetWeaponDataFromId(self.weaponId).consumption    # 攻撃時の行動力消費
-        self.angle          = GameData.GetWeaponDataFromId(self.weaponId).angle          # 角度
-        self.powerFlag      = GameData.GetWeaponDataFromId(self.weaponId).powerFlag      # ユニットの攻撃力分を加算するかどうか
-        self.plusdown       = GameData.GetWeaponDataFromId(self.weaponId).plusdown       # 武器装備時の行動力の増減
+        #self.weaponName     = GameData.GetWeaponDataFromId().weaponName     # 武器名
+        #self.range          = GameData.GetWeaponDataFromId().range          # 射程距離
+        #self.power          = GameData.GetWeaponDataFromId().power          # 攻撃力
+        #self.actioncost    = GameData.GetWeaponDataFromId().actioncost    # 攻撃時の行動力消費
+        #self.angle          = GameData.GetWeaponDataFromId().angle          # 角度
+        #self.powerFlag      = GameData.GetWeaponDataFromId().powerFlag      # ユニットの攻撃力分を加算するかどうか
+        #self.plusdown       = GameData.GetWeaponDataFromId().plusdown       # 武器装備時の行動力の増減
         self.SetSelect(self.isSelect)
         self.SetVisible(self.isVisible)
 

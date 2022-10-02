@@ -12,17 +12,23 @@ NUM_HEIGHT = 24
 
 class MapManager:
     def __init__(self):
+        """マップ生成"""
         self.board = [ [0 for i in range(NUM_WIDTH)] for j in range(NUM_HEIGHT)]
+
         for y in range(NUM_HEIGHT):
-            if y != 0 or y != 1 or y > 22:
-                for x in range(NUM_WIDTH):
-                    if x != 0 or x != 1 or x > 22:
-                        self.board[x][y] = 0
+            for x in range(NUM_WIDTH):
+                if y == 0 or y == 1 or y >= 22:
+                    self.board[y][x] = -1
+                else:
+                    if x == 0 or x == 1 or x >= 22:
+                        self.board[y][x] = -1
                     else:
-                        self.board[x][y] = -1
-            else:
-                for x in range(NUM_WIDTH):
-                    self.board[x][y] = -1
+                        if (2 < y and y < 6) or (17 < y and y < 21) or (8 < x and x < 17):
+                            """ユニットの生成位置"""
+                            self.board[y][x] = 0
+                        else:
+                            # ここで5*5のランダムマップを代入する（後々）
+                            self.board[y][x] = 0
 
 
 class Map:
@@ -65,8 +71,10 @@ class Map:
         self.h_h1_4 = self.h_h / 4
         self.h_h1_2 = self.h_h / 2
 
+        self.space = (0, 0)
         # ゲームの初期化
         self.initMap()
+
 
     def initMap(self):
         '''マップの初期化を行う'''
@@ -123,5 +131,10 @@ class Map:
                 self.m_xy.append([x, y, xne, yne, xn, yn, xnw, ynw, xsw, ysw, xs, ys, xse, yse, board_number])
         return self.m_xy
 
+    def GetSpace(self):
+        return self.space
 
-
+    # 座標の設定
+    def SetPos(self, x : int, y : int):
+        self.space.x = x
+        self.space.y = y

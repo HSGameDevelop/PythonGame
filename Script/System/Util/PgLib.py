@@ -63,6 +63,10 @@ class PgLibImpl(Singleton):
             imageHeight = height
         return pygame.transform.scale(image, (imageWidth, imageHeight))
 
+    # 矩形の描画
+    def DrawRect(self, color : pygame.color.Color, x : float, y : float, width : float, height: float, outline : int):
+        pygame.draw.rect(self.screen, color, (x, y, width, height), outline)
+
     # 円形の描画
     def DrawCircle(self, color : pygame.color.Color, x : float, y : float, size : float):
         pygame.draw.circle(self.screen, color, (x, y), size)
@@ -180,6 +184,11 @@ class PgLib:
     @staticmethod
     def ResizeImage(image : pygame.surface, width : int, height : int):
         return PgLib.GetInstance().ResizeImage(image, width, height)
+
+    # 矩形を描画
+    @staticmethod
+    def DrawRect(color : pygame.color.Color, x : float, y : float, width : float, height : float, outline : int):
+        PgLib.GetInstance().DrawRect(color, x, y, width, height, outline)
 
     # 円形を描画
     @staticmethod
