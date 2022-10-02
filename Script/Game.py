@@ -8,6 +8,7 @@ from .Data.GameData import GameData
 sys.path.append('./System/Util/')
 from .System.Util.PgLib import PgLib
 from .System.Util.CommandUtil import CommandUtil
+from .System.Util.Timer import TimerManager
 sys.path.append('./System/Game/Title/')
 from .System.Game.Title.Title import Title
 sys.path.append('../../Display/')
@@ -22,6 +23,7 @@ GAME_TITLE = "ActKing"
 class Game:    
     def __init__(self):
         PgLib.Initialize(GAME_TITLE, WIDTH, HEIGHT, FPS)
+        TimerManager.Initialize()
         CommandUtil.Initialize()
         GameData.Initialize()
         
@@ -31,6 +33,8 @@ class Game:
     # ゲーム全般の更新処理
     def Update(self):
         PgLib.Update()
+        TimerManager.Update()
+        CommandUtil.Update()
         if self.gameSequence.Update():
             self.gameSequence = Battle()
 

@@ -7,6 +7,8 @@ import math
 import sys, os
 
 from Script.Data.GameData import GameData
+from Script.System.Util.Command import Command
+from Script.System.Util.MoveCommand import MoveCommand
 # マップ表示のクラス
 from .Map import Map
 # プレイヤー表示のクラス
@@ -15,6 +17,8 @@ sys.path.append('../System/Game/')
 from ..System.Game.GameSequenceBase import GameSequenceBase
 sys.path.append('../System/Util/')
 from ..System.Util.PgLib import PgLib
+from ..System.Util.CommandUtil import CommandUtil
+from ..System.Util.Define import Define
 sys.path.append('../System/IO/')
 from ..System.IO.InputKeyboard import InputKeyboard
 from ..System.IO.InputMouse import InputMouse
@@ -95,12 +99,15 @@ class Battle(GameSequenceBase):
         for num in range(PLAYER_UNIT_NUM):
             self.player.append(Player(self.Player_Characters.xl[num], self.Player_Characters.yl[num], num))
             self.player[num].SetSize(20, 20)
-            
+
         # エネミーの初期設定
         for num in range(ENEMY_UNIT_NUM):
             self.enemy.append(Enemy(self.Enemy_Characters.xl[num], self.Enemy_Characters.yl[num], num, PLAYER_UNIT_NUM))
             self.enemy[num].SetSize(20, 20)
 
+        # 確認用（不要なら消してください）
+        CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[0], Define.Position(100, 100), 60, 30)
+        CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[1], Define.Position(900, 100), 30, 60) 
 
     def Update(self):
         if self.state == self.BattleState.Start:
