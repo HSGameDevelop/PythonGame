@@ -16,18 +16,18 @@ class MoveCommand(CommandBase):
         pass
 
     # 指定フレームで目標に到達するまでの速度を求める
-    def ClacSpeed(self, pos, targetPos, frame) -> float:
+    def ClacSpeed(self, pos, targetPos, endFrame) -> float:
         # 現在の位置から目標の位置までのベクトルを求める
         targetDir = np.array([targetPos.x - pos.x, targetPos.y - pos.y])
         # ベクトルの長さを計算
         dis = np.linalg.norm(targetDir)
         # 1フレームあたりの移動すべき量を求める
-        return dis / frame
+        return dis / endFrame
 
     # コマンドの追加
-    def GetCommand(self, type : MoveType, gameObject : GameObject, pos : Define.Position, frame : int):
+    def GetCommand(self, type : MoveType, gameObject : GameObject, pos : Define.Position, endFrame : int):
         if type == MoveCommand.MoveType.NormalToPosition:
-            moveSpeed = self.ClacSpeed(gameObject.GetPos(), pos, frame)
+            moveSpeed = self.ClacSpeed(gameObject.GetPos(), pos, endFrame)
             return Command(self.MoveToPosition, *(gameObject, pos, moveSpeed))
         return None
             

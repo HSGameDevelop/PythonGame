@@ -15,8 +15,8 @@ class CommandUtilImpl(Singleton):
         self.commandList : list = [ ] # Command
     
     # 移動命令の追加
-    def AddMoveCommand(self, type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, frame : int, startFrame : int = 0):
-        command = self.moveCommand.GetCommand(type, gameObject, pos, frame)
+    def AddMoveCommand(self, type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, endFrame : int, startFrame : int = 0):
+        command = self.moveCommand.GetCommand(type, gameObject, pos, endFrame)
         if command != None:
             self.commandList.append(command)
             def CommandPlay():
@@ -47,8 +47,8 @@ class CommandUtil:
 
     # 移動命令の追加
     @staticmethod
-    def AddMoveCommand(type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, frame : int, startFrame : int = 0):
-        CommandUtil.GetInstance().AddMoveCommand(type, gameObject, pos, frame, startFrame)
+    def AddMoveCommand(type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, endFrame : int, startFrame : int = 0):
+        CommandUtil.GetInstance().AddMoveCommand(type, gameObject, pos, endFrame, startFrame)
 
     # 更新処理
     @staticmethod
