@@ -1,4 +1,3 @@
-
 from .Singleton import Singleton
 
 # タイマークラス
