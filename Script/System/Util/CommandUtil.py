@@ -1,21 +1,34 @@
+from Script.System.Util.Command import Command
 from Script.System.Util.GameObject import GameObject
 from .Singleton import Singleton
 from .MoveCommand import MoveCommand
 from .Define import Define
+from .Timer import TimerManager
 
 # 命令制御クラスの中身
 class CommandUtilImpl(Singleton):
     # 初期化
     def __init__(self) -> None:
         self.moveCommand : MoveCommand = MoveCommand()
+        self.id = 0
+        self.frameCount = 0
+        self.commandList : list = [ ] # Command
     
     # 移動命令の追加
-    def AddMoveCommand(self, type : MoveCommand.MoveType, *args):
-        self.moveCommand.AddCommand(type, *args)
+    def AddMoveCommand(self, type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, frame : int, startFrame : int = 0):
+        command = self.moveCommand.GetCommand(type, gameObject, pos, frame)
+        if command != None:
+            self.commandList.append(command)
+            def CommandPlay():
+                command.SetIsPlay(True)
+            TimerManager.AddTimer(str(self.id), startFrame, CommandPlay)
 
     # 更新処理
     def Update(self):
-        self.moveCommand.Update()
+        for command in self.commandList:
+            if command.GetIsPlay():
+                    if command.Handler():
+                        self.commandList.remove(command)
 
 # 命令制御クラスの呼び出す部分
 commandUtil : CommandUtilImpl = None
@@ -34,8 +47,8 @@ class CommandUtil:
 
     # 移動命令の追加
     @staticmethod
-    def AddMoveCommand(type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, moveSpeed : float):
-        CommandUtil.GetInstance().AddMoveCommand(type, *(gameObject, pos, moveSpeed))
+    def AddMoveCommand(type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, frame : int, startFrame : int = 0):
+        CommandUtil.GetInstance().AddMoveCommand(type, gameObject, pos, frame, startFrame)
 
     # 更新処理
     @staticmethod

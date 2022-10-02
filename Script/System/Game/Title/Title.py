@@ -73,9 +73,7 @@ class Title(GameSequenceBase):
         
         # 終了処理
         elif self.state == Title.TitleState.End:
-            return True
-
-        CommandUtil.Update()
+            return True        
 
         self.count += 2
         self.textAlpha = (np.sin(-np.pi/2+np.pi/120*self.count)+1)/2 * 255
