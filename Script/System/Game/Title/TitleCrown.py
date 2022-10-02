@@ -35,6 +35,7 @@ class TitleCrown(GameObject):
             self.imageList.append(PgLib.LoadImage(TitleCrown.TITLE_CROWN_IMAGE_PATH + str(i + 1) + ".png"))
 
         self.SetImage(self.GetNumImage(0))
+        self.SetBaseImage(self.GetNumImage(0))
 
     # 固有の画像取得処理
     def GetNumImage(self, num):
@@ -61,10 +62,5 @@ class TitleCrown(GameObject):
                     self.imageNum += 1
                 else:
                     self.imageNum = TitleCrown.IMAGE_NUM_LOOP_START
-    
-    def Draw(self):
-        pos = self.GetPos()
-        self.SetImage(PgLib.RotateImage(self.GetNumImage(self.imageNum), self.GetAngle()))
-        image = self.GetImage()
-        size = PgLib.GetImageSize(image)        
-        PgLib.DrawImage(image, pos.x - size[0] / 2, pos.y - size[1] / 2, size[0], size[1])
+
+        self.SetBaseImage(self.GetNumImage(self.imageNum))

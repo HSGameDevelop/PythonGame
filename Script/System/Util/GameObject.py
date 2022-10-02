@@ -68,6 +68,10 @@ class GameObject:
     def SetImage(self, image : pygame.surface):
         self.image = image
 
+    # 変形・回転などの元になる画像を設定する
+    def SetBaseImage(self, image : pygame.surface):
+        self.baseImage = image
+
     # 角度の取得
     def GetAngle(self) -> float:
         return self.angle
@@ -85,7 +89,7 @@ class GameObject:
         pos = self.GetPos()
         size = self.GetSize()
         if self.image:
-            self.SetImage(self.baseImage ,self.GetAngle())
+            self.SetImage(PgLib.RotateImage(self.baseImage ,self.GetAngle()))
             PgLib.DrawImage(self.image, pos.x - size.width / 2, pos.y - size.height / 2, size.width, size.height)
         else:
             # 横幅を円のサイズとする
