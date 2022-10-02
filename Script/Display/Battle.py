@@ -107,8 +107,8 @@ class Battle(GameSequenceBase):
             self.enemy[num].SetSize(20, 20)
 
         # 確認用（不要なら消してください）
-        CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[0], Define.Position(100, 100), 60, 30)
-        CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[1], Define.Position(900, 100), 30, 60) 
+        CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[0], Define.Position(100, 100), startFrame=30, endFrame=60)
+        CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[1], Define.Position(900, 100), startFrame=60, endFrame=30) 
 
     def Update(self):
         if self.state == self.BattleState.Start:

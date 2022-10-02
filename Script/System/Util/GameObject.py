@@ -23,6 +23,7 @@ class GameObject:
         self.size = Define.Size(size[0], size[1])
         self.direction = Define.Direction(direction[0], direction[1])
         self.image : pygame.surface = image
+        self.angle = 0.0
 
         # サイズが設定されていないなら画像のサイズで設定する
         if self.image != None:
@@ -65,6 +66,14 @@ class GameObject:
     # 画像の設定
     def SetImage(self, image : pygame.surface):
         self.image = image
+
+    # 角度の取得
+    def GetAngle(self) -> float:
+        return self.angle
+
+    # 角度の設定
+    def SetAngle(self, angle : float):
+        self.angle = angle
 
     # 更新
     def Update(self):

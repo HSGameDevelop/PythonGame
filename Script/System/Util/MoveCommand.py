@@ -1,6 +1,8 @@
 import numpy as np
 from enum import Enum
 
+from Script.System.Util.PgLib import PgLib
+
 from .Define import Define
 from .GameObject import GameObject
 from .Command import Command, CommandBase
@@ -10,6 +12,7 @@ class MoveCommand(CommandBase):
     # 移動の種類
     class MoveType(Enum):
         NormalToPosition = 0
+        Rotate = 1
 
     # 初期化
     def __init__(self) -> None:
@@ -24,11 +27,19 @@ class MoveCommand(CommandBase):
         # 1フレームあたりの移動すべき量を求める
         return dis / endFrame
 
+    # 指定フレームで目標の角度回転するための角度を求める
+    def ClacAngle(self, gameObject : GameObject, angle : float, endFrame : int):
+        nowAngle = gameObject.GetAngle()
+        return (angle - nowAngle) / endFrame
+
     # コマンドの追加
-    def GetCommand(self, type : MoveType, gameObject : GameObject, pos : Define.Position, endFrame : int):
-        if type == MoveCommand.MoveType.NormalToPosition:
+    def GetCommand(self, type : MoveType, gameObject : GameObject, pos : Define.Position, angle : float, endFrame : int):
+        if type == MoveCommand.MoveType.NormalToPosition: # 指定座標に向かって移動
             moveSpeed = self.ClacSpeed(gameObject.GetPos(), pos, endFrame)
             return Command(self.MoveToPosition, *(gameObject, pos, moveSpeed))
+        elif type == MoveCommand.MoveType.Rotate: # 指定の角度回転
+            rotateAngle = self.ClacAngle(gameObject, angle, endFrame)
+            return Command(self.RotateAngle, *(gameObject, rotateAngle, angle))
         return None
             
     # 指定座標に向かって移動する
@@ -56,5 +67,20 @@ class MoveCommand(CommandBase):
         # 座標の設定
         gameObject.SetPos(x, y)
         
+        return False
+    
+    # 指定の角度回転する
+    def RotateAngle(self, gameObject : GameObject, angle : float, endAngle : float):
+        gameObject.SetImage(PgLib.RotateImage(gameObject.GetImage(), angle))
+        
+        # 角度を設定
+        nowAngle = gameObject.GetAngle()
+        nowAngle += angle
+        gameObject.SetAngle(nowAngle)
+
+        # 回転が終了しているかどうかの確認
+        if gameObject.GetAngle() == endAngle:
+            return True
+
         return False
         

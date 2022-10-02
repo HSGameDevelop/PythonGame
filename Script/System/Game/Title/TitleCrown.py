@@ -31,7 +31,8 @@ class TitleCrown(GameObject):
 
     def Update(self):
         if self.state == TitleCrown.TitleCrownState.Init:
-            CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TitleCrown.TITLE_CROWN_END_POS[0], TitleCrown.TITLE_CROWN_END_POS[1]), 30)
+            CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TitleCrown.TITLE_CROWN_END_POS[0], TitleCrown.TITLE_CROWN_END_POS[1]), startFrame=0, endFrame=30)
+            CommandUtil.AddMoveCommand(MoveCommand.MoveType.Rotate, self, angle=-5, startFrame=31)
             self.state = TitleCrown.TitleCrownState.Move
         elif self.state == TitleCrown.TitleCrownState.Move:
             if self.GetPos().y == TitleCrown.TITLE_CROWN_END_POS[1]:
