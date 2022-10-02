@@ -71,16 +71,18 @@ class MoveCommand(CommandBase):
     
     # 指定の角度回転する
     def RotateAngle(self, gameObject : GameObject, angle : float, endAngle : float):
-        gameObject.SetImage(PgLib.RotateImage(gameObject.GetImage(), angle))
+        # 回転が終了しているかどうかの確認
+        if abs(gameObject.GetAngle() - endAngle) <= abs(angle):
+            # 角度を設定
+            nowAngle = gameObject.GetAngle()
+            nowAngle += gameObject.GetAngle() - endAngle
+            gameObject.SetAngle(nowAngle)
+            return True
         
         # 角度を設定
         nowAngle = gameObject.GetAngle()
         nowAngle += angle
         gameObject.SetAngle(nowAngle)
-
-        # 回転が終了しているかどうかの確認
-        if gameObject.GetAngle() == endAngle:
-            return True
 
         return False
         

@@ -23,6 +23,7 @@ class GameObject:
         self.size = Define.Size(size[0], size[1])
         self.direction = Define.Direction(direction[0], direction[1])
         self.image : pygame.surface = image
+        self.oldAngle = 0.0
         self.angle = 0.0
 
         # サイズが設定されていないなら画像のサイズで設定する
@@ -77,7 +78,10 @@ class GameObject:
 
     # 更新
     def Update(self):
-        pass
+        angle = self.GetAngle()
+        if self.oldAngle != angle:
+            self.SetImage(PgLib.RotateImage(self.GetImage(), self.oldAngle - angle))
+            self.oldAngle = self.GetAngle()
 
     # 描画
     def Draw(self, color : ColorList = ColorList.WHITE):
