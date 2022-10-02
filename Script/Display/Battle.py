@@ -29,6 +29,7 @@ MAX_COUNTER = 30
 CIRCLE_WIDTH_OUT = 40
 CIRCLE_WIDTH_IN = 35
 
+PREPARE_TIME = 10
 TURN_DISPLAY = 150
 DATA_DISPLAY_WIDTH = 400
 DATA_DISPLAY_HEIGHT = 300
@@ -61,11 +62,12 @@ ENEMY_COLOR = ColorList.YELLOW.value            # 相手のユニットの色
 class Battle(GameSequenceBase):
     class BattleState(Enum):
         Start = 0
-        Counter = 1
-        Think = 2
-        Stop = 3
-        Move = 4
-        Load = 5
+        Prepare = 1
+        Counter = 2
+        Think = 3
+        Stop = 4
+        Move = 5
+        Load = 6
         End = 10
 
 
@@ -73,6 +75,7 @@ class Battle(GameSequenceBase):
         '''コンストラクタ'''
         GameData.LoadData()
         
+        self.prepareTime = PREPARE_TIME             # ユニットの装備の選択時間
         self.TurnCount = 1                          # ターンのカウント
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
         self.map = Map()                            # Map管理
@@ -104,7 +107,12 @@ class Battle(GameSequenceBase):
 
     def Update(self):
         if self.state == self.BattleState.Start:
-            self.state = self.BattleState.Counter
+            self.state = self.BattleState.Prepare
+            return
+        elif self.state == self.BattleState.Prepare:
+            self.prepareTime -= 1
+            if self.prepareTime == 0:
+                self.state = self.BattleState.Counter
             return
         elif self.state == self.BattleState.Counter:
             self.TurnDisplay -= 1
