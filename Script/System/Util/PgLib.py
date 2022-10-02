@@ -81,14 +81,8 @@ class PgLibImpl(Singleton):
 
     # 画像を描画
     def DrawImage(self, image : pygame.surface, x : int, y : int, width : int, height : int):
-        # 画像データの設定
-        drawImage = self.ResizeImage(image, width, height)
-
-        # 画像サイズの取得
-        imageSize = drawImage.get_rect().size
-
         # 画像の描画
-        self.screen.blit(drawImage, (x, y, imageSize[0], imageSize[1]))
+        self.screen.blit(image, (x, y, width, height))
 
     # 画像を分割描画
     def DrawImageSplit(self, image : pygame.surface, rect : tuple[float, float, float, float], imageRect : tuple[float, float, float, float]):

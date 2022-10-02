@@ -22,8 +22,8 @@ class GameObject:
         self.position = Define.Position(position[0], position[1])
         self.size = Define.Size(size[0], size[1])
         self.direction = Define.Direction(direction[0], direction[1])
-        self.image : pygame.surface = image
-        self.oldAngle = 0.0
+        self.baseImage = image
+        self.image : pygame.surface = self.baseImage
         self.angle = 0.0
 
         # サイズが設定されていないなら画像のサイズで設定する
@@ -78,16 +78,14 @@ class GameObject:
 
     # 更新
     def Update(self):
-        angle = self.GetAngle()
-        if self.oldAngle != angle:
-            self.SetImage(PgLib.RotateImage(self.GetImage(), self.oldAngle - angle))
-            self.oldAngle = self.GetAngle()
+        pass
 
     # 描画
     def Draw(self, color : ColorList = ColorList.WHITE):
         pos = self.GetPos()
         size = self.GetSize()
         if self.image:
+            self.SetImage(self.baseImage ,self.GetAngle())
             PgLib.DrawImage(self.image, pos.x - size.width / 2, pos.y - size.height / 2, size.width, size.height)
         else:
             # 横幅を円のサイズとする
