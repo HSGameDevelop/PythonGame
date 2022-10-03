@@ -63,6 +63,10 @@ class PgLibImpl(Singleton):
             imageHeight = height
         return pygame.transform.scale(image, (imageWidth, imageHeight))
 
+    # 画像の回転
+    def RotateImage(self, image : pygame.surface, angle : float):
+        return pygame.transform.rotate(image, angle)
+
     # 矩形の描画
     def DrawRect(self, color : pygame.color.Color, x : float, y : float, width : float, height: float, outline : int):
         pygame.draw.rect(self.screen, color, (x, y, width, height), outline)
@@ -184,6 +188,11 @@ class PgLib:
     @staticmethod
     def ResizeImage(image : pygame.surface, width : int, height : int):
         return PgLib.GetInstance().ResizeImage(image, width, height)
+
+    # 画像の回転
+    @staticmethod
+    def RotateImage(image : pygame.surface, angle : float):
+        return PgLib.GetInstance().RotateImage(image, angle)
 
     # 矩形を描画
     @staticmethod

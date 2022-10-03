@@ -1,3 +1,4 @@
+from tracemalloc import start
 from Script.System.Util.Command import Command
 from Script.System.Util.GameObject import GameObject
 from .Singleton import Singleton
@@ -15,8 +16,8 @@ class CommandUtilImpl(Singleton):
         self.commandList : list = [ ] # Command
     
     # 移動命令の追加
-    def AddMoveCommand(self, type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, frame : int, startFrame : int = 0):
-        command = self.moveCommand.GetCommand(type, gameObject, pos, frame)
+    def AddMoveCommand(self, type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, angle : float, startFrame, endFrame):
+        command = self.moveCommand.GetCommand(type, gameObject, pos, angle, endFrame)
         if command != None:
             self.commandList.append(command)
             def CommandPlay():
@@ -47,8 +48,8 @@ class CommandUtil:
 
     # 移動命令の追加
     @staticmethod
-    def AddMoveCommand(type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position, frame : int, startFrame : int = 0):
-        CommandUtil.GetInstance().AddMoveCommand(type, gameObject, pos, frame, startFrame)
+    def AddMoveCommand(type : MoveCommand.MoveType, gameObject : GameObject, pos : Define.Position = Define.Position(0.0, 0.0), angle : float = 0.0, startFrame : int = 0, endFrame : int = 1):
+        CommandUtil.GetInstance().AddMoveCommand(type, gameObject, pos, angle, startFrame, endFrame)
 
     # 更新処理
     @staticmethod
