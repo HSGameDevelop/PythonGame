@@ -17,7 +17,6 @@ from ..System.Game.GameSequenceBase import GameSequenceBase
 from ..System.Util.PgLib import PgLib
 from ..System.Util.CommandUtil import CommandUtil
 from ..System.Util.Define import Define
-sys.path.append('../System/IO/')
 from ..System.IO.InputKeyboard import InputKeyboard
 from ..System.IO.InputMouse import InputMouse
 # カラーリスト
