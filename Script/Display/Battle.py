@@ -333,31 +333,35 @@ class Battle(GameSequenceBase):
                                 player[p_num].SetSelect(True)
                                 self.datadisp.SetPos(player[p_num].x, player[p_num].y)
                                 self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
-
+                                
                                 font_size1 = 30
-                                text1 = "名　前：" + player[p_num].characterName
+                                text1 = "I  D：" + str(player[p_num].ID)
                                 self.datadisp.SetFontsize1(font_size1)
                                 self.datadisp.SetText1(text1)
                                 font_size2 = 30
-                                text2 = "H 　P：" + player[p_num].AttackPoint
+                                text2 = "名　前：" + player[p_num].characterName
                                 self.datadisp.SetFontsize2(font_size2)
                                 self.datadisp.SetText2(text2)
                                 font_size3 = 30
-                                text3 = "攻撃力：" + player[p_num].AttackPoint
+                                text3 = "H  P：" + player[p_num].HitPoint
                                 self.datadisp.SetFontsize3(font_size3)
                                 self.datadisp.SetText3(text3)
                                 font_size4 = 30
-                                text4 = "防御力：" + player[p_num].DeffencePoint
+                                text4 = "攻撃力：" + player[p_num].AttackPoint
                                 self.datadisp.SetFontsize4(font_size4)
                                 self.datadisp.SetText4(text4)
                                 font_size5 = 30
-                                text5 = "回避力：" + player[p_num].AvoidancePoint
+                                text5 = "防御力：" + player[p_num].DeffencePoint
                                 self.datadisp.SetFontsize5(font_size5)
                                 self.datadisp.SetText5(text5)
                                 font_size6 = 30
-                                text6 = "技術力：" + player[p_num].TechnologyPoint
+                                text6 = "回避力：" + player[p_num].AvoidancePoint
                                 self.datadisp.SetFontsize6(font_size6)
-                                self.datadisp.SetText5(text6)
+                                self.datadisp.SetText6(text6)
+                                font_size7 = 30
+                                text7 = "技術力：" + player[p_num].TechnologyPoint
+                                self.datadisp.SetFontsize7(font_size7)
+                                self.datadisp.SetText7(text7)
                                 #font_size3 = 30
                                 #text3 = "武　器：" + player[p_num].weaponName
                                 #self.datadisp.SetFontsize3(font_size3)
@@ -384,29 +388,33 @@ class Battle(GameSequenceBase):
                                 self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
 
                                 font_size1 = 30
-                                text1 = "名　前：" + enemy[e_num].characterName
+                                text1 = "I  D：" + str(enemy[e_num].ID)
                                 self.datadisp.SetFontsize1(font_size1)
                                 self.datadisp.SetText1(text1)
                                 font_size2 = 30
-                                text2 = "H 　P：" + enemy[e_num].AttackPoint
+                                text2 = "名　前：" + enemy[e_num].characterName
                                 self.datadisp.SetFontsize2(font_size2)
                                 self.datadisp.SetText2(text2)
                                 font_size3 = 30
-                                text3 = "攻撃力：" + enemy[e_num].AttackPoint
+                                text3 = "H  P：" + enemy[e_num].HitPoint
                                 self.datadisp.SetFontsize3(font_size3)
                                 self.datadisp.SetText3(text3)
                                 font_size4 = 30
-                                text4 = "防御力：" + enemy[e_num].DeffencePoint
+                                text4 = "攻撃力：" + enemy[e_num].AttackPoint
                                 self.datadisp.SetFontsize4(font_size4)
                                 self.datadisp.SetText4(text4)
                                 font_size5 = 30
-                                text5 = "回避力：" + enemy[e_num].AvoidancePoint
+                                text5 = "防御力：" + enemy[e_num].DeffencePoint
                                 self.datadisp.SetFontsize5(font_size5)
                                 self.datadisp.SetText5(text5)
                                 font_size6 = 30
-                                text6 = "技術力：" + enemy[e_num].TechnologyPoint
+                                text6 = "回避力：" + enemy[e_num].AvoidancePoint
                                 self.datadisp.SetFontsize6(font_size6)
-                                self.datadisp.SetText5(text6)
+                                self.datadisp.SetText6(text6)
+                                font_size7 = 30
+                                text7 = "技術力：" + enemy[e_num].TechnologyPoint
+                                self.datadisp.SetFontsize7(font_size7)
+                                self.datadisp.SetText7(text7)
                                 #font_size3 = 30
                                 #text3 = "武　器：" + enemy[e_num].weaponName
                                 #self.datadisp.SetFontsize3(font_size3)

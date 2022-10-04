@@ -67,15 +67,22 @@ class Character(GameObject):
         self.isSelect = False
         self.isVisible = False
 
-        self.id, self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl, GameData.GetCharacterDataFromId(num).characterId )
-        self.characterName  = GameData.GetCharacterDataFromId(num).characterName          # キャラクター名
-        self.ActionPower      = GameData.GetCharacterDataFromId(num).actionpower          # 行動力
-        self.HitPoint    = GameData.GetCharacterDataFromId(num).hitpoint                  # HP
-        self.AttackPoint    = GameData.GetCharacterDataFromId(num).attackpoint            # 攻撃力
-        self.DeffencePoint     = GameData.GetCharacterDataFromId(num).defensepoint        # 防御力
-        self.AvoidancePoint       = GameData.GetCharacterDataFromId(num).avoidancepoint   # 回避力
-        self.TechnologyPoint    = GameData.GetCharacterDataFromId(num).technologypoint    # 技術力
-        self.Visible    = GameData.GetCharacterDataFromId(num).visible                    # 視界
+        self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl)
+        self.ID = num
+        if self.unit_side == 0:
+            self.chara = random.randint(1, 25)  # excelのプレイヤーの種類
+        else:
+            self.chara = random.randint(26, 50) # excelのエネミーの種類
+        
+        self.characterid = GameData.GetCharacterDataFromId(self.chara).characterId                        # キャラクターID
+        self.characterName  = GameData.GetCharacterDataFromId(self.chara).characterName          # キャラクター名
+        self.ActionPower      = GameData.GetCharacterDataFromId(self.chara).actionpower          # 行動力
+        self.HitPoint    = GameData.GetCharacterDataFromId(self.chara).hitpoint                  # HP
+        self.AttackPoint    = GameData.GetCharacterDataFromId(self.chara).attackpoint            # 攻撃力
+        self.DeffencePoint     = GameData.GetCharacterDataFromId(self.chara).defensepoint        # 防御力
+        self.AvoidancePoint       = GameData.GetCharacterDataFromId(self.chara).avoidancepoint   # 回避力
+        self.TechnologyPoint    = GameData.GetCharacterDataFromId(self.chara).technologypoint    # 技術力
+        self.Visible    = GameData.GetCharacterDataFromId(self.chara).visible                    # 視界
 
         #self.weaponName     = GameData.GetWeaponDataFromId().weaponName     # 武器名
         #self.range          = GameData.GetWeaponDataFromId().range          # 射程距離
@@ -88,7 +95,7 @@ class Character(GameObject):
         self.SetVisible(self.isVisible)
 
 
-    def prepareUnit(self, xl, yl, id):
+    def prepareUnit(self, xl, yl):
         # (x,y)のマスの中心座標を計算
         #self.xy = []
         if yl % 2 == 0:
@@ -103,7 +110,7 @@ class Character(GameObject):
         # (x, y)座標
         tagname = "(" + str(xl) + "," + str(yl) + ")"
         #self.xy.append([id, xl, yl, x, y, tagname])
-        return id, xl, yl, x, y, tagname
+        return xl, yl, x, y, tagname
 
     def GetSelect(self):
         return self.isSelect
