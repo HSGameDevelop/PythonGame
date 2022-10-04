@@ -53,6 +53,9 @@ PLAYER_Y_END = 21
 ENEMY_Y_START = 2
 ENEMY_Y_END = 6
 
+PLAYER = 0
+ENEMY = 1
+
 # 色の設定
 BOARD_COLOR = ColorList.GRAY.value              # 盤面全体（見えない位置）
 VISIBLE_COLOR = ColorList.WHITE.value           # ユニットから見える範囲（カラー）
@@ -158,6 +161,9 @@ class Battle(GameSequenceBase):
             self.CreatePlayer(self.player)
             # エネミーの描画
             self.CreateEnemy(self.enemy)
+        #elif self.state == self.BattleState.Prepare:
+            # sideによって変更準備するユニット
+            #self.PrepareUnit(self.player, self.enemy)
         elif self.state == self.BattleState.Counter:
             # マップの描画
             self.DrawMap(self.map)
@@ -187,6 +193,8 @@ class Battle(GameSequenceBase):
             if self.isUnitselect == True:
                 self.datadisp.Draw(ColorList.BLACK, ColorList.RED, ColorList.WHITE)
 
+    def PrepareUnit():
+        pass
 
     def DrawMap(self, map):
         # ６点指定 六角形 30*24
