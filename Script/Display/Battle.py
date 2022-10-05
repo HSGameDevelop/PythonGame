@@ -13,6 +13,7 @@ from .Map import Map
 # プレイヤー表示のクラス
 from .Character import Character, Player, Enemy, CharacterManager
 from .DataDisplay import DataDisplay
+from .Weapon import Weapon
 from .CountDownTimer import CountDownTimer as Timer
 from ..System.Game.GameSequenceBase import GameSequenceBase
 from ..System.Util.PgLib import PgLib
@@ -89,6 +90,10 @@ class Battle(GameSequenceBase):
         self.screen = PgLib.GetScreen()             # スクリーンの設定 
         self.PrepareTime = PREPARE_TIME             # シーン「prepare」のユニットの装備の選択時間設定
         self.PrepareTimer = Timer(PREPARE_TIME, TIMER_X, TIMER_Y)
+        self.weapon : list = []                     # Weaponリスト
+        # 武器の初期設定
+        for num in range(1, Weapon.IMAGE_NUM_MAX):
+            self.weapon.append(Weapon(num))
 
         self.TurnCount = 1                          # ターンのカウント
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
@@ -106,7 +111,6 @@ class Battle(GameSequenceBase):
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
         self.isUnitselect = False                   # ユニットが選択済みかどうか
         self.datadisp = DataDisplay()
-
 
         # プレイヤーの初期設定
         for num in range(PLAYER_UNIT_NUM):
@@ -149,7 +153,7 @@ class Battle(GameSequenceBase):
         elif self.state == self.BattleState.Think:
             self.BattleTimer.Update()
 
-            # キー入力取得期間            
+            # キー入力取得期間
             if self.click_flag == True:
                 self.click_flag_counter -= 1
             if self.click_flag_counter == 0:
@@ -208,10 +212,10 @@ class Battle(GameSequenceBase):
             self.CreatePlayer(self.player)
             # エネミーの描画
             self.CreateEnemy(self.enemy)
-            # 上部円タイマー
-            self.DrawCircleTimer()
-            # 数字タイマー
-            self.DrawCountTimer()
+#            # 上部円タイマー
+#            self.DrawCircleTimer()
+#            # 数字タイマー
+#            self.DrawCountTimer()
             # マウスチェック
             self.CalcReturnPos(self.player, self.enemy, self.map)
             if self.isUnitselect == True:
@@ -220,8 +224,15 @@ class Battle(GameSequenceBase):
     def DrawPrepare(self):
         width, height =PgLib.GetScreenSize()
         PgLib.DrawRect(ColorList.BLACK.value, 0, 0, width, height, 0)
-        pygame.draw.line( self.screen, ColorList.LIME.value, (200, 0), (200, 960), 10)
-
+        pygame.draw.line( self.screen, ColorList.LIME.value, (200, 0), (200, height), 10)
+#        for num in range(1, Weapon.IMAGE_NUM_MAX):
+#            if num <= 5:
+#                self.weapon[num].SetPos(230 +  (130 * (num - 1)), CANVAS_HEIGHT / 2)
+#            elif 5  < num and num <= 10:
+#                self.weapon[num].SetPos(230 +  (130 * (num % 5 - 1)), CANVAS_HEIGHT / 2 + 130)
+#            elif 10  < num and num <= 15:
+#                self.weapon[num].SetPos(230 +  (130 * (num % 5 - 1)), CANVAS_HEIGHT / 2 + 230)
+#            self.weapon[num].DrawImage()
 
     def PrepareUnit(self):
         for num in range(PLAYER_UNIT_NUM):
