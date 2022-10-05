@@ -101,11 +101,11 @@ class Character(GameObject):
         if yl % 2 == 0:
             x = h_w * xl
             y = h_h3_4 * yl - h_h1_4
-            self.SetPos(x, y)
+            #self.SetPos(x, y)
         elif yl % 2 == 1:
             x = h_w1_2 + (xl * h_w)
             y = (h_h3_4 * yl) - h_h1_4
-            self.SetPos(x, y)
+            #self.SetPos(x, y)
         
         # (x, y)座標
         tagname = "(" + str(xl) + "," + str(yl) + ")"

@@ -14,8 +14,9 @@ PLAYER = 0
 ENEMY = 1
 
 
-class Weapon():
+class Weapon(GameObject):
     def __init__(self):
+        super.__init__()
         self.weaponName     = GameData.GetWeaponDataFromId().weaponName     # 武器名
         self.range          = GameData.GetWeaponDataFromId().range          # 射程距離
         self.power          = GameData.GetWeaponDataFromId().power          # 攻撃力

@@ -13,6 +13,7 @@ from .Map import Map
 # プレイヤー表示のクラス
 from .Character import Character, Player, Enemy, CharacterManager
 from .DataDisplay import DataDisplay
+from .CountDownTimer import CountDownTimer as Timer
 from ..System.Game.GameSequenceBase import GameSequenceBase
 from ..System.Util.PgLib import PgLib
 from ..System.Util.CommandUtil import CommandUtil
@@ -33,7 +34,8 @@ MAX_COUNTER = 30
 CIRCLE_WIDTH_OUT = 40
 CIRCLE_WIDTH_IN = 35
 
-PREPARE_TIME = 10
+PREPARE_TIME = 120
+
 TURN_DISPLAY = 150
 DATA_DISPLAY_WIDTH = 400
 DATA_DISPLAY_HEIGHT = 300
@@ -55,6 +57,8 @@ ENEMY_Y_END = 6
 
 PLAYER = 0
 ENEMY = 1
+
+PREPARE_UNIT_WIDTH = 50
 
 # 色の設定
 BOARD_COLOR = ColorList.GRAY.value              # 盤面全体（見えない位置）
@@ -82,18 +86,21 @@ class Battle(GameSequenceBase):
         '''コンストラクタ'''
         GameData.LoadData()
         
-        self.prepareTime = PREPARE_TIME             # ユニットの装備の選択時間
+        self.screen = PgLib.GetScreen()             # スクリーンの設定 
+        self.PrepareTime = PREPARE_TIME             # シーン「prepare」のユニットの装備の選択時間設定
+        self.PrepareTimer = Timer(PREPARE_TIME, TIMER_X, TIMER_Y)
+
         self.TurnCount = 1                          # ターンのカウント
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
+        self.counter = MAX_COUNTER                  # シーン「Think」の時間設定
+        self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
         self.map = Map()                            # Map管理
         self.Player_Characters = CharacterManager(UNIT_X_START, UNIT_X_END, PLAYER_Y_START, PLAYER_Y_END, PLAYER_UNIT_NUM)
         self.player : list = []                     # Playerユニット
         self.Enemy_Characters = CharacterManager(UNIT_X_START, UNIT_X_END, ENEMY_Y_START, ENEMY_Y_END, ENEMY_UNIT_NUM)
-        self.enemy : list = []                      # Enemyユニット
-        self.screen = PgLib.GetScreen()             # スクリーンの設定
-        self.counter = MAX_COUNTER * FPS            # シーン「Think」の時間設定
+        self.enemy : list = []                      # Enemyユニット               
         self.state = self.BattleState.Start         # バトルのステイト
-        self.click_flag_counter = 10                # クリックのフラグが立っている間受付拒否時間
+        self.click_flag_counter = 5                 # クリックのフラグが立っている間受付拒否時間
         self.click_flag = False                     # クリックした時のフラグ
         self.pushClick = None                       # クリックしたイベントの取得
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
@@ -104,12 +111,12 @@ class Battle(GameSequenceBase):
         # プレイヤーの初期設定
         for num in range(PLAYER_UNIT_NUM):
             self.player.append(Player(self.Player_Characters.xl[num], self.Player_Characters.yl[num], num))
-            self.player[num].SetSize(20, 20)
+            #self.player[num].SetSize(20, 20)
 
         # エネミーの初期設定
         for num in range(ENEMY_UNIT_NUM):
             self.enemy.append(Enemy(self.Enemy_Characters.xl[num], self.Enemy_Characters.yl[num], num, PLAYER_UNIT_NUM))
-            self.enemy[num].SetSize(20, 20)
+            #self.enemy[num].SetSize(20, 20)
 
         # 確認用（不要なら消してください）
         CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[0], Define.Position(100, 100), startFrame=30, endFrame=60)
@@ -120,27 +127,37 @@ class Battle(GameSequenceBase):
             self.state = self.BattleState.Prepare
             return
         elif self.state == self.BattleState.Prepare:
-            self.prepareTime -= 1
-            if self.prepareTime == 0:
+            self.PrepareTimer.Update()
+            # キー入力取得期間
+            if self.click_flag == True:
+                self.click_flag_counter -= 1
+            if self.click_flag_counter == 0:
+                self.click_flag = False
+                self.click_flag_counter = 5
+
+            if self.PrepareTimer.GetCounter() == 0:
                 self.state = self.BattleState.Counter
             return
         elif self.state == self.BattleState.Counter:
             self.TurnDisplay -= 1
-            self.counter = MAX_COUNTER * FPS
+            self.BattleTimer.SetCounter(MAX_COUNTER)
             if self.TurnDisplay == 0:
                 self.state = self.BattleState.Think
             else:
                 self.state = self.BattleState.Counter
             return
         elif self.state == self.BattleState.Think:
-            # キー入力取得期間
-            self.counter -= 1
+            self.BattleTimer.Update()
+
+            # キー入力取得期間            
             if self.click_flag == True:
                 self.click_flag_counter -= 1
             if self.click_flag_counter == 0:
                 self.click_flag = False
-                self.click_flag_counter = 10
-            if self.counter == -1:
+                self.click_flag_counter = 5
+
+            # ターンのタイマー
+            if self.BattleTimer.GetCounter() == 0:
                 self.state = self.BattleState.Stop
             return
         elif self.state == self.BattleState.Stop:
@@ -161,9 +178,18 @@ class Battle(GameSequenceBase):
             self.CreatePlayer(self.player)
             # エネミーの描画
             self.CreateEnemy(self.enemy)
-        #elif self.state == self.BattleState.Prepare:
-            # sideによって変更準備するユニット
-            #self.PrepareUnit(self.player, self.enemy)
+        elif self.state == self.BattleState.Prepare:
+            # 背景（黒）
+            self.DrawPrepare()
+            # タイマーの表示
+            self.PrepareTimer.Draw(ColorList.RED, ColorList.LIME, ColorList.YELLOW, ColorList.WHITE)
+            # sideによって変更準備するユニット（現在はプレイヤーのみで可）エネミーはアルゴリズムで対応（AI利用）
+            self.PrepareUnit()
+            # クリック処理
+            self.PreparePos(self.player)
+            if self.isUnitselect == True:
+                self.datadisp.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
+
         elif self.state == self.BattleState.Counter:
             # マップの描画
             self.DrawMap(self.map)
@@ -173,10 +199,8 @@ class Battle(GameSequenceBase):
             self.CreateEnemy(self.enemy)
             # ターン経過
             self.DrawTurn()
-            # 上部円タイマー
-            self.DrawCircleTimer()
-            # 数字タイマー
-            self.DrawCountTimer()
+            # 円タイマー
+            self.BattleTimer.Draw(ColorList.RED, ColorList.LIME, ColorList.YELLOW, ColorList.WHITE)
         elif self.state == self.BattleState.Think:
             # マップの描画
             self.DrawMap(self.map)
@@ -191,10 +215,89 @@ class Battle(GameSequenceBase):
             # マウスチェック
             self.CalcReturnPos(self.player, self.enemy, self.map)
             if self.isUnitselect == True:
-                self.datadisp.Draw(ColorList.BLACK, ColorList.RED, ColorList.WHITE)
+                self.datadisp.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
 
-    def PrepareUnit():
-        pass
+    def DrawPrepare(self):
+        width, height =PgLib.GetScreenSize()
+        PgLib.DrawRect(ColorList.BLACK.value, 0, 0, width, height, 0)
+        pygame.draw.line( self.screen, ColorList.LIME.value, (200, 0), (200, 960), 10)
+
+
+    def PrepareUnit(self):
+        for num in range(PLAYER_UNIT_NUM):
+            #self.player[num].Draw(ColorList.BLUE)
+            self.player[num].SetSize(PREPARE_UNIT_WIDTH, PREPARE_UNIT_WIDTH)
+            self.player[num].GetSelect()
+            self.player[num].SetVisible(True)
+            # 左に一列で並べる。
+            self.player[num].SetPos(PREPARE_UNIT_WIDTH + 30, (PREPARE_UNIT_WIDTH * 2.5 * num) + 60 )
+            self.player[num].PlayerDraw()
+
+    def PreparePos(self, player):
+        # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。        
+        Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
+        self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+        flg = False
+        if self.pushClick != self.before_pushClick:
+            if  self.click_flag == False:
+                # キー入力確認用
+                print("Push Click :  x:", str(Point_x) + " y:" + str(Point_y))
+                #[id, xl, yl, x, y, tagname]
+                self.click_flag = True
+                self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+                if Point_x != None and Point_y !=  None:
+                    if self.pushClick == 1:
+                        for p_num in range(6):
+                            pos = player[p_num].GetPos()
+                            player[p_num].SetSelect(False)
+                            if pos.x - (PREPARE_UNIT_WIDTH) < Point_x and Point_x < pos.x + (PREPARE_UNIT_WIDTH) and pos.y - (PREPARE_UNIT_WIDTH) < Point_y and Point_y < pos.y + (PREPARE_UNIT_WIDTH):
+                                player[p_num].SetSelect(True)
+                                self.datadisp.SetPos(pos.x, pos.y)
+                                self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
+                                
+                                font_size1 = 30
+                                text1 = "I  D：" + str(player[p_num].ID)
+                                self.datadisp.SetFontsize1(font_size1)
+                                self.datadisp.SetText1(text1)
+                                font_size2 = 30
+                                text2 = "名　前：" + player[p_num].characterName
+                                self.datadisp.SetFontsize2(font_size2)
+                                self.datadisp.SetText2(text2)
+                                font_size3 = 30
+                                text3 = "体　力：" + player[p_num].HitPoint
+                                self.datadisp.SetFontsize3(font_size3)
+                                self.datadisp.SetText3(text3)
+                                font_size4 = 30
+                                text4 = "攻撃力：" + player[p_num].AttackPoint
+                                self.datadisp.SetFontsize4(font_size4)
+                                self.datadisp.SetText4(text4)
+                                font_size5 = 30
+                                text5 = "防御力：" + player[p_num].DeffencePoint
+                                self.datadisp.SetFontsize5(font_size5)
+                                self.datadisp.SetText5(text5)
+                                font_size6 = 30
+                                text6 = "回避力：" + player[p_num].AvoidancePoint
+                                self.datadisp.SetFontsize6(font_size6)
+                                self.datadisp.SetText6(text6)
+                                font_size7 = 30
+                                text7 = "技術力：" + player[p_num].TechnologyPoint
+                                self.datadisp.SetFontsize7(font_size7)
+                                self.datadisp.SetText7(text7)
+                                if player[p_num].GetSelect() == True:
+                                    self.isUnitselect = True
+                                    flg = True
+
+                        if flg == False:
+                            self.isUnitselect = False
+
+                    elif self.pushClick == 3:
+                        for p_num in range(6):
+                            if player[p_num].GetSelect() == True:
+                                player[p_num].SetSelect(False)
+
+                        self.isUnitselect = False
+
+
 
     def DrawMap(self, map):
         # ６点指定 六角形 30*24
@@ -249,7 +352,9 @@ class Battle(GameSequenceBase):
         for num in range(PLAYER_UNIT_NUM):
             #self.player[num].Draw(ColorList.BLUE)
             self.player[num].GetSelect()
+            self.player[num].SetVisible(True)       # プレイヤー側は常に明るい表示（エネミー側をする場合は、エネミー側を常に明るい表示）
             self.player[num].GetVisible()
+            self.player[num].SetPos(self.player[num].x, self.player[num].y)
             self.player[num].PlayerDraw()
             pos = self.player[num].GetPos()
 
@@ -269,6 +374,7 @@ class Battle(GameSequenceBase):
             #self.enemy[num].Draw(ColorList.YELLOW)
             self.enemy[num].GetSelect()
             self.enemy[num].GetVisible()
+            self.enemy[num].SetPos(self.enemy[num].x, self.enemy[num].y)
             self.enemy[num].EnemyDraw()
             pos = self.enemy[num].GetPos()
             #pygame.draw.circle(self.screen, ColorList.YELLOW.value, (enemy.xy[num][3], enemy.xy[num][4]), 20)
@@ -294,24 +400,24 @@ class Battle(GameSequenceBase):
             self.screen.blit(self.Turncounter, [CANVAS_WIDTH / 2 - 70, CANVAS_HEIGHT / 2 - 25])
 
 
-    def DrawCircleTimer(self):
-        pygame.draw.circle(self.screen, ColorList.YELLOW.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_OUT)
-        pygame.draw.circle(self.screen, ColorList.RED.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_IN)
-        pygame.draw.arc(self.screen, ColorList.LIME.value, [TIMER_X - CIRCLE_WIDTH_IN, TIMER_Y - CIRCLE_WIDTH_IN, CIRCLE_WIDTH_IN * 2, CIRCLE_WIDTH_IN * 2], pi/2, (pi/2) + (2*pi) * (self.counter * 0.98) / (MAX_COUNTER * FPS), CIRCLE_WIDTH_IN)
-
-
-    def DrawCountTimer(self):
-        self.Timerfont = pygame.font.Font(None, 30)
-        count = math.ceil(self.counter / FPS)
-        self.Timercounter = self.Timerfont.render( str(count), True, ColorList.BLACK.value)
-        counter_length = len( str(count) )
-        #self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])               #映らない時　用
-        if counter_length == 3:
-            self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])
-        elif counter_length == 2:
-            self.screen.blit(self.Timercounter, [TIMER_X - 12, TIMER_Y - 9])
-        elif counter_length == 1:
-            self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
+#    def DrawCircleTimer(self):
+#        pygame.draw.circle(self.screen, ColorList.YELLOW.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_OUT)
+#        pygame.draw.circle(self.screen, ColorList.RED.value, (TIMER_X, TIMER_Y), CIRCLE_WIDTH_IN)
+#        pygame.draw.arc(self.screen, ColorList.LIME.value, [TIMER_X - CIRCLE_WIDTH_IN, TIMER_Y - CIRCLE_WIDTH_IN, CIRCLE_WIDTH_IN * 2, CIRCLE_WIDTH_IN * 2], pi/2, (pi/2) + (2*pi) * (self.counter * 0.98) / (MAX_COUNTER * FPS), CIRCLE_WIDTH_IN)
+#
+#
+#    def DrawCountTimer(self):
+#        self.Timerfont = pygame.font.Font(None, 30)
+#        count = math.ceil(self.counter / FPS)
+#        self.Timercounter = self.Timerfont.render( str(count), True, ColorList.BLACK.value)
+#        counter_length = len( str(count) )
+#        #self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])               #映らない時　用
+#        if counter_length == 3:
+#            self.screen.blit(self.Timercounter, [TIMER_X - 16, TIMER_Y - 9])
+#        elif counter_length == 2:
+#            self.screen.blit(self.Timercounter, [TIMER_X - 12, TIMER_Y - 9])
+#        elif counter_length == 1:
+#            self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
 
     def MapData(self, map):
         #CalcReturnPosでマップの情報を受け渡す（表示等）
@@ -351,7 +457,7 @@ class Battle(GameSequenceBase):
                                 self.datadisp.SetFontsize2(font_size2)
                                 self.datadisp.SetText2(text2)
                                 font_size3 = 30
-                                text3 = "H  P：" + player[p_num].HitPoint
+                                text3 = "体　力：" + player[p_num].HitPoint
                                 self.datadisp.SetFontsize3(font_size3)
                                 self.datadisp.SetText3(text3)
                                 font_size4 = 30
@@ -404,7 +510,7 @@ class Battle(GameSequenceBase):
                                 self.datadisp.SetFontsize2(font_size2)
                                 self.datadisp.SetText2(text2)
                                 font_size3 = 30
-                                text3 = "H  P：" + enemy[e_num].HitPoint
+                                text3 = "体　力：" + enemy[e_num].HitPoint
                                 self.datadisp.SetFontsize3(font_size3)
                                 self.datadisp.SetText3(text3)
                                 font_size4 = 30
