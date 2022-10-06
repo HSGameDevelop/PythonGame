@@ -143,8 +143,8 @@ class Battle(GameSequenceBase):
             return
         elif self.state == self.BattleState.Counter:
             self.TurnDisplay -= 1
-            self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
             if self.TurnDisplay == 0:
+                self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
                 self.state = self.BattleState.Think
             else:
                 self.state = self.BattleState.Counter
