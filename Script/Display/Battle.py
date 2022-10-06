@@ -189,7 +189,7 @@ class Battle(GameSequenceBase):
             # sideによって変更準備するユニット（現在はプレイヤーのみで可）エネミーはアルゴリズムで対応（AI利用）
             self.PrepareUnit()
             # クリック処理
-            self.PreparePos(self.player)
+            self.PreparePos(self.player, self.weapon)
             if self.isUnitselect == True:
                 self.datadisp.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
 
@@ -226,10 +226,11 @@ class Battle(GameSequenceBase):
             if num < 6:
                 self.weapon[num].SetPos(280 + (150 * (num)), CANVAS_HEIGHT / 2)
             elif 6  <= num and num < 10:
-                self.weapon[num].SetPos(130 + (150 * (num % 5)), CANVAS_HEIGHT / 2 + 130)
+                self.weapon[num].SetPos(130 + (150 * (num % 5)), CANVAS_HEIGHT / 2 + 140)
             elif 10  <= num and num < 15:
-                self.weapon[num].SetPos(280 + (150 * (num % 5)), CANVAS_HEIGHT / 2 + 260)
+                self.weapon[num].SetPos(280 + (150 * (num % 5)), CANVAS_HEIGHT / 2 + 280)
             self.weapon[num].Draw()
+            self.weapon[num].WeaponDraw()
 
     def PrepareUnit(self):
         for num in range(PLAYER_UNIT_NUM):
@@ -241,7 +242,7 @@ class Battle(GameSequenceBase):
             self.player[num].SetPos(PREPARE_UNIT_WIDTH + 30, (PREPARE_UNIT_WIDTH * 2.5 * num) + 60 )
             self.player[num].PlayerDraw()
 
-    def PreparePos(self, player):
+    def PreparePos(self, player, weapon):
         # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。        
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
@@ -295,6 +296,46 @@ class Battle(GameSequenceBase):
                                     self.isUnitselect = True
                                     flg = True
 
+                            for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
+                                pos = weapon[w_num].GetPos()
+                                weapon[w_num].SetSelect(False)
+                                if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):
+                                    weapon[w_num].SetSelect(True)
+                                    self.datadisp.SetPos(pos.x, pos.y)
+                                    self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
+                                    
+                                    font_size1 = 30
+                                    text1 = "I  D：" + str(weapon[w_num].weaponId)
+                                    self.datadisp.SetFontsize1(font_size1)
+                                    self.datadisp.SetText1(text1)
+                                    font_size2 = 30
+                                    text2 = "名　前：" + weapon[w_num].weaponName
+                                    self.datadisp.SetFontsize2(font_size2)
+                                    self.datadisp.SetText2(text2)
+                                    font_size3 = 30
+                                    text3 = "射　程：" + weapon[w_num].range
+                                    self.datadisp.SetFontsize3(font_size3)
+                                    self.datadisp.SetText3(text3)
+                                    font_size4 = 30
+                                    text4 = "攻撃力：" + weapon[w_num].power
+                                    self.datadisp.SetFontsize4(font_size4)
+                                    self.datadisp.SetText4(text4)
+                                    font_size5 = 30
+                                    text5 = "消　費：" + weapon[w_num].actioncost
+                                    self.datadisp.SetFontsize5(font_size5)
+                                    self.datadisp.SetText5(text5)
+                                    font_size6 = 30
+                                    text6 = "角　度：" + str(weapon[w_num].angle) + "°"
+                                    self.datadisp.SetFontsize6(font_size6)
+                                    self.datadisp.SetText6(text6)
+                                    font_size7 = 30
+                                    text7 = "装備時行動力増減：" + weapon[w_num].plusdown
+                                    self.datadisp.SetFontsize7(font_size7)
+                                    self.datadisp.SetText7(text7)
+                                    if weapon[w_num].GetSelect() == True:
+                                        self.isUnitselect = True
+                                        flg = True
+
                         if flg == False:
                             self.isUnitselect = False
 
@@ -302,6 +343,10 @@ class Battle(GameSequenceBase):
                         for p_num in range(6):
                             if player[p_num].GetSelect() == True:
                                 player[p_num].SetSelect(False)
+
+                        for w_num in range(6):
+                            if weapon[w_num].GetSelect() == True:
+                                weapon[w_num].SetSelect(False)
 
                         self.isUnitselect = False
 

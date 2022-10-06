@@ -81,3 +81,10 @@ class Weapon(GameObject):
         if(self.weaponName == "爆弾"):
             return "Bomb"
         
+    def WeaponDraw(self):
+        pos = self.GetPos()
+        if self.isSelect == True:
+            PgLib.DrawRect(ColorList.RED.value, pos.x - (Weapon.IMAGE_SIZE / 2), pos.y - (Weapon.IMAGE_SIZE / 2), Weapon.IMAGE_SIZE, Weapon.IMAGE_SIZE, 2)
+        else:
+            PgLib.DrawRect(ColorList.BLACK.value, pos.x - (Weapon.IMAGE_SIZE / 2), pos.y - (Weapon.IMAGE_SIZE / 2), Weapon.IMAGE_SIZE, Weapon.IMAGE_SIZE, 2)
+
