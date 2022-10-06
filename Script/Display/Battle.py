@@ -98,7 +98,6 @@ class Battle(GameSequenceBase):
         self.TurnCount = 1                          # ターンのカウント
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
         self.counter = MAX_COUNTER                  # シーン「Think」の時間設定
-        self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
         self.map = Map()                            # Map管理
         self.Player_Characters = CharacterManager(UNIT_X_START, UNIT_X_END, PLAYER_Y_START, PLAYER_Y_END, PLAYER_UNIT_NUM)
         self.player : list = []                     # Playerユニット
@@ -139,12 +138,12 @@ class Battle(GameSequenceBase):
                 self.click_flag = False
                 self.click_flag_counter = 5
 
-            if self.PrepareTimer.GetCounter() == 0:
+            if self.PrepareTimer.GetCounter() <= 0:
                 self.state = self.BattleState.Counter
             return
         elif self.state == self.BattleState.Counter:
             self.TurnDisplay -= 1
-            self.BattleTimer.SetCounter(MAX_COUNTER)
+            self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
             if self.TurnDisplay == 0:
                 self.state = self.BattleState.Think
             else:
@@ -161,7 +160,7 @@ class Battle(GameSequenceBase):
                 self.click_flag_counter = 5
 
             # ターンのタイマー
-            if self.BattleTimer.GetCounter() == 0:
+            if self.BattleTimer.GetCounter() <= 0:
                 self.state = self.BattleState.Stop
             return
         elif self.state == self.BattleState.Stop:
@@ -212,10 +211,6 @@ class Battle(GameSequenceBase):
             self.CreatePlayer(self.player)
             # エネミーの描画
             self.CreateEnemy(self.enemy)
-#            # 上部円タイマー
-#            self.DrawCircleTimer()
-#            # 数字タイマー
-#            self.DrawCountTimer()
             # 円タイマー
             self.BattleTimer.Draw(ColorList.RED, ColorList.LIME, ColorList.YELLOW, ColorList.WHITE)
             # マウスチェック
@@ -433,8 +428,8 @@ class Battle(GameSequenceBase):
 #            self.screen.blit(self.Timercounter, [TIMER_X - 9, TIMER_Y - 9])
 
     def MapData(self, map):
-        #CalcReturnPosでマップの情報を受け渡す（表示等）
-        #ユニットの表示と同じような処理（ここではできない）
+        # CalcReturnPosでマップの情報を受け渡す（表示等）
+        # ユニットの表示と同じような処理（ここではできない）
         pass
 
     def CalcReturnPos(self, player, enemy, map):
@@ -490,7 +485,7 @@ class Battle(GameSequenceBase):
                                 self.datadisp.SetFontsize7(font_size7)
                                 self.datadisp.SetText7(text7)
                                 #font_size3 = 30
-                                #text3 = "武　器：" + player[p_num].weaponName
+                                #text3 = "武　器：" + player[p_num].weaponId
                                 #self.datadisp.SetFontsize3(font_size3)
                                 #self.datadisp.SetText3(text3)
                                 #font_size4 = 30
