@@ -216,6 +216,8 @@ class Battle(GameSequenceBase):
 #            self.DrawCircleTimer()
 #            # 数字タイマー
 #            self.DrawCountTimer()
+            # 円タイマー
+            self.BattleTimer.Draw(ColorList.RED, ColorList.LIME, ColorList.YELLOW, ColorList.WHITE)
             # マウスチェック
             self.CalcReturnPos(self.player, self.enemy, self.map)
             if self.isUnitselect == True:
@@ -223,16 +225,16 @@ class Battle(GameSequenceBase):
 
     def DrawPrepare(self):
         width, height =PgLib.GetScreenSize()
-        PgLib.DrawRect(ColorList.BLACK.value, 0, 0, width, height, 0)
+        PgLib.DrawRect(ColorList.WHITE.value, 0, 0, width, height, 0)
         pygame.draw.line( self.screen, ColorList.LIME.value, (200, 0), (200, height), 10)
-#        for num in range(1, Weapon.IMAGE_NUM_MAX):
-#            if num <= 5:
-#                self.weapon[num].SetPos(230 +  (130 * (num - 1)), CANVAS_HEIGHT / 2)
-#            elif 5  < num and num <= 10:
-#                self.weapon[num].SetPos(230 +  (130 * (num % 5 - 1)), CANVAS_HEIGHT / 2 + 130)
-#            elif 10  < num and num <= 15:
-#                self.weapon[num].SetPos(230 +  (130 * (num % 5 - 1)), CANVAS_HEIGHT / 2 + 230)
-#            self.weapon[num].DrawImage()
+        for num in range(Weapon.IMAGE_NUM_MAX - 1):
+            if num < 6:
+                self.weapon[num].SetPos(280 + (150 * (num)), CANVAS_HEIGHT / 2)
+            elif 6  <= num and num < 10:
+                self.weapon[num].SetPos(130 + (150 * (num % 5)), CANVAS_HEIGHT / 2 + 130)
+            elif 10  <= num and num < 15:
+                self.weapon[num].SetPos(280 + (150 * (num % 5)), CANVAS_HEIGHT / 2 + 260)
+            self.weapon[num].Draw()
 
     def PrepareUnit(self):
         for num in range(PLAYER_UNIT_NUM):

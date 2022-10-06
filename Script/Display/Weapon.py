@@ -18,10 +18,10 @@ ENEMY = 1
 class Weapon(GameObject):
     WEAPON_IMAGE_PATH = "Resource/Image/Battle/"
     IMAGE_SIZE = 128.0
-    IMAGE_NUM_MAX = 14
+    IMAGE_NUM_MAX = 15
 
     def __init__(self, id):
-        super().__init__()
+        super().__init__(size=(128,128))
         self.weaponId       = GameData.GetWeaponDataFromId(id).weaponId       # 武器ID
         self.weaponName     = GameData.GetWeaponDataFromId(id).weaponName     # 武器名
         self.weaponEnglish  =  self.English()                                  # 武器名(英語)
@@ -36,6 +36,10 @@ class Weapon(GameObject):
         self.image = PgLib.LoadImage(Weapon.WEAPON_IMAGE_PATH + self.weaponEnglish + ".png")
 
         self.SetSelect(self.isSelect)
+        self.SetImage(self.image)
+        self.SetBaseImage(self.image)
+        self.SetAngle(0)
+
         
 
     def GetSelect(self):
