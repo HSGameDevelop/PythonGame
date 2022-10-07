@@ -258,6 +258,7 @@ class Battle(GameSequenceBase):
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
         weapon_flg = False
         weapon_flg1 = False
+        weapon_flg2 = False
         if self.pushClick != self.before_pushClick:
             if  self.click_flag == False:
                 # キー入力確認用
@@ -387,12 +388,12 @@ class Battle(GameSequenceBase):
                         text7 = "装備時行動力増減：" + weapon[w_num].plusdown
                         self.datadisp1.SetFontsize7(font_size7)
                         self.datadisp1.SetText7(text7)
-                    else:
-                        self.isWeaponhover = False
 
                     if weapon[w_num].GetHover() == True:
+                        weapon_flg = True
                         self.isWeaponhover = True
-
+                    elif weapon_flg != True:
+                        self.isWeaponhover = False
 
 
     def DrawMap(self, map):
