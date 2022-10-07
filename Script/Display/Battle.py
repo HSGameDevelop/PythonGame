@@ -35,7 +35,7 @@ MAX_COUNTER = 30
 CIRCLE_WIDTH_OUT = 40
 CIRCLE_WIDTH_IN = 35
 
-PREPARE_TIME = 120
+PREPARE_TIME = 20
 
 TURN_DISPLAY = 150
 DATA_DISPLAY_WIDTH = 400
@@ -130,8 +130,8 @@ class Battle(GameSequenceBase):
             #self.enemy[num].SetSize(20, 20)
 
         # 確認用（不要なら消してください）
-        CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[0], Define.Position(100, 100), startFrame=30, endFrame=60)
-        CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[1], Define.Position(900, 100), startFrame=60, endFrame=30) 
+        #CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[0], Define.Position(100, 100), startFrame=30, endFrame=60)
+        #CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[1], Define.Position(900, 100), startFrame=60, endFrame=30) 
 
     def Update(self):
         if self.state == self.BattleState.Start:
@@ -153,6 +153,10 @@ class Battle(GameSequenceBase):
         elif self.state == self.BattleState.Counter:
             self.TurnDisplay -= 1
             if self.TurnDisplay == 0:
+                self.isUnitselect = False
+                self.isWeaponselect1 = False
+                self.isWeaponselect2 = False
+                self.isWeaponhover = False
                 self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
                 self.state = self.BattleState.Think
             else:
@@ -177,6 +181,7 @@ class Battle(GameSequenceBase):
             if self.TurnCount == 7:
                 self.state = self.BattleState.End
             else:
+                self.BattleTimer.SetCounter(MAX_COUNTER)
                 self.TurnDisplay = TURN_DISPLAY
                 self.state = self.BattleState.Counter
             return
@@ -184,23 +189,18 @@ class Battle(GameSequenceBase):
 
     def Draw(self):
         if self.state == self.BattleState.Start:
-            # マップの描画
-            self.DrawMap(self.map)
-            # プレイヤーの描画
-            self.CreatePlayer(self.player)
-            # エネミーの描画
-            self.CreateEnemy(self.enemy)
+            pass
         elif self.state == self.BattleState.Prepare:
-            # 背景（黒）
+            # 背景（白）
             self.DrawPrepare()
             # タイマーの表示
             self.PrepareTimer.Draw(ColorList.RED, ColorList.LIME, ColorList.YELLOW, ColorList.WHITE)
             # ユニットのクリック処理
             self.SelectUnit(self.player, self.weapon)
-            
+            # ユニットが選択状態かどうか
             if self.isUnitselect == True:
                 self.datadisp.Draw(ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
-            
+            # 武器の上にマウスがあるとき武器の詳細が出る
             if self.isWeaponhover == True:
                 self.datadisp1.Draw( ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
 
@@ -243,7 +243,6 @@ class Battle(GameSequenceBase):
             self.weapon[num].Draw()
             self.weapon[num].WeaponDraw()
         for num in range(PLAYER_UNIT_NUM):
-            #self.player[num].Draw(ColorList.BLUE)
             self.player[num].SetSize(PREPARE_UNIT_WIDTH, PREPARE_UNIT_WIDTH)
             self.player[num].GetSelect()
             self.player[num].SetVisible(True)
