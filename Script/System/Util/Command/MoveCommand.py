@@ -1,10 +1,8 @@
 import numpy as np
 from enum import Enum
 
-from Script.System.Util.PgLib import PgLib
-
-from .Define import Define
-from .GameObject import GameObject
+from ..Define import Define
+from ..GameObject import GameObject
 from .Command import Command, CommandBase
 
 # 移動命令制御クラス

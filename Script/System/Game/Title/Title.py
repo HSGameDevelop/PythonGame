@@ -8,10 +8,10 @@ import numpy as np
 from Script.System.IO.InputKeyboard import InputKeyboard
 from ..GameSequenceBase import GameSequenceBase
 
+from ...Util.Command import CommandUtil
 sys.path.append('../Util/')
 from ...Util.PgLib import PgLib
-from ...Util.MoveCommand import MoveCommand
-from ...Util.CommandUtil import CommandUtil
+from ...Util.Command.MoveCommand import MoveCommand
 from ...Util.Define import Define
 from ...Util.GameObject import GameObject
 

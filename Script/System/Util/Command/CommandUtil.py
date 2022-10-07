@@ -1,10 +1,10 @@
 from tracemalloc import start
-from Script.System.Util.Command import Command
-from Script.System.Util.GameObject import GameObject
-from .Singleton import Singleton
+from .Command import Command
+from ..GameObject import GameObject
+from ..Singleton import Singleton
 from .MoveCommand import MoveCommand
-from .Define import Define
-from .Timer import TimerManager
+from ..Define import Define
+from ..Timer import TimerManager
 
 # 命令制御クラスの中身
 class CommandUtilImpl(Singleton):

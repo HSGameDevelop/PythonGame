@@ -7,8 +7,9 @@ sys.path.append('./Data/')
 from .Data.GameData import GameData
 sys.path.append('./System/Util/')
 from .System.Util.PgLib import PgLib
-from .System.Util.CommandUtil import CommandUtil
 from .System.Util.Timer import TimerManager
+sys.path.append('./System/Util/Command')
+from .System.Util.Command.CommandUtil import CommandUtil
 sys.path.append('./System/Game/Title/')
 from .System.Game.Title.Title import Title
 sys.path.append('../../Display/')

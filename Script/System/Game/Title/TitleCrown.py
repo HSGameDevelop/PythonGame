@@ -2,11 +2,11 @@ from enum import Enum
 import sys
 from turtle import pos
 
-from Script.System.Util.MoveCommand import MoveCommand
+from Script.System.Util.Command.MoveCommand import MoveCommand
+from ...Util.Command.CommandUtil import CommandUtil
 sys.path.append('../Util/')
 from ...Util.GameObject import GameObject 
 from ...Util.PgLib import PgLib
-from ...Util.CommandUtil import CommandUtil
 from ...Util.Define import Define
 
 class TitleCrown(GameObject):
