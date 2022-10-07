@@ -7,7 +7,7 @@ import sys, os
 
 from Script.Data.GameData import GameData
 from Script.System.Util.Command import Command
-from Script.System.Util.MoveCommand import MoveCommand
+from Script.System.Util.Command.MoveCommand import MoveCommand
 # マップ表示のクラス
 from .Map import Map
 # プレイヤー表示のクラス
@@ -17,10 +17,10 @@ from .Weapon import Weapon
 from .CountDownTimer import CountDownTimer as Timer
 from ..System.Game.GameSequenceBase import GameSequenceBase
 from ..System.Util.PgLib import PgLib
-from ..System.Util.CommandUtil import CommandUtil
 from ..System.Util.Define import Define
 from ..System.IO.InputKeyboard import InputKeyboard
 from ..System.IO.InputMouse import InputMouse
+from ..System.Util.Command.CommandUtil import CommandUtil
 # カラーリスト
 from Script.Data.ColorList import ColorList
 
@@ -251,7 +251,7 @@ class Battle(GameSequenceBase):
             self.player[num].PlayerDraw()
 
 
-    def SelectUnit(self, player, weapon):
+    def SelectUnit(self, player, weapon : Weapon):
         # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。        
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
