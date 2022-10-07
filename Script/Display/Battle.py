@@ -108,8 +108,16 @@ class Battle(GameSequenceBase):
         self.click_flag = False                     # クリックした時のフラグ
         self.pushClick = None                       # クリックしたイベントの取得
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
-        self.isUnitselect = False                   # ユニットが選択済みかどうか
+        self.isUnitselect = False                   # ユニットを選択しているかどうか
         self.datadisp = DataDisplay()
+        self.datadisp1 = DataDisplay()
+        self.datadisp2 = DataDisplay()
+        self.isWeaponselect1 = False                 # 武器1を選択しているかどうか
+        self.isWeaponselect2 = False                 # 武器2を選択しているかどうか
+        self.isWeaponhover = False                   # 武器の上にあるかどうか
+        self.isArmorselect = False                   # 防具を選択しているかどうか
+        self.player_flg = None
+
 
         # プレイヤーの初期設定
         for num in range(PLAYER_UNIT_NUM):
@@ -140,6 +148,7 @@ class Battle(GameSequenceBase):
 
             if self.PrepareTimer.GetCounter() <= 0:
                 self.state = self.BattleState.Counter
+                self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
             return
         elif self.state == self.BattleState.Counter:
             self.TurnDisplay -= 1
@@ -186,12 +195,14 @@ class Battle(GameSequenceBase):
             self.DrawPrepare()
             # タイマーの表示
             self.PrepareTimer.Draw(ColorList.RED, ColorList.LIME, ColorList.YELLOW, ColorList.WHITE)
-            # sideによって変更準備するユニット（現在はプレイヤーのみで可）エネミーはアルゴリズムで対応（AI利用）
-            self.PrepareUnit()
-            # クリック処理
-            self.PreparePos(self.player, self.weapon)
+            # ユニットのクリック処理
+            self.SelectUnit(self.player, self.weapon)
+            
             if self.isUnitselect == True:
-                self.datadisp.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
+                self.datadisp.Draw(ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
+            
+            if self.isWeaponhover == True:
+                self.datadisp1.Draw( ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
 
         elif self.state == self.BattleState.Counter:
             # マップの描画
@@ -231,8 +242,6 @@ class Battle(GameSequenceBase):
                 self.weapon[num].SetPos(280 + (150 * (num % 5)), CANVAS_HEIGHT / 2 + 280)
             self.weapon[num].Draw()
             self.weapon[num].WeaponDraw()
-
-    def PrepareUnit(self):
         for num in range(PLAYER_UNIT_NUM):
             #self.player[num].Draw(ColorList.BLUE)
             self.player[num].SetSize(PREPARE_UNIT_WIDTH, PREPARE_UNIT_WIDTH)
@@ -242,11 +251,13 @@ class Battle(GameSequenceBase):
             self.player[num].SetPos(PREPARE_UNIT_WIDTH + 30, (PREPARE_UNIT_WIDTH * 2.5 * num) + 60 )
             self.player[num].PlayerDraw()
 
-    def PreparePos(self, player, weapon):
+
+    def SelectUnit(self, player, weapon):
         # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。        
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
-        flg = False
+        weapon_flg = False
+        weapon_flg1 = False
         if self.pushClick != self.before_pushClick:
             if  self.click_flag == False:
                 # キー入力確認用
@@ -258,12 +269,11 @@ class Battle(GameSequenceBase):
                     if self.pushClick == 1:
                         for p_num in range(6):
                             pos = player[p_num].GetPos()
-                            player[p_num].SetSelect(False)
                             if pos.x - (PREPARE_UNIT_WIDTH) < Point_x and Point_x < pos.x + (PREPARE_UNIT_WIDTH) and pos.y - (PREPARE_UNIT_WIDTH) < Point_y and Point_y < pos.y + (PREPARE_UNIT_WIDTH):
                                 player[p_num].SetSelect(True)
-                                self.datadisp.SetPos(pos.x, pos.y)
+                                self.datadisp.SetPos(280, 50)
                                 self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
-                                
+
                                 font_size1 = 30
                                 text1 = "I  D：" + str(player[p_num].ID)
                                 self.datadisp.SetFontsize1(font_size1)
@@ -294,61 +304,94 @@ class Battle(GameSequenceBase):
                                 self.datadisp.SetText7(text7)
                                 if player[p_num].GetSelect() == True:
                                     self.isUnitselect = True
-                                    flg = True
+                                    self.player_flg = p_num
+                            
+                        for p_num in range(6):
+                            if self.player_flg != p_num:
+                                player[p_num].SetSelect(False)
 
-                            for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
-                                pos = weapon[w_num].GetPos()
-                                weapon[w_num].SetSelect(False)
-                                if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):
-                                    weapon[w_num].SetSelect(True)
-                                    self.datadisp.SetPos(pos.x, pos.y)
-                                    self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
-                                    
-                                    font_size1 = 30
-                                    text1 = "I  D：" + str(weapon[w_num].weaponId)
-                                    self.datadisp.SetFontsize1(font_size1)
-                                    self.datadisp.SetText1(text1)
-                                    font_size2 = 30
-                                    text2 = "名　前：" + weapon[w_num].weaponName
-                                    self.datadisp.SetFontsize2(font_size2)
-                                    self.datadisp.SetText2(text2)
-                                    font_size3 = 30
-                                    text3 = "射　程：" + weapon[w_num].range
-                                    self.datadisp.SetFontsize3(font_size3)
-                                    self.datadisp.SetText3(text3)
-                                    font_size4 = 30
-                                    text4 = "攻撃力：" + weapon[w_num].power
-                                    self.datadisp.SetFontsize4(font_size4)
-                                    self.datadisp.SetText4(text4)
-                                    font_size5 = 30
-                                    text5 = "消　費：" + weapon[w_num].actioncost
-                                    self.datadisp.SetFontsize5(font_size5)
-                                    self.datadisp.SetText5(text5)
-                                    font_size6 = 30
-                                    text6 = "角　度：" + str(weapon[w_num].angle) + "°"
-                                    self.datadisp.SetFontsize6(font_size6)
-                                    self.datadisp.SetText6(text6)
-                                    font_size7 = 30
-                                    text7 = "装備時行動力増減：" + weapon[w_num].plusdown
-                                    self.datadisp.SetFontsize7(font_size7)
-                                    self.datadisp.SetText7(text7)
-                                    if weapon[w_num].GetSelect() == True:
-                                        self.isUnitselect = True
-                                        flg = True
+                        if self.isUnitselect == True:
+                            if self.isWeaponselect1 == False:
+                                for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
+                                    pos = weapon[w_num].GetPos()
+                                    weapon[w_num].SetSelect(False)
+                                    if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):                                  
+                                        weapon[w_num].SetSelect(True)
 
-                        if flg == False:
-                            self.isUnitselect = False
+                                        if weapon[w_num].GetSelect() == True:
+                                            self.isWeaponselect1 = True
+                                            weapon_flg = True
+                            elif self.isWeaponselect1 == True:
+                                for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
+                                    pos = weapon[w_num].GetPos()
+                                    weapon[w_num].SetSelect(False)
+                                    if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):                                  
+                                        weapon[w_num].SetSelect(True)
+
+                                        if weapon[w_num].GetSelect() == True:
+                                            self.isWeaponselect2 = True
+                                            weapon_flg1 = True
+                    
+                        if weapon_flg == False and weapon_flg1 == False:
+                            self.isWeaponselect1 = False
+                        elif weapon_flg == True and weapon_flg1 == False:
+                            self.isWeaponselect2 = False
 
                     elif self.pushClick == 3:
                         for p_num in range(6):
                             if player[p_num].GetSelect() == True:
                                 player[p_num].SetSelect(False)
 
-                        for w_num in range(6):
+                        for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
                             if weapon[w_num].GetSelect() == True:
                                 weapon[w_num].SetSelect(False)
 
                         self.isUnitselect = False
+                        self.isWeaponselect1 = False
+                        self.isWeaponselect2 = False
+        else:
+            if Point_x != None and Point_y !=  None:
+                for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
+                    pos = weapon[w_num].GetPos()
+                    weapon[w_num].SetHover(False)
+                    if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):
+                        weapon[w_num].SetHover(True)
+                        self.datadisp1.SetPos(pos.x, pos.y)
+                        self.datadisp1.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
+
+                        font_size1 = 30
+                        text1 = "I  D：" + str(weapon[w_num].weaponId)
+                        self.datadisp1.SetFontsize1(font_size1)
+                        self.datadisp1.SetText1(text1)
+                        font_size2 = 30
+                        text2 = "名　前：" + weapon[w_num].weaponName
+                        self.datadisp1.SetFontsize2(font_size2)
+                        self.datadisp1.SetText2(text2)
+                        font_size3 = 30
+                        text3 = "射　程：" + weapon[w_num].range
+                        self.datadisp1.SetFontsize3(font_size3)
+                        self.datadisp1.SetText3(text3)
+                        font_size4 = 30
+                        text4 = "攻撃力：" + weapon[w_num].power
+                        self.datadisp1.SetFontsize4(font_size4)
+                        self.datadisp1.SetText4(text4)
+                        font_size5 = 30
+                        text5 = "消　費：" + weapon[w_num].actioncost
+                        self.datadisp1.SetFontsize5(font_size5)
+                        self.datadisp1.SetText5(text5)
+                        font_size6 = 30
+                        text6 = "角　度：" + str(weapon[w_num].angle) + "°"
+                        self.datadisp1.SetFontsize6(font_size6)
+                        self.datadisp1.SetText6(text6)
+                        font_size7 = 30
+                        text7 = "装備時行動力増減：" + weapon[w_num].plusdown
+                        self.datadisp1.SetFontsize7(font_size7)
+                        self.datadisp1.SetText7(text7)
+                    else:
+                        self.isWeaponhover = False
+
+                    if weapon[w_num].GetHover() == True:
+                        self.isWeaponhover = True
 
 
 
@@ -408,6 +451,7 @@ class Battle(GameSequenceBase):
             self.player[num].SetVisible(True)       # プレイヤー側は常に明るい表示（エネミー側をする場合は、エネミー側を常に明るい表示）
             self.player[num].GetVisible()
             self.player[num].SetPos(self.player[num].x, self.player[num].y)
+            self.player[num].SetSize(20, 20)
             self.player[num].PlayerDraw()
             pos = self.player[num].GetPos()
 
@@ -428,6 +472,7 @@ class Battle(GameSequenceBase):
             self.enemy[num].GetSelect()
             self.enemy[num].GetVisible()
             self.enemy[num].SetPos(self.enemy[num].x, self.enemy[num].y)
+            self.enemy[num].SetSize(20, 20)
             self.enemy[num].EnemyDraw()
             pos = self.enemy[num].GetPos()
             #pygame.draw.circle(self.screen, ColorList.YELLOW.value, (enemy.xy[num][3], enemy.xy[num][4]), 20)

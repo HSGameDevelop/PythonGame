@@ -28,6 +28,8 @@ class InputMouse:
             self.click = None
             self.pos_x = None
             self.pos_y = None
+        else:
+            self.pos_x, self.pos_y = pygame.mouse.get_pos()
 
     # マウスクリックを取得する
     def GetPushClick(self):

@@ -32,6 +32,7 @@ class Weapon(GameObject):
         self.powerFlag      = GameData.GetWeaponDataFromId(id).powerFlag      # ユニットの攻撃力分を加算するかどうか
         self.plusdown       = GameData.GetWeaponDataFromId(id).plusdown       # 武器装備時の行動力の増減
         self.isSelect = False
+        self.isHover = False
 
         self.image = PgLib.LoadImage(Weapon.WEAPON_IMAGE_PATH + self.weaponEnglish + ".png")
 
@@ -40,7 +41,11 @@ class Weapon(GameObject):
         self.SetBaseImage(self.image)
         self.SetAngle(0)
 
-        
+    def GetHover(self):
+        return self.isHover
+
+    def SetHover(self, hover):
+        self.isHover = hover
 
     def GetSelect(self):
         return self.isSelect
