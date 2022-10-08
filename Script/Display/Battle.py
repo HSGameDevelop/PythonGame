@@ -320,7 +320,7 @@ class Battle(GameSequenceBase):
 
                                         if weapon[w_num].GetSelect() == True:
                                             self.isWeaponselect1 = True
-                                            weapon_flg = True
+                                            weapon_flg1 = True
                             elif self.isWeaponselect1 == True:
                                 for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
                                     pos = weapon[w_num].GetPos()
@@ -330,11 +330,11 @@ class Battle(GameSequenceBase):
 
                                         if weapon[w_num].GetSelect() == True:
                                             self.isWeaponselect2 = True
-                                            weapon_flg1 = True
+                                            weapon_flg2 = True
                     
-                        if weapon_flg == False and weapon_flg1 == False:
+                        if weapon_flg1 == False and weapon_flg2 == False:
                             self.isWeaponselect1 = False
-                        elif weapon_flg == True and weapon_flg1 == False:
+                        elif weapon_flg1 == True and weapon_flg2 == False:
                             self.isWeaponselect2 = False
 
                     elif self.pushClick == 3:
