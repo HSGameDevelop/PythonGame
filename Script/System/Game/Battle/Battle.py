@@ -90,8 +90,11 @@ class Battle(GameSequenceBase):
         self.PrepareTimer = Timer(PREPARE_TIME, TIMER_X, TIMER_Y)
         self.weapon : list = []                     # Weaponリスト
         # 武器の初期設定
-        for num in range(1, Weapon.IMAGE_NUM_MAX):
-            self.weapon.append(Weapon(num))
+        for num in range(Weapon.IMAGE_NUM_MAX):
+            if num == 0:
+                self.weapon.append(None)
+            else:
+                self.weapon.append(Weapon(num))
 
         self.TurnCount = 1                          # ターンのカウント
         self.TurnDisplay = TURN_DISPLAY             # ターンの表示時間
@@ -200,7 +203,7 @@ class Battle(GameSequenceBase):
                 self.datadisp.Draw(ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
             
             if self.isWeaponhover == True:
-                self.datadisp1.Draw( ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
+                self.datadisp1.Draw(ColorList.BLACK, ColorList.LIME, ColorList.LIME)
 
         elif self.state == self.BattleState.Counter:
             # マップの描画
@@ -231,13 +234,13 @@ class Battle(GameSequenceBase):
         width, height =PgLib.GetScreenSize()
         PgLib.DrawRect(ColorList.WHITE.value, 0, 0, width, height, 0)
         pygame.draw.line( self.screen, ColorList.LIME.value, (200, 0), (200, height), 10)
-        for num in range(Weapon.IMAGE_NUM_MAX - 1):
-            if num < 6:
-                self.weapon[num].SetPos(280 + (150 * (num)), CANVAS_HEIGHT / 2)
-            elif 6  <= num and num < 10:
-                self.weapon[num].SetPos(130 + (150 * (num % 5)), CANVAS_HEIGHT / 2 + 140)
-            elif 10  <= num and num < 15:
-                self.weapon[num].SetPos(280 + (150 * (num % 5)), CANVAS_HEIGHT / 2 + 280)
+        for num in range(1, Weapon.IMAGE_NUM_MAX):
+            if num < 7:
+                self.weapon[num].SetPos(280 + (150 * (num - 1)), CANVAS_HEIGHT / 2)
+            elif 7 <= num and num < 11:
+                self.weapon[num].SetPos(130 + (150 * ((num - 1) % 5)), CANVAS_HEIGHT / 2 + 140)
+            elif 11  <= num and num < 15:
+                self.weapon[num].SetPos(280 + (150 * ((num - 1) % 5)), CANVAS_HEIGHT / 2 + 280)
             self.weapon[num].Draw()
             self.weapon[num].WeaponDraw()
         for num in range(PLAYER_UNIT_NUM):
@@ -311,7 +314,7 @@ class Battle(GameSequenceBase):
 
                         if self.isUnitselect == True:
                             if self.isWeaponselect1 == False:
-                                for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
+                                for w_num in range(1, Weapon.IMAGE_NUM_MAX):
                                     pos = weapon[w_num].GetPos()
                                     weapon[w_num].SetSelect(False)
                                     if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):                                  
@@ -321,7 +324,7 @@ class Battle(GameSequenceBase):
                                             self.isWeaponselect1 = True
                                             weapon_flg1 = True
                             elif self.isWeaponselect1 == True:
-                                for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
+                                for w_num in range(1, Weapon.IMAGE_NUM_MAX):
                                     pos = weapon[w_num].GetPos()
                                     weapon[w_num].SetSelect(False)
                                     if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):                                  
@@ -341,7 +344,7 @@ class Battle(GameSequenceBase):
                             if player[p_num].GetSelect() == True:
                                 player[p_num].SetSelect(False)
 
-                        for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
+                        for w_num in range(1, Weapon.IMAGE_NUM_MAX):
                             if weapon[w_num].GetSelect() == True:
                                 weapon[w_num].SetSelect(False)
 
@@ -350,7 +353,7 @@ class Battle(GameSequenceBase):
                         self.isWeaponselect2 = False
         else:
             if Point_x != None and Point_y !=  None:
-                for w_num in range(Weapon.IMAGE_NUM_MAX - 1):
+                for w_num in range(1, Weapon.IMAGE_NUM_MAX):
                     pos = weapon[w_num].GetPos()
                     weapon[w_num].SetHover(False)
                     if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):

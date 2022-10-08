@@ -21,6 +21,7 @@ class DataDisplay:
      ) -> None:
         self.position = Define.Position(position[0], position[1])
         self.size = Define.Size(size[0], size[1])
+        self.screen = PgLib.GetScreen()
         self.font_padding = 10
         self.outline = 10
         self.font_size1 = None
@@ -53,7 +54,7 @@ class DataDisplay:
         self.text8 = None
         self.text9 = None
         self.text10 = None
-        self.screen = PgLib.GetScreen()
+        
 
     # 座標の取得
     def GetPos(self) -> Define.Position:
