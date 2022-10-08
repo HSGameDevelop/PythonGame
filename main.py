@@ -1,6 +1,4 @@
 import sys, os
-sys.path.append('/Script/Data/')
-from Script.Data.GameData import GameData
 sys.path.append('/Script/Display/')
 from Script.Game import Game
 

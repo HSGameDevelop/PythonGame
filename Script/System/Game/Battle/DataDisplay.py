@@ -1,9 +1,9 @@
 import numpy as np
 import pygame
 
-from Script.Data.ColorList import ColorList
-from ..System.Util.PgLib import PgLib
-from ..System.Util.Define import Define
+from ..Data.ColorList import ColorList
+from ...Util.PgLib import PgLib
+from ...Util.Define import Define
 
 FONT_PATH = "./Data/FontData/ipaexg.ttf"
 

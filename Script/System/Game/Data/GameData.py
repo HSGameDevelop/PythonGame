@@ -1,11 +1,10 @@
 import sys, os
 sys.path.append('../../Script/Data/')
 
-from Script.Data.CharacterData import CharacterData, CharacterDataLoader
-from Script.Data.WeaponData import WeaponData, WeaponDataLoader
+from .CharacterData import CharacterData, CharacterDataLoader
+from .WeaponData import WeaponData, WeaponDataLoader
 
-sys.path.append('../System/Util/')
-from ..System.Util.Singleton import Singleton
+from ...Util.Singleton import Singleton
 
 # ゲームのデータ関連を扱うクラス
 class GameDataImpl(Singleton):

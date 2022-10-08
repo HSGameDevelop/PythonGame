@@ -1,7 +1,6 @@
 import sys, os
 
-sys.path.append('../../Script/Data/')
-from Script.Data.DataBase import DataLoaderBase
+from .DataBase import DataLoaderBase
 
 class CharacterData:
     def __init__(self):
