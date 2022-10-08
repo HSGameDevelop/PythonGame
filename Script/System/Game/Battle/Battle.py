@@ -5,7 +5,7 @@ from math import pi
 import math
 import sys, os
 
-from Script.Data.GameData import GameData
+from ..Data.GameData import GameData
 from Script.System.Util.Command import Command
 from Script.System.Util.Command.MoveCommand import MoveCommand
 # マップ表示のクラス
@@ -15,14 +15,14 @@ from .Character import Character, Player, Enemy, CharacterManager
 from .DataDisplay import DataDisplay
 from .Weapon import Weapon
 from .CountDownTimer import CountDownTimer as Timer
-from ..System.Game.GameSequenceBase import GameSequenceBase
-from ..System.Util.PgLib import PgLib
-from ..System.Util.Define import Define
-from ..System.IO.InputKeyboard import InputKeyboard
-from ..System.IO.InputMouse import InputMouse
-from ..System.Util.Command.CommandUtil import CommandUtil
+from ..GameSequenceBase import GameSequenceBase
+from ...Util.PgLib import PgLib
+from ...Util.Define import Define
+from ...IO.InputKeyboard import InputKeyboard
+from ...IO.InputMouse import InputMouse
+from ...Util.Command.CommandUtil import CommandUtil
 # カラーリスト
-from Script.Data.ColorList import ColorList
+from ..Data.ColorList import ColorList
 
 CANVAS_WIDTH =  1280
 CANVAS_HEIGHT = 960
@@ -35,7 +35,7 @@ MAX_COUNTER = 30
 CIRCLE_WIDTH_OUT = 40
 CIRCLE_WIDTH_IN = 35
 
-PREPARE_TIME = 20
+PREPARE_TIME = 120
 
 TURN_DISPLAY = 150
 DATA_DISPLAY_WIDTH = 400
@@ -70,7 +70,6 @@ OUT_LINE_COLOR = ColorList.BLACK.value          # 枠線の色
 YOUR_COLOR = ColorList.BLUE.value               # あなたのユニットの色
 ENEMY_COLOR = ColorList.YELLOW.value            # 相手のユニットの色
 
-
 class Battle(GameSequenceBase):
     class BattleState(Enum):
         Start = 0
@@ -81,7 +80,6 @@ class Battle(GameSequenceBase):
         Move = 5
         Load = 6
         End = 10
-
 
     def __init__(self) -> None:
         '''コンストラクタ'''
@@ -130,8 +128,8 @@ class Battle(GameSequenceBase):
             #self.enemy[num].SetSize(20, 20)
 
         # 確認用（不要なら消してください）
-        #CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[0], Define.Position(100, 100), startFrame=30, endFrame=60)
-        #CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[1], Define.Position(900, 100), startFrame=60, endFrame=30) 
+        CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[0], Define.Position(100, 100), startFrame=30, endFrame=60)
+        CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self.player[1], Define.Position(900, 100), startFrame=60, endFrame=30) 
 
     def Update(self):
         if self.state == self.BattleState.Start:
@@ -153,10 +151,6 @@ class Battle(GameSequenceBase):
         elif self.state == self.BattleState.Counter:
             self.TurnDisplay -= 1
             if self.TurnDisplay == 0:
-                self.isUnitselect = False
-                self.isWeaponselect1 = False
-                self.isWeaponselect2 = False
-                self.isWeaponhover = False
                 self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
                 self.state = self.BattleState.Think
             else:
@@ -181,7 +175,6 @@ class Battle(GameSequenceBase):
             if self.TurnCount == 7:
                 self.state = self.BattleState.End
             else:
-                self.BattleTimer.SetCounter(MAX_COUNTER)
                 self.TurnDisplay = TURN_DISPLAY
                 self.state = self.BattleState.Counter
             return
@@ -189,18 +182,23 @@ class Battle(GameSequenceBase):
 
     def Draw(self):
         if self.state == self.BattleState.Start:
-            pass
+            # マップの描画
+            self.DrawMap(self.map)
+            # プレイヤーの描画
+            self.CreatePlayer(self.player)
+            # エネミーの描画
+            self.CreateEnemy(self.enemy)
         elif self.state == self.BattleState.Prepare:
-            # 背景（白）
+            # 背景（黒）
             self.DrawPrepare()
             # タイマーの表示
             self.PrepareTimer.Draw(ColorList.RED, ColorList.LIME, ColorList.YELLOW, ColorList.WHITE)
             # ユニットのクリック処理
             self.SelectUnit(self.player, self.weapon)
-            # ユニットが選択状態かどうか
+            
             if self.isUnitselect == True:
                 self.datadisp.Draw(ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
-            # 武器の上にマウスがあるとき武器の詳細が出る
+            
             if self.isWeaponhover == True:
                 self.datadisp1.Draw( ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
 
@@ -243,6 +241,7 @@ class Battle(GameSequenceBase):
             self.weapon[num].Draw()
             self.weapon[num].WeaponDraw()
         for num in range(PLAYER_UNIT_NUM):
+            #self.player[num].Draw(ColorList.BLUE)
             self.player[num].SetSize(PREPARE_UNIT_WIDTH, PREPARE_UNIT_WIDTH)
             self.player[num].GetSelect()
             self.player[num].SetVisible(True)

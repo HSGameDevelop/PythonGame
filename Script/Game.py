@@ -3,17 +3,15 @@ import sys, os
 import pygame
 from Script.System.Game.GameSequenceBase import GameSequenceBase
 
-sys.path.append('./Data/')
-from .Data.GameData import GameData
-sys.path.append('./System/Util/')
+from .System.Game.Battle.Battle import Battle
+
+from .System.Game.Data.GameData import GameData
 from .System.Util.PgLib import PgLib
 from .System.Util.Timer import TimerManager
 sys.path.append('./System/Util/Command')
 from .System.Util.Command.CommandUtil import CommandUtil
 sys.path.append('./System/Game/Title/')
 from .System.Game.Title.Title import Title
-sys.path.append('../../Display/')
-from Script.Display.Battle import Battle
 
 WIDTH = 1280
 HEIGHT = 960

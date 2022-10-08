@@ -1,13 +1,7 @@
-import random
-import sys, os
-
-from ..System.Util.PgLib import PgLib
-from ..System.Util.GameObject import GameObject
+from ...Util.PgLib import PgLib
+from ...Util.GameObject import GameObject
 from ..Data.GameData import GameData
-
-from Script.Data.ColorList import ColorList
-#sys.path.append('../../System/Util/')
-
+from ..Data.ColorList import ColorList
 
 # キャラの視界を設定マップへ反映するように追加
 

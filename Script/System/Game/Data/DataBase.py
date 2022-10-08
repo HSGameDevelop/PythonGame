@@ -1,7 +1,6 @@
 import sys, os
 
-sys.path.append('../System/IO/')
-from ..System.IO.BinaryFileManager import BinaryFileManager
+from ...IO.BinaryFileManager import BinaryFileManager
 
 # データ読み込みのベースクラス
 class DataLoaderBase:

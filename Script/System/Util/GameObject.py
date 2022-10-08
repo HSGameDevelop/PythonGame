@@ -1,7 +1,7 @@
 import numpy as np
 import pygame.surface
 
-from Script.Data.ColorList import ColorList
+from ..Game.Data.ColorList import ColorList
 from .PgLib import PgLib
 from .Define import Define
 

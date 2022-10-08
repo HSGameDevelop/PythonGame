@@ -2,9 +2,9 @@ import pygame
 import time
 from math import pi
 import math
-from ..System.Util.PgLib import PgLib
+from ...Util.PgLib import PgLib
 # カラーリスト
-from Script.Data.ColorList import ColorList
+from ..Data.ColorList import ColorList
 
 CIRCLE_WIDTH_OUT = 40
 CIRCLE_WIDTH_IN = 35
