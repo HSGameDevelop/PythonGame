@@ -306,6 +306,12 @@ class Battle(GameSequenceBase):
                                 self.datadisp.SetText7(text7)
                                 if player[p_num].GetSelect() == True:
                                     self.isUnitselect = True
+                                    #weaponId1 = player[p_num].GetWeaponId1()
+                                    #weaponId2 = player[p_num].GetWeaponId2()
+                                    #if weaponId1 != None:
+                                    #    self.isWeaponselect1 = True
+                                    #if weaponId2 != None:
+                                    #    self.isWeaponselect2 = True
                                     self.player_flg = p_num
                             
                         for p_num in range(6):
