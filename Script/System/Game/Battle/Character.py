@@ -81,6 +81,10 @@ class Character(GameObject):
         self.TechnologyPoint    = GameData.GetCharacterDataFromId(self.chara).technologypoint    # 技術力
         self.Visible    = GameData.GetCharacterDataFromId(self.chara).visible                    # 視界
 
+        self.weaponId1 = None
+        self.weaponId2 = None
+        self.armorId = None
+
         #self.weaponName     = GameData.GetWeaponDataFromId().weaponName     # 武器名
         #self.range          = GameData.GetWeaponDataFromId().range          # 射程距離
         #self.power          = GameData.GetWeaponDataFromId().power          # 攻撃力
@@ -121,6 +125,23 @@ class Character(GameObject):
     def SetVisible(self, visible):
         self.isVisible = visible
 
+    def GetWeaponId1(self):
+        return self.weaponId1
+
+    def SetWeaponId1(self, weaponId):
+        self.weaponId1 = weaponId
+
+    def GetWeaponId2(self):
+        return self.weaponId2
+
+    def SetWeaponId2(self, weaponId):
+        self.weaponId2 = weaponId
+
+    def GetArmorId(self):
+        return self.armorId
+
+    def SetArmorId(self, armorId):
+        self.armorId = armorId
 
 class Player(Character):
     def __init__(self, xl, yl, num):
