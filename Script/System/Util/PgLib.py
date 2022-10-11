@@ -1,4 +1,5 @@
 from ctypes import resize
+import statistics
 import pygame
 from pygame import constants
 
@@ -16,12 +17,23 @@ class PgLibImpl(Singleton):
         # ゲーム画面を初期化
         pygame.init()
         pygame.display.set_caption(title)
-        pygame.time.Clock().tick(fps)
         self.screen = pygame.display.set_mode((width, height))
         self.bgColor = (0, 0, 0)
+        self.fps = fps
+        self.deltaTime : float = 0.0
 
         # 入力管理クラスのインスタンス生成
         self.inputManager = InputManager()
+
+    # ライブラリの更新処理
+    def Update(self):
+        self.deltaTime = pygame.time.Clock().tick_busy_loop(self.fps)
+        # 入力情報の更新
+        self.inputManager.Update()
+
+    # １フレーム毎の経過時間を取得
+    def GetFrameDeltaTime(self) -> float:
+        return self.deltaTime
 
     # スクリーンの取得
     def GetScreen(self):
@@ -109,11 +121,7 @@ class PgLibImpl(Singleton):
         h = screenSize[1] / 2 + imageSize[1] / 2
         
         # 画像の描画
-        self.screen.blit(drawImage, (x, y, w, h))
-
-    # ライブラリの更新処理
-    def Update(self):
-        self.inputManager.Update()
+        self.screen.blit(drawImage, (x, y, w, h))        
 
     # 描画開始
     def DrawStart(self):
@@ -148,6 +156,16 @@ class PgLib:
     @staticmethod
     def GetInstance():
         return pgLib
+
+    # ライブラリの更新処理
+    @staticmethod
+    def Update():
+        PgLib.GetInstance().Update()
+
+    # １フレーム毎の経過時間を取得
+    @staticmethod
+    def GetFrameDeltaTime():
+        return PgLib.GetInstance().GetFrameDeltaTime()
 
     # スクリーンの取得
     @staticmethod
@@ -223,11 +241,6 @@ class PgLib:
     @staticmethod
     def DrawImageCenter(image : pygame.surface, width : int = 0, height : int = 0):
         PgLib.GetInstance().DrawImageCenter(image, width, height)
-
-    # ライブラリの更新処理
-    @staticmethod
-    def Update():
-        PgLib.GetInstance().Update()
 
     # 描画開始
     @staticmethod
