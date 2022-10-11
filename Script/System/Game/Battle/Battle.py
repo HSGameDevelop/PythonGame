@@ -354,25 +354,24 @@ class Battle(GameSequenceBase):
                             self.isWeaponselect2 = False
 
                     elif self.pushClick == 3:
-                        w_num1 = None
-                        w_num2 = None
+                        w_num = None
                         for p_num in range(6):
                             if player[p_num].GetSelect() == True:
                                 weaponId1 = player[p_num].GetWeaponId1()
                                 weaponId2 = player[p_num].GetWeaponId2()
+                                print(weaponId1)
+                                print(weaponId2)
                                 if weaponId1 == None and weaponId2 == None:
                                     player[p_num].SetSelect(False)
                                 if weaponId1 != None and weaponId2 == None:
                                     player[p_num].SetWeaponId1(None)
-                                    w_num1 = p_num
+                                    w_num = weaponId1
                                 if weaponId1 != None and weaponId2 != None:
                                     player[p_num].SetWeaponId2(None)
-                                    w_num2 = p_num
+                                    w_num = weaponId2
 
-                                if w_num1 == None:
-                                    weapon[w_num1].SetSelect(False)
-                                if w_num2 == None:
-                                    weapon[w_num2].SetSelect(False)
+                                if w_num != None:
+                                    weapon[w_num].SetSelect(False)
 
                         if self.isUnitselect == True and self.isWeaponselect1 == False and self.isWeaponselect2 == False:
                             self.isUnitselect = False
