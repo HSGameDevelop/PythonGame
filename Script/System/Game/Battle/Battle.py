@@ -307,19 +307,34 @@ class Battle(GameSequenceBase):
                                 if player[p_num].GetSelect() == True:
                                     self.isUnitselect = True
                                     weaponId1 = player[p_num].GetWeaponId1()
-                                    print(weaponId1)
                                     weaponId2 = player[p_num].GetWeaponId2()
-                                    print(weaponId2)
-                                    if weaponId1 != None:
+                                    if weaponId1 == None:
+                                        weapon_flg1 = False
+                                        self.isWeaponselect1 = False
+                                        for w_num in range(1, Weapon.IMAGE_NUM_MAX):
+                                            weapon[w_num].SetSelect(False)
+                                    else:
                                         self.isWeaponselect1 = True
                                         weapon_flg1 = True
                                         player[p_num].SetWeaponId1(weaponId1)
+                                        for w_num in range(1, Weapon.IMAGE_NUM_MAX):
+                                            weapon[w_num].SetSelect(False)
                                         weapon[weaponId1].SetSelect(True)
-                                    if weaponId2 != None:
+                                        
+                                        
+                                    if weaponId2 == None:
+                                        self.isWeaponselect2 = False
+                                        weapon_flg2 = False
+                                        for w_num in range(1, Weapon.IMAGE_NUM_MAX):
+                                            weapon[w_num].SetSelect(False)
+                                    else:
                                         self.isWeaponselect2 = True
                                         weapon_flg2 = True
                                         player[p_num].SetWeaponId2(weaponId2)
                                         weapon[weaponId2].SetSelect(True)
+
+                                    print(weaponId1)
+                                    print(weaponId2)
                                     self.player_flg = p_num
                             
                         for p_num in range(6):
@@ -359,8 +374,6 @@ class Battle(GameSequenceBase):
                             if player[p_num].GetSelect() == True:
                                 weaponId1 = player[p_num].GetWeaponId1()
                                 weaponId2 = player[p_num].GetWeaponId2()
-                                print(weaponId1)
-                                print(weaponId2)
                                 if weaponId1 == None and weaponId2 == None:
                                     player[p_num].SetSelect(False)
                                 if weaponId1 != None and weaponId2 == None:
