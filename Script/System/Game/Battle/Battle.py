@@ -259,8 +259,11 @@ class Battle(GameSequenceBase):
         # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。        
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
+        # 今回のクリックイベントのみ
         weapon_flg = False
+        # 今回のクリックイベントのみ
         weapon_flg1 = False
+        # 今回のクリックイベントのみ
         weapon_flg2 = False
         if self.pushClick != self.before_pushClick:
             if  self.click_flag == False:
