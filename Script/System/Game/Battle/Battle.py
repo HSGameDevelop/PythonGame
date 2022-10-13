@@ -185,12 +185,14 @@ class Battle(GameSequenceBase):
 
     def Draw(self):
         if self.state == self.BattleState.Start:
-            # マップの描画
-            self.DrawMap(self.map)
-            # プレイヤーの描画
-            self.CreatePlayer(self.player)
-            # エネミーの描画
-            self.CreateEnemy(self.enemy)
+#            # マップの描画
+#            self.DrawMap(self.map)
+#            # プレイヤーの描画
+#            self.CreatePlayer(self.player)
+#            # エネミーの描画
+#            self.CreateEnemy(self.enemy)
+            # 背景（黒）
+            self.DrawPrepare()
         elif self.state == self.BattleState.Prepare:
             # 背景（黒）
             self.DrawPrepare()
@@ -316,7 +318,6 @@ class Battle(GameSequenceBase):
                                     else:
                                         self.isWeaponselect1 = True
                                         weapon_flg1 = True
-                                        player[p_num].SetWeaponId1(weaponId1)
                                         for w_num in range(1, Weapon.IMAGE_NUM_MAX):
                                             weapon[w_num].SetSelect(False)
                                         weapon[weaponId1].SetSelect(True)
@@ -330,7 +331,6 @@ class Battle(GameSequenceBase):
                                     else:
                                         self.isWeaponselect2 = True
                                         weapon_flg2 = True
-                                        player[p_num].SetWeaponId2(weaponId2)
                                         weapon[weaponId2].SetSelect(True)
 
                                     print(weaponId1)
@@ -358,10 +358,11 @@ class Battle(GameSequenceBase):
                                     if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):                                  
                                         weapon[w_num].SetSelect(True)
                                         player[self.player_flg].SetWeaponId2(w_num)
-
                                         if weapon[w_num].GetSelect() == True:
                                             self.isWeaponselect2 = True
                                             weapon_flg2 = True
+                            else:
+                                pass
                     
                         if weapon_flg1 == False and weapon_flg2 == False:
                             self.isWeaponselect1 = False
