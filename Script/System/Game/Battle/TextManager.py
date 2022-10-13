@@ -25,9 +25,9 @@ class TextManager:
         self.font_padding = 10
         self.outline = 10
         self.font_size = []
-        self.font = []
+        self.font = None
         self.text = []
-        self.font_num = None
+        self.font_num = None        # 超重要ここで改行数を取得（テキストを配列で取得するため配列数を取得しても対応可能にする）
         
 
     # 座標の取得
@@ -70,17 +70,35 @@ class TextManager:
     def Update(self):
         pass
 
-    # 描画
+    # 描画  color1:四角の内側　color2:四角の枠線 color3:テキストカラー
     def Draw(self, color1 : ColorList = ColorList.WHITE, color2 : ColorList = ColorList.WHITE, color3 : ColorList = ColorList.WHITE):
+
+        if self.font_num == None:
+            self.font_num = len(self.text)
+        if self.size.width == 0:
+            self.size.width = 0
+            for num in range(self.font_num):
+                text_num = len(self.text[num])
+                width = text_num * (self.font_size[num] * 1.2)
+                if self.size.width < width:
+                    self.size.width = width
+
+        if self.size.height == 0:
+            self.size.height = 0
+            for num in range(self.font_num):
+                self.size.height += self.font_size[num] + 10
         # 内部の色
         PgLib.DrawRect(color1.value, self.position.x, self.position.y, self.size.width, self.size.height, 0)
         # 大外の枠
         PgLib.DrawRect(color2.value, self.position.x, self.position.y, self.size.width, self.size.height, self.outline)
+        height = 0
         # テキスト
-        if self.font_size != None:
-            self.font = pygame.font.Font(FONT_PATH, self.font_size)
-            text = self.font.render(self.text, True, color3.value)
-            self.screen.blit(text, [self.position.x + self.font_padding, self.position.y + self.font_padding])
+        for num in range(self.font_num):
+            if self.font_size[num] != None:
+                self.font = pygame.font.Font(FONT_PATH, self.font_size[num])
+                text = self.font.render(self.text[num], True, color3.value)
+                self.screen.blit(text, [self.position.x + self.font_padding, self.position.y + self.font_padding + height])
+            height += self.font_size[num]
 
         #text = font.render(self.text, True, color3.value)
         #self.screen.blit(text, [pos.x  - 8, pos.y])
