@@ -76,17 +76,16 @@ class TextManager:
         if self.font_num == None:
             self.font_num = len(self.text)
         if self.size.width == 0:
-            self.size.width = 0
             for num in range(self.font_num):
                 text_num = len(self.text[num])
-                width = text_num * (self.font_size[num] * 1.2)
+                width = text_num * self.font_size[num] * 1.1
                 if self.size.width < width:
                     self.size.width = width
 
         if self.size.height == 0:
-            self.size.height = 0
+            self.size.height = 10
             for num in range(self.font_num):
-                self.size.height += self.font_size[num] + 10
+                self.size.height += self.font_size[num] * 1.1
         # 内部の色
         PgLib.DrawRect(color1.value, self.position.x, self.position.y, self.size.width, self.size.height, 0)
         # 大外の枠
