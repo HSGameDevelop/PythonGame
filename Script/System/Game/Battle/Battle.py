@@ -150,6 +150,7 @@ class Battle(GameSequenceBase):
 
             if self.PrepareTimer.GetCounter() <= 0:
                 self.state = self.BattleState.Counter
+                self.isUnitSelect = False
                 self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
             return
         elif self.state == self.BattleState.Counter:
@@ -227,6 +228,7 @@ class Battle(GameSequenceBase):
             if self.isUnitselect == True:
                 #self.datadisp.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
                 self.textmanager.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
+                self.textmanager1.Draw(ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
 
     def DrawPrepare(self):
         width, height =PgLib.GetScreenSize()
@@ -361,7 +363,7 @@ class Battle(GameSequenceBase):
                     weapon[w_num].SetHover(False)
                     if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):
                         weapon[w_num].SetHover(True)
-                        self.textmanager1.SetPos(pos.x, pos.y)
+                        self.textmanager1.SetPos(pos.x + 65, pos.y + 65)
 
                         font_size_list1 = [30, 30, 30, 30, 30, 30, 30]
                         text_list1 = []
@@ -531,37 +533,80 @@ class Battle(GameSequenceBase):
                             player[p_num].SetSelect(False)
                             if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
                                 player[p_num].SetSelect(True)
-                                self.datadisp.SetPos(player[p_num].x, player[p_num].y)
-                                self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
-                                
-                                font_size1 = 30
-                                text1 = "I  D：" + str(player[p_num].ID)
-                                self.datadisp.SetFontsize1(font_size1)
-                                self.datadisp.SetText1(text1)
-                                font_size2 = 30
-                                text2 = "名　前：" + player[p_num].characterName
-                                self.datadisp.SetFontsize2(font_size2)
-                                self.datadisp.SetText2(text2)
-                                font_size3 = 30
-                                text3 = "体　力：" + player[p_num].HitPoint
-                                self.datadisp.SetFontsize3(font_size3)
-                                self.datadisp.SetText3(text3)
-                                font_size4 = 30
-                                text4 = "攻撃力：" + player[p_num].AttackPoint
-                                self.datadisp.SetFontsize4(font_size4)
-                                self.datadisp.SetText4(text4)
-                                font_size5 = 30
-                                text5 = "防御力：" + player[p_num].DeffencePoint
-                                self.datadisp.SetFontsize5(font_size5)
-                                self.datadisp.SetText5(text5)
-                                font_size6 = 30
-                                text6 = "回避力：" + player[p_num].AvoidancePoint
-                                self.datadisp.SetFontsize6(font_size6)
-                                self.datadisp.SetText6(text6)
-                                font_size7 = 30
-                                text7 = "技術力：" + player[p_num].TechnologyPoint
-                                self.datadisp.SetFontsize7(font_size7)
-                                self.datadisp.SetText7(text7)
+                                weaponid1 = player[p_num].GetWeaponId1
+                                weaponid2 = player[p_num].GetWeaponId2
+                                self.textmanager.SetPos(player[p_num].x + 21, player[p_num].y - 21)
+
+                                if weaponid1 != None and weaponid2 != None:
+                                    font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
+                                    text_list = []
+                                    text_list.append("I  D：" + str(player[p_num].ID))
+                                    text_list.append("行動力：" + player[p_num].ActionPower)
+                                    text_list.append("名　前：" + player[p_num].characterName)
+                                    text_list.append("体　力：" + player[p_num].HitPoint)
+                                    text_list.append("攻撃力：" + player[p_num].AttackPoint)
+                                    text_list.append("防御力：" + player[p_num].DeffencePoint)
+                                    text_list.append("回避力：" + player[p_num].AvoidancePoin)
+                                    text_list.append("技術力：" + player[p_num].TechnologyPoint)
+
+                                    text_list.append("I  D：" + str(weapon[weaponid1].weaponId))
+                                    text_list.append("名　前：" + weapon[weaponid1].weaponName)
+                                    text_list.append("射　程：" + weapon[weaponid1].range)
+                                    text_list.append("攻撃力：" + weapon[weaponid1].power)
+                                    text_list.append("消　費：" + weapon[weaponid1].actioncost)
+                                    text_list.append("角　度：" + str(weapon[weaponid1].angle) + "°")
+                                    text_list.append("装備時行動力増減：" + weapon[weaponid1].plusdown)
+                                    
+                                    text_list.append("I  D：" + str(weapon[weaponid2].weaponId))
+                                    text_list.append("名　前：" + weapon[weaponid2].weaponName)
+                                    text_list.append("射　程：" + weapon[weaponid2].range)
+                                    text_list.append("攻撃力：" + weapon[weaponid2].power)
+                                    text_list.append("消　費：" + weapon[weaponid2].actioncost)
+                                    text_list.append("角　度：" + str(weapon[weaponid2].angle) + "°")
+                                    text_list.append("装備時行動力増減：" + weapon[weaponid2].plusdown)
+
+                                elif weaponid1 != None and weaponid2 == None:
+                                    font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
+                                    text_list = []
+                                    text_list.append("I  D：" + str(player[p_num].ID))
+                                    text_list.append("行動力：" + player[p_num].ActionPower)
+                                    text_list.append("名　前：" + player[p_num].characterName)
+                                    text_list.append("体　力：" + player[p_num].HitPoint)
+                                    text_list.append("攻撃力：" + player[p_num].AttackPoint)
+                                    text_list.append("防御力：" + player[p_num].DeffencePoint)
+                                    text_list.append("回避力：" + player[p_num].AvoidancePoin)
+                                    text_list.append("技術力：" + player[p_num].TechnologyPoint)
+
+                                    text_list.append("I  D：" + str(weapon[weaponid1].weaponId))
+                                    text_list.append("名　前：" + weapon[weaponid1].weaponName)
+                                    text_list.append("射　程：" + weapon[weaponid1].range)
+                                    text_list.append("攻撃力：" + weapon[weaponid1].power)
+                                    text_list.append("消　費：" + weapon[weaponid1].actioncost)
+                                    text_list.append("角　度：" + str(weapon[weaponid1].angle) + "°")
+                                    text_list.append("装備時行動力増減：" + weapon[weaponid1].plusdown)
+
+                                elif weaponid1 == None and weaponid2 == None:
+                                    font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
+                                    text_list = []
+                                    text_list.append("I  D：" + str(player[p_num].ID))
+                                    text_list.append("行動力：" + player[p_num].ActionPower)
+                                    text_list.append("名　前：" + player[p_num].characterName)
+                                    text_list.append("体　力：" + player[p_num].HitPoint)
+                                    text_list.append("攻撃力：" + player[p_num].AttackPoint)
+                                    text_list.append("防御力：" + player[p_num].DeffencePoint)
+                                    text_list.append("回避力：" + player[p_num].AvoidancePoin)
+                                    text_list.append("技術力：" + player[p_num].TechnologyPoint)
+
+                                    text_list.append("I  D：" + str(weapon[1].weaponId))
+                                    text_list.append("名　前：" + weapon[1].weaponName)
+                                    text_list.append("射　程：" + weapon[1].range)
+                                    text_list.append("攻撃力：" + weapon[1].power)
+                                    text_list.append("消　費：" + weapon[1].actioncost)
+                                    text_list.append("角　度：" + str(weapon[1].angle) + "°")
+                                    text_list.append("装備時行動力増減：" + weapon[1].plusdown)
+
+                                self.textmanager.SetFontsize(font_size_list)
+                                self.textmanager.SetText(text_list)
                                 #font_size3 = 30
                                 #text3 = "武　器：" + player[p_num].weaponId
                                 #self.datadisp.SetFontsize3(font_size3)
@@ -584,37 +629,22 @@ class Battle(GameSequenceBase):
                             enemy[e_num].SetSelect(False)
                             if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
                                 enemy[e_num].SetSelect(True)
-                                self.datadisp.SetPos(enemy[e_num].x, enemy[e_num].y)
-                                self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
+                                self.textmanager1.SetPos(enemy[e_num].x + 21, enemy[e_num].y - 21)
+                                self.textmanager1.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
+                                
+                                font_size_list1 = [30, 30, 30, 30, 30, 30, 30, 30]
+                                text_list1 = []
+                                text_list1.append("I  D：" + str(enemy[e_num].ID))
+                                text_list1.append("行動力：" + enemy[e_num].ActionPower)
+                                text_list1.append("名　前：" + enemy[e_num].characterName)
+                                text_list1.append("体　力：" + enemy[e_num].HitPoint)
+                                text_list1.append("攻撃力：" + enemy[e_num].AttackPoint)
+                                text_list1.append("防御力：" + enemy[e_num].DeffencePoint)
+                                text_list1.append("回避力：" + enemy[e_num].AvoidancePoin)
+                                text_list1.append("技術力：" + enemy[e_num].TechnologyPoint)
 
-                                font_size1 = 30
-                                text1 = "I  D：" + str(enemy[e_num].ID)
-                                self.datadisp.SetFontsize1(font_size1)
-                                self.datadisp.SetText1(text1)
-                                font_size2 = 30
-                                text2 = "名　前：" + enemy[e_num].characterName
-                                self.datadisp.SetFontsize2(font_size2)
-                                self.datadisp.SetText2(text2)
-                                font_size3 = 30
-                                text3 = "体　力：" + enemy[e_num].HitPoint
-                                self.datadisp.SetFontsize3(font_size3)
-                                self.datadisp.SetText3(text3)
-                                font_size4 = 30
-                                text4 = "攻撃力：" + enemy[e_num].AttackPoint
-                                self.datadisp.SetFontsize4(font_size4)
-                                self.datadisp.SetText4(text4)
-                                font_size5 = 30
-                                text5 = "防御力：" + enemy[e_num].DeffencePoint
-                                self.datadisp.SetFontsize5(font_size5)
-                                self.datadisp.SetText5(text5)
-                                font_size6 = 30
-                                text6 = "回避力：" + enemy[e_num].AvoidancePoint
-                                self.datadisp.SetFontsize6(font_size6)
-                                self.datadisp.SetText6(text6)
-                                font_size7 = 30
-                                text7 = "技術力：" + enemy[e_num].TechnologyPoint
-                                self.datadisp.SetFontsize7(font_size7)
-                                self.datadisp.SetText7(text7)
+                                self.textmanager1.SetFontsize(font_size_list1)
+                                self.textmanager1.SetText(text_list1)
                                 #font_size3 = 30
                                 #text3 = "武　器：" + enemy[e_num].weaponName
                                 #self.datadisp.SetFontsize3(font_size3)

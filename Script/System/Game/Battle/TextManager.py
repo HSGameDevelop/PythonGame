@@ -86,6 +86,11 @@ class TextManager:
             self.size.height = 10
             for num in range(self.font_num):
                 self.size.height += self.font_size[num] * 1.1
+
+        if self.size.width + self.position.x >= 1280:
+            self.position.x = self.position.x - (self.size.width / 2)
+        if self.size.height + self.position.y >= 960:
+            self.position.y = self.position.y - (self.size.height / 2)
         # 内部の色
         PgLib.DrawRect(color1.value, self.position.x, self.position.y, self.size.width, self.size.height, 0)
         # 大外の枠
