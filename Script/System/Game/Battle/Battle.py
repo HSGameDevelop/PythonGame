@@ -546,7 +546,7 @@ class Battle(GameSequenceBase):
                                     text_list.append("体　力：" + player[p_num].HitPoint)
                                     text_list.append("攻撃力：" + player[p_num].AttackPoint)
                                     text_list.append("防御力：" + player[p_num].DeffencePoint)
-                                    text_list.append("回避力：" + player[p_num].AvoidancePoin)
+                                    text_list.append("回避力：" + player[p_num].AvoidancePoint)
                                     text_list.append("技術力：" + player[p_num].TechnologyPoint)
 
                                     text_list.append("I  D：" + str(weapon[weaponid1].weaponId))
@@ -574,7 +574,7 @@ class Battle(GameSequenceBase):
                                     text_list.append("体　力：" + player[p_num].HitPoint)
                                     text_list.append("攻撃力：" + player[p_num].AttackPoint)
                                     text_list.append("防御力：" + player[p_num].DeffencePoint)
-                                    text_list.append("回避力：" + player[p_num].AvoidancePoin)
+                                    text_list.append("回避力：" + player[p_num].AvoidancePoint)
                                     text_list.append("技術力：" + player[p_num].TechnologyPoint)
 
                                     text_list.append("I  D：" + str(weapon[weaponid1].weaponId))
@@ -594,7 +594,7 @@ class Battle(GameSequenceBase):
                                     text_list.append("体　力：" + player[p_num].HitPoint)
                                     text_list.append("攻撃力：" + player[p_num].AttackPoint)
                                     text_list.append("防御力：" + player[p_num].DeffencePoint)
-                                    text_list.append("回避力：" + player[p_num].AvoidancePoin)
+                                    text_list.append("回避力：" + player[p_num].AvoidancePoint)
                                     text_list.append("技術力：" + player[p_num].TechnologyPoint)
 
                                     text_list.append("I  D：" + str(weapon[1].weaponId))
@@ -640,7 +640,7 @@ class Battle(GameSequenceBase):
                                 text_list1.append("体　力：" + enemy[e_num].HitPoint)
                                 text_list1.append("攻撃力：" + enemy[e_num].AttackPoint)
                                 text_list1.append("防御力：" + enemy[e_num].DeffencePoint)
-                                text_list1.append("回避力：" + enemy[e_num].AvoidancePoin)
+                                text_list1.append("回避力：" + enemy[e_num].AvoidancePoint)
                                 text_list1.append("技術力：" + enemy[e_num].TechnologyPoint)
 
                                 self.textmanager1.SetFontsize(font_size_list1)
