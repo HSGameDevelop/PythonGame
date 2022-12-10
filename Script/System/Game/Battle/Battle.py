@@ -11,7 +11,8 @@ from Script.System.Util.Command.MoveCommand import MoveCommand
 # マップ表示のクラス
 from .Map import Map
 # プレイヤー表示のクラス
-from .Character import Character, Player, Enemy, CharacterManager
+from .Character import Enemy, CharacterManager
+from .Player import Player
 from .TextManager import TextManager
 from .Weapon import Weapon
 from .CountDownTimer import CountDownTimer as Timer
@@ -278,10 +279,10 @@ class Battle(GameSequenceBase):
 
                                 font_size_list = [30, 30, 30, 30, 30]
                                 text_list = []
-                                text_list.append("I  D：" + str(player[p_num].ID) + "　　　　行動力：" + player[p_num].ActionPower)
-                                text_list.append("名　前：" + player[p_num].characterName + "　　　　体　力：" + player[p_num].HitPoint)
-                                text_list.append("攻撃力：" + player[p_num].AttackPoint + "　　　　防御力：" + player[p_num].DeffencePoint)
-                                text_list.append("回避力：" + player[p_num].AvoidancePoint+ "　　　　技術力：" + player[p_num].TechnologyPoint)
+                                text_list.append("I  D：" + str(player[p_num].ID) + "　　　　行動力：" + player[p_num].Status.ActionPower)
+                                text_list.append("名　前：" + player[p_num].Status.characterName + "　　　　体　力：" + player[p_num].Status.HitPoint)
+                                text_list.append("攻撃力：" + player[p_num].Status.AttackPoint + "　　　　防御力：" + player[p_num].Status.DeffencePoint)
+                                text_list.append("回避力：" + player[p_num].Status.AvoidancePoint+ "　　　　技術力：" + player[p_num].Status.TechnologyPoint)
 
                                 self.textmanager.SetFontsize(font_size_list)
                                 self.textmanager.SetText(text_list)

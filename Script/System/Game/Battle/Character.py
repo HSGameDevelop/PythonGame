@@ -141,22 +141,6 @@ class Character(GameObject):
     def Status(self):
         return self.__status
 
-class Player(Character):
-    def __init__(self, xl, yl, num):
-        super().__init__(xl, yl, PLAYER, num)
-
-    def PlayerDraw(self):
-        if self.isVisible == True:
-            if self.isSelect == True:
-                self.Draw(ColorList.LIGHTBLUE)
-            else:
-                self.Draw(ColorList.BLUE)
-        else:
-            if self.isSelect == True:
-                self.Draw(ColorList.BLUE)
-            else:
-                self.Draw(ColorList.DARKBLUE)
-
 
 class Enemy(Character):
     def __init__(self, xl, yl, num, p_num):
