@@ -4,6 +4,7 @@ import sys, os
 from ...Util.GameObject import GameObject
 from ..Data.GameData import GameData
 from ..Data.ColorList import ColorList
+from .CharacterStatus import CharacterStatus
 
 # キャラの視界を設定マップへ反映するように追加
 
@@ -71,15 +72,8 @@ class Character(GameObject):
         else:
             self.chara = random.randint(26, 50) # excelのエネミーの種類
         
-        self.characterid = GameData.GetCharacterDataFromId(self.chara).characterId                        # キャラクターID
-        self.characterName  = GameData.GetCharacterDataFromId(self.chara).characterName          # キャラクター名
-        self.ActionPower      = GameData.GetCharacterDataFromId(self.chara).actionpower          # 行動力
-        self.HitPoint    = GameData.GetCharacterDataFromId(self.chara).hitpoint                  # HP
-        self.AttackPoint    = GameData.GetCharacterDataFromId(self.chara).attackpoint            # 攻撃力
-        self.DeffencePoint     = GameData.GetCharacterDataFromId(self.chara).defensepoint        # 防御力
-        self.AvoidancePoint       = GameData.GetCharacterDataFromId(self.chara).avoidancepoint   # 回避力
-        self.TechnologyPoint    = GameData.GetCharacterDataFromId(self.chara).technologypoint    # 技術力
-        self.Visible    = GameData.GetCharacterDataFromId(self.chara).visible                    # 視界
+        characterData = GameData.GetCharacterDataFromId(self.chara)
+        self.__status : CharacterStatus = CharacterStatus(characterData) # ステータス
 
         self.weaponId1 = None
         self.weaponId2 = None
@@ -142,6 +136,10 @@ class Character(GameObject):
 
     def SetArmorId(self, armorId):
         self.armorId = armorId
+
+    @property
+    def Status(self):
+        return self.__status
 
 class Player(Character):
     def __init__(self, xl, yl, num):
