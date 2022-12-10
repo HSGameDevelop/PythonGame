@@ -542,13 +542,13 @@ class Battle(GameSequenceBase):
                                     font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
                                     text_list = []
                                     text_list.append("I  D：" + str(player[p_num].ID))
-                                    text_list.append("行動力：" + player[p_num].ActionPower)
-                                    text_list.append("名　前：" + player[p_num].characterName)
-                                    text_list.append("体　力：" + player[p_num].HitPoint)
-                                    text_list.append("攻撃力：" + player[p_num].AttackPoint)
-                                    text_list.append("防御力：" + player[p_num].DeffencePoint)
-                                    text_list.append("回避力：" + player[p_num].AvoidancePoint)
-                                    text_list.append("技術力：" + player[p_num].TechnologyPoint)
+                                    text_list.append("行動力：" + player[p_num].Status.ActionPower)
+                                    text_list.append("名　前：" + player[p_num].Status.characterName)
+                                    text_list.append("体　力：" + player[p_num].Status.HitPoint)
+                                    text_list.append("攻撃力：" + player[p_num].Status.AttackPoint)
+                                    text_list.append("防御力：" + player[p_num].Status.DeffencePoint)
+                                    text_list.append("回避力：" + player[p_num].Status.AvoidancePoint)
+                                    text_list.append("技術力：" + player[p_num].Status.TechnologyPoint)
 
                                     text_list.append("I  D：" + str(weapon[weaponid1].weaponId))
                                     text_list.append("名　前：" + weapon[weaponid1].weaponName)
@@ -570,13 +570,13 @@ class Battle(GameSequenceBase):
                                     font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
                                     text_list = []
                                     text_list.append("I  D：" + str(player[p_num].ID))
-                                    text_list.append("行動力：" + player[p_num].ActionPower)
-                                    text_list.append("名　前：" + player[p_num].characterName)
-                                    text_list.append("体　力：" + player[p_num].HitPoint)
-                                    text_list.append("攻撃力：" + player[p_num].AttackPoint)
-                                    text_list.append("防御力：" + player[p_num].DeffencePoint)
-                                    text_list.append("回避力：" + player[p_num].AvoidancePoint)
-                                    text_list.append("技術力：" + player[p_num].TechnologyPoint)
+                                    text_list.append("行動力：" + player[p_num].Status.ActionPower)
+                                    text_list.append("名　前：" + player[p_num].Status.characterName)
+                                    text_list.append("体　力：" + player[p_num].Status.HitPoint)
+                                    text_list.append("攻撃力：" + player[p_num].Status.AttackPoint)
+                                    text_list.append("防御力：" + player[p_num].Status.DeffencePoint)
+                                    text_list.append("回避力：" + player[p_num].Status.AvoidancePoint)
+                                    text_list.append("技術力：" + player[p_num].Status.TechnologyPoint)
 
                                     text_list.append("I  D：" + str(weapon[weaponid1].weaponId))
                                     text_list.append("名　前：" + weapon[weaponid1].weaponName)
@@ -590,13 +590,13 @@ class Battle(GameSequenceBase):
                                     font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
                                     text_list = []
                                     text_list.append("I  D：" + str(player[p_num].ID))
-                                    text_list.append("行動力：" + player[p_num].ActionPower)
-                                    text_list.append("名　前：" + player[p_num].characterName)
-                                    text_list.append("体　力：" + player[p_num].HitPoint)
-                                    text_list.append("攻撃力：" + player[p_num].AttackPoint)
-                                    text_list.append("防御力：" + player[p_num].DeffencePoint)
-                                    text_list.append("回避力：" + player[p_num].AvoidancePoint)
-                                    text_list.append("技術力：" + player[p_num].TechnologyPoint)
+                                    text_list.append("行動力：" + player[p_num].Status.ActionPower)
+                                    text_list.append("名　前：" + player[p_num].Status.characterName)
+                                    text_list.append("体　力：" + player[p_num].Status.HitPoint)
+                                    text_list.append("攻撃力：" + player[p_num].Status.AttackPoint)
+                                    text_list.append("防御力：" + player[p_num].Status.DeffencePoint)
+                                    text_list.append("回避力：" + player[p_num].Status.AvoidancePoint)
+                                    text_list.append("技術力：" + player[p_num].Status.TechnologyPoint)
 
                                     text_list.append("I  D：" + str(weapon[1].weaponId))
                                     text_list.append("名　前：" + weapon[1].weaponName)
@@ -636,13 +636,13 @@ class Battle(GameSequenceBase):
                                 font_size_list1 = [30, 30, 30, 30, 30, 30, 30, 30]
                                 text_list1 = []
                                 text_list1.append("I  D：" + str(enemy[e_num].ID))
-                                text_list1.append("行動力：" + enemy[e_num].ActionPower)
-                                text_list1.append("名　前：" + enemy[e_num].characterName)
-                                text_list1.append("体　力：" + enemy[e_num].HitPoint)
-                                text_list1.append("攻撃力：" + enemy[e_num].AttackPoint)
-                                text_list1.append("防御力：" + enemy[e_num].DeffencePoint)
-                                text_list1.append("回避力：" + enemy[e_num].AvoidancePoint)
-                                text_list1.append("技術力：" + enemy[e_num].TechnologyPoint)
+                                text_list1.append("行動力：" + enemy[e_num].Status.ActionPower)
+                                text_list1.append("名　前：" + enemy[e_num].Status.characterName)
+                                text_list1.append("体　力：" + enemy[e_num].Status.HitPoint)
+                                text_list1.append("攻撃力：" + enemy[e_num].Status.AttackPoint)
+                                text_list1.append("防御力：" + enemy[e_num].Status.DeffencePoint)
+                                text_list1.append("回避力：" + enemy[e_num].Status.AvoidancePoint)
+                                text_list1.append("技術力：" + enemy[e_num].Status.TechnologyPoint)
 
                                 self.textmanager1.SetFontsize(font_size_list1)
                                 self.textmanager1.SetText(text_list1)
