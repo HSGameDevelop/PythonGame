@@ -11,8 +11,9 @@ from Script.System.Util.Command.MoveCommand import MoveCommand
 # マップ表示のクラス
 from .Map import Map
 # プレイヤー表示のクラス
-from .Character import Enemy, CharacterManager
+from .Character import CharacterManager
 from .Player import Player
+from .Enemy import Enemy
 from .TextManager import TextManager
 from .Weapon import Weapon
 from .CountDownTimer import CountDownTimer as Timer
