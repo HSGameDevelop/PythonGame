@@ -334,11 +334,11 @@ class Battle(GameSequenceBase):
                     elif self.pushClick == 3:
                         w_num = None
                         for p_num in range(6):
-                            if player[p_num].GetSelect() == True:
+                            if player[p_num].IsSelect == True:
                                 weaponId1 = player[p_num].GetWeaponId1()
                                 weaponId2 = player[p_num].GetWeaponId2()
                                 if weaponId1 == None and weaponId2 == None:
-                                    player[p_num].SetSelect(False)
+                                    player[p_num].IsSelect = False
                                 if weaponId1 != None and weaponId2 == None:
                                     player[p_num].SetWeaponId1(None)
                                     w_num = weaponId1
