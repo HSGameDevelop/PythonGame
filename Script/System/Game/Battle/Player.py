@@ -8,12 +8,12 @@ class Player(Character):
 
     def PlayerDraw(self):
         if self.isVisible == True:
-            if self.isSelect == True:
+            if self.IsSelect == True:
                 self.Draw(ColorList.LIGHTBLUE)
             else:
                 self.Draw(ColorList.BLUE)
         else:
-            if self.isSelect == True:
+            if self.IsSelect == True:
                 self.Draw(ColorList.BLUE)
             else:
                 self.Draw(ColorList.DARKBLUE)
