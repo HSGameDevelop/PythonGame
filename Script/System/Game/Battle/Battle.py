@@ -616,7 +616,7 @@ class Battle(GameSequenceBase):
                                 #text5 = "消　費：" + player[p_num].actioncost
                                 #self.datadisp.SetFontsize5(font_size5)
                                 #self.datadisp.SetText5(text5)
-                                if player[p_num].GetSelect() == True:
+                                if player[p_num].IsSelect == True:
                                     self.isUnitselect = True
                                     flg = True
 
