@@ -534,8 +534,8 @@ class Battle(GameSequenceBase):
                             player[p_num].SetSelect(False)
                             if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
                                 player[p_num].SetSelect(True)
-                                weaponid1 = player[p_num].GetWeaponId1
-                                weaponid2 = player[p_num].GetWeaponId2
+                                weaponid1 = player[p_num].GetWeaponId1()
+                                weaponid2 = player[p_num].GetWeaponId2()
                                 self.textmanager.SetPos(player[p_num].x + 21, player[p_num].y - 21)
 
                                 if weaponid1 != None and weaponid2 != None:
