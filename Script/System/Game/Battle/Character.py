@@ -79,13 +79,6 @@ class Character(GameObject):
         self.weaponId2 = None
         self.armorId = None
 
-        #self.weaponName     = GameData.GetWeaponDataFromId().weaponName     # 武器名
-        #self.range          = GameData.GetWeaponDataFromId().range          # 射程距離
-        #self.power          = GameData.GetWeaponDataFromId().power          # 攻撃力
-        #self.actioncost    = GameData.GetWeaponDataFromId().actioncost    # 攻撃時の行動力消費
-        #self.angle          = GameData.GetWeaponDataFromId().angle          # 角度
-        #self.powerFlag      = GameData.GetWeaponDataFromId().powerFlag      # ユニットの攻撃力分を加算するかどうか
-        #self.plusdown       = GameData.GetWeaponDataFromId().plusdown       # 武器装備時の行動力の増減
         self.SetSelect(self.isSelect)
         self.SetVisible(self.isVisible)
 
@@ -140,21 +133,3 @@ class Character(GameObject):
     @property
     def Status(self):
         return self.__status
-
-
-class Enemy(Character):
-    def __init__(self, xl, yl, num, p_num):
-        super().__init__(xl, yl, ENEMY, num + p_num)
-
-    def EnemyDraw(self):
-        if self.isVisible == True:
-            if self.isSelect == True:
-                self.Draw(ColorList.LIGHTYELLOW)
-            else:
-                self.Draw(ColorList.YELLOW)
-        else:
-            if self.isSelect == True:
-                self.Draw(ColorList.YELLOW)
-            else:
-                self.Draw(ColorList.OLIVE)
-
