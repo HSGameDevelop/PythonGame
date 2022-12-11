@@ -5,6 +5,7 @@ from ...Util.GameObject import GameObject
 from ..Data.GameData import GameData
 from ..Data.ColorList import ColorList
 from .CharacterStatus import CharacterStatus
+from .BattleDefine import SideType
 
 # キャラの視界を設定マップへ反映するように追加
 
@@ -64,7 +65,7 @@ class Character(GameObject):
 
         self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl)
         self.ID = num
-        if self.unit_side == 0:
+        if self.unit_side == SideType.Player:
             self.chara = random.randint(1, 25)  # excelのプレイヤーの種類
         else:
             self.chara = random.randint(26, 50) # excelのエネミーの種類
