@@ -2,7 +2,7 @@ from ..Data.GameData import CharacterData
 
 class CharacterStatus:
     def __init__(self, data : CharacterData) -> None:
-        self.__characterid       = data.characterId      # キャラクターID
+        self.__characterId       = data.characterId      # キャラクターID
         self.__characterName     = data.characterName    # キャラクター名
         self.__actionPower       = data.actionpower      # 行動力
         self.__hitPoint          = data.hitpoint         # HP
