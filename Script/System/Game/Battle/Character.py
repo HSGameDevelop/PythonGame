@@ -18,9 +18,6 @@ h_h3_4 = h_h * (3 / 4)
 h_h1_4 = h_h / 4
 h_h1_2 = h_h / 2
 
-PLAYER = 0
-ENEMY = 1
-
 
 class CharacterManager():
     def __init__(self, xi, xj, yi, yj, num):
