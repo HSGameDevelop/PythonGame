@@ -37,7 +37,7 @@ MAX_COUNTER = 30
 CIRCLE_WIDTH_OUT = 40
 CIRCLE_WIDTH_IN = 35
 
-PREPARE_TIME = 120
+PREPARE_TIME = 30
 
 TURN_DISPLAY = 150
 DATA_DISPLAY_WIDTH = 400
@@ -226,7 +226,7 @@ class Battle(GameSequenceBase):
             # 円タイマー
             self.BattleTimer.Draw(ColorList.RED, ColorList.LIME, ColorList.YELLOW, ColorList.WHITE)
             # マウスチェック
-            self.CalcReturnPos(self.player, self.enemy, self.map)
+            self.CalcReturnPos(self.player, self.enemy, self.map, self.weapon)
             if self.isUnitselect == True:
                 #self.datadisp.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
                 self.textmanager.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
@@ -254,8 +254,7 @@ class Battle(GameSequenceBase):
             self.player[num].PlayerDraw()
 
 
-    def SelectUnit(self, player, weapon : Weapon):
-        # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。        
+    def SelectUnit(self, player, weapon : Weapon):       
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
         # 今回のクリックイベントのみ
@@ -509,7 +508,7 @@ class Battle(GameSequenceBase):
         # ユニットの表示と同じような処理（ここではできない）
         pass
 
-    def CalcReturnPos(self, player, enemy, map):
+    def CalcReturnPos(self, player, enemy, map, weapon):
         # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。        
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
