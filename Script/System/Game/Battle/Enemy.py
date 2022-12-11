@@ -9,12 +9,12 @@ class Enemy(Character):
 
     def EnemyDraw(self):
         if self.isVisible == True:
-            if self.isSelect == True:
+            if self.IsSelect == True:
                 self.Draw(ColorList.LIGHTYELLOW)
             else:
                 self.Draw(ColorList.YELLOW)
         else:
-            if self.isSelect == True:
+            if self.IsSelect == True:
                 self.Draw(ColorList.YELLOW)
             else:
                 self.Draw(ColorList.OLIVE)

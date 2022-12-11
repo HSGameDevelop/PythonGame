@@ -60,7 +60,7 @@ class Character(GameObject):
     def __init__(self, xl, yl, side, num):
         super().__init__()
         self.unit_side = side
-        self.isSelect = False
+        self.__isSelect = False
         self.isVisible = False
 
         self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl)
@@ -77,7 +77,6 @@ class Character(GameObject):
         self.weaponId2 = None
         self.armorId = None
 
-        self.SetSelect(self.isSelect)
         self.SetVisible(self.isVisible)
 
 
@@ -98,11 +97,12 @@ class Character(GameObject):
         #self.xy.append([id, xl, yl, x, y, tagname])
         return xl, yl, x, y, tagname
 
-    def GetSelect(self):
-        return self.isSelect
-
-    def SetSelect(self, select):
-        self.isSelect = select
+    @property
+    def IsSelect(self):
+        return self.__isSelect
+    @IsSelect.setter
+    def IsSelect(self, isSelect):
+        self.__isSelect = isSelect
 
     def GetVisible(self):
         return self.isVisible

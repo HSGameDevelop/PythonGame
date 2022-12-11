@@ -248,7 +248,6 @@ class Battle(GameSequenceBase):
         for num in range(PLAYER_UNIT_NUM):
             #self.player[num].Draw(ColorList.BLUE)
             self.player[num].SetSize(PREPARE_UNIT_WIDTH, PREPARE_UNIT_WIDTH)
-            self.player[num].GetSelect()
             self.player[num].SetVisible(True)
             # 左に一列で並べる。
             self.player[num].SetPos(PREPARE_UNIT_WIDTH + 30, (PREPARE_UNIT_WIDTH * 2.5 * num) + 60 )
@@ -273,7 +272,7 @@ class Battle(GameSequenceBase):
                         for p_num in range(6):
                             pos = player[p_num].GetPos()
                             if pos.x - (PREPARE_UNIT_WIDTH) < Point_x and Point_x < pos.x + (PREPARE_UNIT_WIDTH) and pos.y - (PREPARE_UNIT_WIDTH) < Point_y and Point_y < pos.y + (PREPARE_UNIT_WIDTH):
-                                player[p_num].SetSelect(True)
+                                player[p_num].IsSelect = True
                                 #self.datadisp.SetPos(280, 50)
                                 #self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
                                 self.textmanager.SetPos(280, 50)
@@ -288,7 +287,7 @@ class Battle(GameSequenceBase):
                                 self.textmanager.SetFontsize(font_size_list)
                                 self.textmanager.SetText(text_list)
 
-                                if player[p_num].GetSelect() == True:
+                                if player[p_num].IsSelect == True:
                                     self.isUnitselect = True
                                     weaponId1 = player[p_num].GetWeaponId1()
                                     weaponId2 = player[p_num].GetWeaponId2()
@@ -299,8 +298,8 @@ class Battle(GameSequenceBase):
                                     else:
                                         self.isWeaponselect1 = True
                                         for w_num in range(1, Weapon.IMAGE_NUM_MAX):
-                                            weapon[w_num].SetSelect(False)
-                                        weapon[weaponId1].SetSelect(True)
+                                            weapon[w_num].IsSelect = False 
+                                        weapon[weaponId1].IsSelect = True
                                     if weaponId2 == None:
                                         self.isWeaponselect2 = False
                                     else:
@@ -331,7 +330,7 @@ class Battle(GameSequenceBase):
 
                         for p_num in range(6):
                             if self.player_flg != p_num:
-                                player[p_num].SetSelect(False)
+                                player[p_num].IsSelect = False
 
                     elif self.pushClick == 3:
                         w_num = None
@@ -439,9 +438,7 @@ class Battle(GameSequenceBase):
         #[id, xl, yl, x, y, tagname]
         for num in range(PLAYER_UNIT_NUM):
             #self.player[num].Draw(ColorList.BLUE)
-            self.player[num].GetSelect()
             self.player[num].SetVisible(True)       # プレイヤー側は常に明るい表示（エネミー側をする場合は、エネミー側を常に明るい表示）
-            self.player[num].GetVisible()
             self.player[num].SetPos(self.player[num].x, self.player[num].y)
             self.player[num].SetSize(20, 20)
             self.player[num].PlayerDraw()
@@ -461,8 +458,6 @@ class Battle(GameSequenceBase):
         #[id, xl, yl, x, y, tagname]
         for num in range(ENEMY_UNIT_NUM):
             #self.enemy[num].Draw(ColorList.YELLOW)
-            self.enemy[num].GetSelect()
-            self.enemy[num].GetVisible()
             self.enemy[num].SetPos(self.enemy[num].x, self.enemy[num].y)
             self.enemy[num].SetSize(20, 20)
             self.enemy[num].EnemyDraw()
@@ -532,9 +527,9 @@ class Battle(GameSequenceBase):
                         for p_num in range(6):
                             p_x = math.floor(player[p_num].x)
                             p_y = math.floor(player[p_num].y)
-                            player[p_num].SetSelect(False)
+                            player[p_num].IsSelect = False
                             if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
-                                player[p_num].SetSelect(True)
+                                player[p_num].IsSelect = True
                                 weaponid1 = player[p_num].GetWeaponId1
                                 weaponid2 = player[p_num].GetWeaponId2
                                 self.textmanager.SetPos(player[p_num].x + 21, player[p_num].y - 21)
@@ -628,9 +623,9 @@ class Battle(GameSequenceBase):
                         for e_num in range(6):
                             e_x = math.floor(enemy[e_num].x)
                             e_y = math.floor(enemy[e_num].y)
-                            enemy[e_num].SetSelect(False)
+                            enemy[e_num].IsSelect = False
                             if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
-                                enemy[e_num].SetSelect(True)
+                                enemy[e_num].IsSelect = True
                                 self.textmanager1.SetPos(enemy[e_num].x + 21, enemy[e_num].y - 21)
                                 self.textmanager1.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
                                 
@@ -659,7 +654,7 @@ class Battle(GameSequenceBase):
                                 #text5 = "消　費：" + enemy[e_num].consumption
                                 #self.datadisp.SetFontsize5(font_size5)
                                 #self.datadisp.SetText5(text5)
-                                if enemy[e_num].GetSelect() == True:
+                                if enemy[e_num].IsSelect == True:
                                     self.isUnitselect = True
                                     flg = True
 
@@ -676,12 +671,12 @@ class Battle(GameSequenceBase):
                         
                     elif self.pushClick == 3:
                         for p_num in range(6):
-                            if player[p_num].GetSelect() == True:
-                                player[p_num].SetSelect(False)
+                            if player[p_num].IsSelect == True:
+                                player[p_num].IsSelect = False
 
                         for e_num in range(6):
-                            if enemy[e_num].GetSelect() == True:
-                                enemy[e_num].SetSelect(False)
+                            if enemy[e_num].IsSelect == True:
+                                enemy[e_num].IsSelect = False
 
                         self.isUnitselect = False
 
