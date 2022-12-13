@@ -61,7 +61,7 @@ class Character(GameObject):
         super().__init__()
         self.unit_side = side
         self.__isSelect = False
-        self.isVisible = False
+        self.__isVisible = False
 
         self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl)
         self.ID = num
@@ -76,8 +76,6 @@ class Character(GameObject):
         self.weaponId1 = None
         self.weaponId2 = None
         self.armorId = None
-
-        self.SetVisible(self.isVisible)
 
 
     def prepareUnit(self, xl, yl):
@@ -104,11 +102,12 @@ class Character(GameObject):
     def IsSelect(self, isSelect):
         self.__isSelect = isSelect
 
-    def GetVisible(self):
-        return self.isVisible
-
-    def SetVisible(self, visible):
-        self.isVisible = visible
+    @property
+    def IsVisible(self):
+        return self.__isVisible
+    @IsVisible.setter
+    def IsVisible(self, isVisible):
+        self.__isVisible = isVisible
 
     def GetWeaponId1(self):
         return self.weaponId1

@@ -7,7 +7,7 @@ class Player(Character):
         super().__init__(xl, yl, SideType.Player, num)
 
     def PlayerDraw(self):
-        if self.isVisible == True:
+        if self.IsVisible == True:
             if self.IsSelect == True:
                 self.Draw(ColorList.LIGHTBLUE)
             else:

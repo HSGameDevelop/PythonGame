@@ -8,7 +8,7 @@ class Enemy(Character):
         super().__init__(xl, yl, SideType.Enemy, num + p_num)
 
     def EnemyDraw(self):
-        if self.isVisible == True:
+        if self.IsVisible == True:
             if self.IsSelect == True:
                 self.Draw(ColorList.LIGHTYELLOW)
             else:

@@ -248,7 +248,7 @@ class Battle(GameSequenceBase):
         for num in range(PLAYER_UNIT_NUM):
             #self.player[num].Draw(ColorList.BLUE)
             self.player[num].SetSize(PREPARE_UNIT_WIDTH, PREPARE_UNIT_WIDTH)
-            self.player[num].SetVisible(True)
+            self.player[num].IsVisible = True
             # 左に一列で並べる。
             self.player[num].SetPos(PREPARE_UNIT_WIDTH + 30, (PREPARE_UNIT_WIDTH * 2.5 * num) + 60 )
             self.player[num].PlayerDraw()
@@ -437,7 +437,7 @@ class Battle(GameSequenceBase):
         #[id, xl, yl, x, y, tagname]
         for num in range(PLAYER_UNIT_NUM):
             #self.player[num].Draw(ColorList.BLUE)
-            self.player[num].SetVisible(True)       # プレイヤー側は常に明るい表示（エネミー側をする場合は、エネミー側を常に明るい表示）
+            self.player[num].IsVisible = True       # プレイヤー側は常に明るい表示（エネミー側をする場合は、エネミー側を常に明るい表示）
             self.player[num].SetPos(self.player[num].x, self.player[num].y)
             self.player[num].SetSize(20, 20)
             self.player[num].PlayerDraw()
