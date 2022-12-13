@@ -288,8 +288,8 @@ class Battle(GameSequenceBase):
 
                                 if player[p_num].IsSelect == True:
                                     self.isUnitselect = True
-                                    weaponId1 = player[p_num].GetWeaponId1()
-                                    weaponId2 = player[p_num].GetWeaponId2()
+                                    weaponId1 = player[p_num].WeaponId
+                                    weaponId2 = player[p_num].SecondWeaponId
                                     if weaponId1 == None:
                                         self.isWeaponselect1 = False
                                         for w_num in range(1, Weapon.IMAGE_NUM_MAX):
@@ -313,7 +313,7 @@ class Battle(GameSequenceBase):
                                     pos = weapon[w_num].GetPos()
                                     if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):                                  
                                         weapon[w_num].SetSelect(True)
-                                        player[self.player_flg].SetWeaponId1(w_num)
+                                        player[self.player_flg].WeaponId = w_num
 
                                         if weapon[w_num].GetSelect() == True:
                                             self.isWeaponselect1 = True
@@ -323,7 +323,7 @@ class Battle(GameSequenceBase):
                                         pos = weapon[w_num].GetPos()
                                         if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):                                  
                                             weapon[w_num].SetSelect(True)
-                                            player[self.player_flg].SetWeaponId2(w_num)
+                                            player[self.player_flg].SecondWeaponId = w_num
                                             if weapon[w_num].GetSelect() == True:
                                                 self.isWeaponselect2 = True
 
@@ -335,15 +335,15 @@ class Battle(GameSequenceBase):
                         w_num = None
                         for p_num in range(6):
                             if player[p_num].IsSelect == True:
-                                weaponId1 = player[p_num].GetWeaponId1()
-                                weaponId2 = player[p_num].GetWeaponId2()
+                                weaponId1 = player[p_num].WeaponId
+                                weaponId2 = player[p_num].SecondWeaponId
                                 if weaponId1 == None and weaponId2 == None:
                                     player[p_num].IsSelect = False
                                 if weaponId1 != None and weaponId2 == None:
-                                    player[p_num].SetWeaponId1(None)
+                                    player[p_num].WeaponId = None
                                     w_num = weaponId1
                                 if weaponId1 != None and weaponId2 != None:
-                                    player[p_num].SetWeaponId2(None)
+                                    player[p_num].SecondWeaponId = None
                                     w_num = weaponId2
 
                                 if w_num != None:
@@ -529,8 +529,8 @@ class Battle(GameSequenceBase):
                             player[p_num].IsSelect = False
                             if p_x - 21 < Point_x and Point_x < p_x + 21 and p_y - 21 < Point_y and Point_y < p_y + 21:
                                 player[p_num].IsSelect = True
-                                weaponid1 = player[p_num].GetWeaponId1()
-                                weaponid2 = player[p_num].GetWeaponId2()
+                                weaponid1 = player[p_num].WeaponId
+                                weaponid2 = player[p_num].SecondWeaponId
 
                                 self.textmanager.SetPos(player[p_num].x + 21, player[p_num].y - 21)
 

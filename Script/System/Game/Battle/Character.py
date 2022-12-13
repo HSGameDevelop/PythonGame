@@ -5,7 +5,7 @@ from ...Util.GameObject import GameObject
 from ..Data.GameData import GameData
 from ..Data.ColorList import ColorList
 from .CharacterStatus import CharacterStatus
-from .BattleDefine import SideType
+from .BattleDefine import *
 
 # キャラの視界を設定マップへ反映するように追加
 
@@ -66,15 +66,16 @@ class Character(GameObject):
         self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl)
         self.ID = num
         if self.unit_side == SideType.Player:
-            self.chara = random.randint(1, 25)  # excelのプレイヤーの種類
+            self.chara = random.randint(CharacterNum.PlayerStart, CharacterNum.PlayerMax)  # excelのプレイヤーの種類
         else:
-            self.chara = random.randint(26, 50) # excelのエネミーの種類
+            self.chara = random.randint(CharacterNum.EnemyStart, CharacterNum.EnemyMax) # excelのエネミーの種類
         
         characterData = GameData.GetCharacterDataFromId(self.chara)
         self.__status : CharacterStatus = CharacterStatus(characterData) # ステータス
 
-        self.weaponId1 = None
-        self.weaponId2 = None
+        self.__weaponId = None
+        self.__secondWeaponId = None
+
         self.armorId = None
 
 
@@ -109,17 +110,19 @@ class Character(GameObject):
     def IsVisible(self, isVisible):
         self.__isVisible = isVisible
 
-    def GetWeaponId1(self):
-        return self.weaponId1
+    @property
+    def WeaponId(self):
+        return self.__weaponId
+    @WeaponId.setter
+    def WeaponId(self, weaponId):
+        self.__weaponId = weaponId
 
-    def SetWeaponId1(self, weaponId):
-        self.weaponId1 = weaponId
-
-    def GetWeaponId2(self):
-        return self.weaponId2
-
-    def SetWeaponId2(self, weaponId):
-        self.weaponId2 = weaponId
+    @property
+    def SecondWeaponId(self):
+        return self.__secondWeaponId
+    @SecondWeaponId.setter
+    def SecondWeaponId(self, weaponId):
+        self.__secondWeaponId = weaponId
 
     def GetArmorId(self):
         return self.armorId
