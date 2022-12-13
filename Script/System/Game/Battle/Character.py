@@ -77,9 +77,7 @@ class Character(GameObject):
 
         self.__weaponId = None
         self.__secondWeaponId = None
-
-        self.armorId = None
-
+        self.__armorId = None
 
     def prepareUnit(self, xl, yl):
         # (x,y)のマスの中心座標を計算
@@ -126,11 +124,12 @@ class Character(GameObject):
     def SecondWeaponId(self, weaponId):
         self.__secondWeaponId = weaponId
 
-    def GetArmorId(self):
-        return self.armorId
-
-    def SetArmorId(self, armorId):
-        self.armorId = armorId
+    @property
+    def ArmorId(self):
+        return self.__armorId
+    @ArmorId.setter
+    def ArmorId(self, armorId):
+        self.__armorId = armorId
 
     @property
     def Status(self):
