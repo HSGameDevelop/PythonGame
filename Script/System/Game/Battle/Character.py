@@ -65,6 +65,8 @@ class Character(GameObject):
 
         self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl)
         self.ID = num
+
+        # todo:この処理は管理側で行うべき
         if self.unit_side == SideType.Player:
             self.chara = random.randint(CharacterNum.PlayerStart, CharacterNum.PlayerMax)  # excelのプレイヤーの種類
         else:
