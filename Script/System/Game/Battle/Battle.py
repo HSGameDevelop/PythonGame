@@ -66,11 +66,13 @@ PREPARE_UNIT_WIDTH = 50
 # 色の設定
 BOARD_COLOR = ColorList.GRAY.value              # 盤面全体（見えない位置）
 VISIBLE_COLOR = ColorList.WHITE.value           # ユニットから見える範囲（カラー）
+CAN_MOVE_COLOR = ColorList.LIGHTBLUE.value      # ユニットの移動可能範囲（カラー）
 DEAD_COLOR = ColorList.MAROON.value             # 侵入不可エリア
 DEAD_OUT_LINE_COLOR = ColorList.BLACK.value     # 侵入不可エリア枠線
 OUT_LINE_COLOR = ColorList.BLACK.value          # 枠線の色
 YOUR_COLOR = ColorList.BLUE.value               # あなたのユニットの色
 ENEMY_COLOR = ColorList.YELLOW.value            # 相手のユニットの色
+
 
 class Battle(GameSequenceBase):
     class BattleState(Enum):
@@ -112,9 +114,12 @@ class Battle(GameSequenceBase):
         self.pushClick = None                       # クリックしたイベントの取得
         self.before_pushClick = None                # 1つ前のクリックイベントの取得
         self.isUnitselect = False                   # ユニットを選択しているかどうか
-        self.textmanager = TextManager()
-        self.textmanager1 = TextManager()
-        self.textmanager2 = TextManager()
+        self.text_player = TextManager()
+        self.text_weapon = TextManager()
+        self.text_enemy = TextManager()
+
+        self.text_player_status = TextManager()
+        self.text_enemy_status = TextManager()
 
         self.isWeaponselect1 = False                 # 武器1を選択しているかどうか
         self.isWeaponselect2 = False                 # 武器2を選択しているかどうか
@@ -153,6 +158,11 @@ class Battle(GameSequenceBase):
             if self.PrepareTimer.GetCounter() <= 0:
                 self.state = self.BattleState.Counter
                 self.isUnitSelect = False
+                self.isWeaponselect1 = False
+                self.isWeaponselect2 = False
+                self.isWeaponhover = False
+                for num in range(PLAYER_UNIT_NUM):
+                    self.player[num].IsSelect == False
                 self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
             return
         elif self.state == self.BattleState.Counter:
@@ -200,14 +210,14 @@ class Battle(GameSequenceBase):
             self.SelectUnit(self.player, self.weapon)
             
             if self.isUnitselect == True:
-                self.textmanager.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
+                self.text_player.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
             
             if self.isWeaponhover == True:
-                self.textmanager1.Draw(ColorList.BLACK, ColorList.LIME, ColorList.LIME)
+                self.text_weapon.Draw(ColorList.BLACK, ColorList.LIME, ColorList.LIME)
 
         elif self.state == self.BattleState.Counter:
             # マップの描画
-            self.DrawMap(self.map)
+            self.DrawMap(self.map, self.player)
             # プレイヤーの描画
             self.CreatePlayer(self.player)
             # エネミーの描画
@@ -218,7 +228,7 @@ class Battle(GameSequenceBase):
             self.BattleTimer.Draw(ColorList.RED, ColorList.LIME, ColorList.YELLOW, ColorList.WHITE)
         elif self.state == self.BattleState.Think:
             # マップの描画
-            self.DrawMap(self.map)
+            self.DrawMap(self.map, self.player)
             # プレイヤーの描画
             self.CreatePlayer(self.player)
             # エネミーの描画
@@ -229,8 +239,9 @@ class Battle(GameSequenceBase):
             self.CalcReturnPos(self.player, self.enemy, self.map, self.weapon)
             if self.isUnitselect == True:
                 #self.datadisp.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
-                self.textmanager.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
-                self.textmanager1.Draw(ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
+                # self.text_weapon.Draw(ColorList.WHITE, ColorList.BLACK, ColorList.LIME)
+                self.text_player_status.Draw(ColorList.BLACK, ColorList.WHITE, ColorList.LIME)
+                
 
     def DrawPrepare(self):
         width, height =PgLib.GetScreenSize()
@@ -274,17 +285,17 @@ class Battle(GameSequenceBase):
                                 player[p_num].IsSelect = True
                                 #self.datadisp.SetPos(280, 50)
                                 #self.datadisp.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
-                                self.textmanager.SetPos(280, 50)
+                                self.text_player.SetPos(280, 50)
 
-                                font_size_list = [30, 30, 30, 30, 30]
-                                text_list = []
-                                text_list.append("I  D：" + str(player[p_num].ID) + "　　　　行動力：" + player[p_num].Status.ActionPower)
-                                text_list.append("名　前：" + player[p_num].Status.characterName + "　　　　体　力：" + player[p_num].Status.HitPoint)
-                                text_list.append("攻撃力：" + player[p_num].Status.AttackPoint + "　　　　防御力：" + player[p_num].Status.DeffencePoint)
-                                text_list.append("回避力：" + player[p_num].Status.AvoidancePoint+ "　　　　技術力：" + player[p_num].Status.TechnologyPoint)
+                                player_font_size_list = [30, 30, 30, 30, 30]
+                                player_text_list = []
+                                player_text_list.append("I  D：" + str(player[p_num].ID) + "　　　　行動力：" + player[p_num].Status.ActionPower)
+                                player_text_list.append("名　前：" + player[p_num].Status.characterName + "　　　　体　力：" + player[p_num].Status.HitPoint)
+                                player_text_list.append("攻撃力：" + player[p_num].Status.AttackPoint + "　　　　防御力：" + player[p_num].Status.DeffencePoint)
+                                player_text_list.append("回避力：" + player[p_num].Status.AvoidancePoint+ "　　　　技術力：" + player[p_num].Status.TechnologyPoint)
 
-                                self.textmanager.SetFontsize(font_size_list)
-                                self.textmanager.SetText(text_list)
+                                self.text_player.SetFontsize(player_font_size_list)
+                                self.text_player.SetText(player_text_list)
 
                                 if player[p_num].IsSelect == True:
                                     self.isUnitselect = True
@@ -363,20 +374,20 @@ class Battle(GameSequenceBase):
                     weapon[w_num].SetHover(False)
                     if pos.x - (Weapon.IMAGE_SIZE/ 2) < Point_x and Point_x < pos.x + (Weapon.IMAGE_SIZE/ 2) and pos.y - (Weapon.IMAGE_SIZE/ 2) < Point_y and Point_y < pos.y + (Weapon.IMAGE_SIZE/ 2):
                         weapon[w_num].SetHover(True)
-                        self.textmanager1.SetPos(pos.x + 65, pos.y + 65)
+                        self.text_weapon.SetPos(pos.x + 65, pos.y + 65)
 
-                        font_size_list1 = [30, 30, 30, 30, 30, 30, 30]
-                        text_list1 = []
-                        text_list1.append("I  D：" + str(weapon[w_num].weaponId))
-                        text_list1.append("名　前：" + weapon[w_num].weaponName)
-                        text_list1.append("射　程：" + weapon[w_num].range)
-                        text_list1.append("攻撃力：" + weapon[w_num].power)
-                        text_list1.append("消　費：" + weapon[w_num].actioncost)
-                        text_list1.append("角　度：" + str(weapon[w_num].angle) + "°")
-                        text_list1.append("装備時行動力増減：" + weapon[w_num].plusdown)
+                        weapon_font_size_list = [30, 30, 30, 30, 30, 30, 30]
+                        weapon_text_list = []
+                        weapon_text_list.append("I  D：" + str(weapon[w_num].weaponId))
+                        weapon_text_list.append("名　前：" + weapon[w_num].weaponName)
+                        weapon_text_list.append("射　程：" + weapon[w_num].range)
+                        weapon_text_list.append("攻撃力：" + weapon[w_num].power)
+                        weapon_text_list.append("消　費：" + weapon[w_num].actioncost)
+                        weapon_text_list.append("角　度：" + str(weapon[w_num].angle) + "°")
+                        weapon_text_list.append("装備時行動力増減：" + weapon[w_num].plusdown)
 
-                        self.textmanager1.SetFontsize(font_size_list1)
-                        self.textmanager1.SetText(text_list1)
+                        self.text_weapon.SetFontsize(weapon_font_size_list)
+                        self.text_weapon.SetText(weapon_text_list)
 
                     if weapon[w_num].GetHover() == True:
                         weapon_flg = True
@@ -385,9 +396,32 @@ class Battle(GameSequenceBase):
                         self.isWeaponhover = False
 
 
-    def DrawMap(self, map):
+    def DrawMap(self, map, player):
+        # 敵ユニットの動きと連動させるタイミングはThinkが終わってから行動するタイミングになる
+        # そのためここの段階でユニットの視界に入っても敵ユニットが移動中に表示されることはない（情報も出ないようにする）
+        # 移動先を考えてるときの視覚情報も反映するためよく考えよう
+
+        for num in range(PLAYER_UNIT_NUM):  # 見える範囲の色変化と移動できるかどうかの色の変化を加える（未確認）
+            player_x = player[num].xl  # x = map.m_xy[num][0]
+            player_y = player[num].yl  # y = map.m_xy[num][1]
+            if player_y % 2 == 0:
+                xl = 2 * player_x
+                yl = player_y
+            elif player_y % 2 == 1:
+                xl = (2 * player_x) - 1
+                yl = player_y
+
+            visible_distance = player[num].Status.Visible #見える範囲.Status.characterName
+            # move_distance = player[num].Status.ActionPower #移動できる距離
+
+        # for num in range(720):
+            # 優先順位　まず、壁、プレイヤー移動、プレイヤー視覚、建物
+            # y = map.m_xy[num][1]   x = map.m_xy[num][0]
+
+
         # ６点指定 六角形 30*24
         for num in range(720):
+            # 優先順位　まず、壁、プレイヤー移動、プレイヤー視覚、建物
             # y = map.m_xy[num][1]   x = map.m_xy[num][0]
             if map.m_xy[num][14] == -1:
                 color = DEAD_COLOR
@@ -532,7 +566,7 @@ class Battle(GameSequenceBase):
                                 weaponid1 = player[p_num].WeaponId
                                 weaponid2 = player[p_num].SecondWeaponId
 
-                                self.textmanager.SetPos(player[p_num].x + 21, player[p_num].y - 21)
+                                self.text_player_status.SetPos(player[p_num].x + 21, player[p_num].y - 21)
 
                                 if weaponid1 != None and weaponid2 != None:
                                     font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
@@ -602,8 +636,8 @@ class Battle(GameSequenceBase):
                                     text_list.append("角　度：" + str(weapon[1].angle) + "°")
                                     text_list.append("装備時行動力増減：" + weapon[1].plusdown)
 
-                                self.textmanager.SetFontsize(font_size_list)
-                                self.textmanager.SetText(text_list)
+                                self.text_player_status.SetFontsize(font_size_list)
+                                self.text_player_status.SetText(text_list)
                                 #font_size3 = 30
                                 #text3 = "武　器：" + player[p_num].weaponId
                                 #self.datadisp.SetFontsize3(font_size3)
@@ -626,34 +660,22 @@ class Battle(GameSequenceBase):
                             enemy[e_num].IsSelect = False
                             if e_x - 21 < Point_x and Point_x < e_x + 21 and e_y - 21 < Point_y and Point_y < e_y + 21:
                                 enemy[e_num].IsSelect = True
-                                self.textmanager1.SetPos(enemy[e_num].x + 21, enemy[e_num].y - 21)
-                                self.textmanager1.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
+                                self.text_enemy_status.SetPos(enemy[e_num].x + 21, enemy[e_num].y - 21)
+                                self.text_enemy_status.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
                                 
-                                font_size_list1 = [30, 30, 30, 30, 30, 30, 30, 30]
-                                text_list1 = []
-                                text_list1.append("I  D：" + str(enemy[e_num].ID))
-                                text_list1.append("行動力：" + enemy[e_num].Status.ActionPower)
-                                text_list1.append("名　前：" + enemy[e_num].Status.characterName)
-                                text_list1.append("体　力：" + enemy[e_num].Status.HitPoint)
-                                text_list1.append("攻撃力：" + enemy[e_num].Status.AttackPoint)
-                                text_list1.append("防御力：" + enemy[e_num].Status.DeffencePoint)
-                                text_list1.append("回避力：" + enemy[e_num].Status.AvoidancePoint)
-                                text_list1.append("技術力：" + enemy[e_num].Status.TechnologyPoint)
+                                enemy_font_size_list1 = [30, 30, 30, 30, 30, 30, 30, 30]
+                                enemy_text_list = []
+                                enemy_text_list.append("I  D：" + str(enemy[e_num].ID))
+                                enemy_text_list.append("行動力：" + enemy[e_num].Status.ActionPower)
+                                enemy_text_list.append("名　前：" + enemy[e_num].Status.characterName)
+                                enemy_text_list.append("体　力：" + enemy[e_num].Status.HitPoint)
+                                enemy_text_list.append("攻撃力：" + enemy[e_num].Status.AttackPoint)
+                                enemy_text_list.append("防御力：" + enemy[e_num].Status.DeffencePoint)
+                                enemy_text_list.append("回避力：" + enemy[e_num].Status.AvoidancePoint)
+                                enemy_text_list.append("技術力：" + enemy[e_num].Status.TechnologyPoint)
 
-                                self.textmanager1.SetFontsize(font_size_list1)
-                                self.textmanager1.SetText(text_list1)
-                                #font_size3 = 30
-                                #text3 = "武　器：" + enemy[e_num].weaponName
-                                #self.datadisp.SetFontsize3(font_size3)
-                                #self.datadisp.SetText3(text3)
-                                #font_size4 = 30
-                                #text4 = "射　程：" + enemy[e_num].range
-                                #self.datadisp.SetFontsize4(font_size4)
-                                #self.datadisp.SetText4(text4)
-                                #font_size5 = 30
-                                #text5 = "消　費：" + enemy[e_num].consumption
-                                #self.datadisp.SetFontsize5(font_size5)
-                                #self.datadisp.SetText5(text5)
+                                self.text_enemy_status.SetFontsize(enemy_font_size_list)
+                                self.text_enemy_status.SetText(enemy_text_list)
                                 if enemy[e_num].IsSelect == True:
                                     self.isUnitselect = True
                                     flg = True
@@ -682,9 +704,14 @@ class Battle(GameSequenceBase):
 
 
     def MoveData(self):
+        # 移動できるマスは黄色にする（取り合えず）
         # リストでそれぞれの行動データを生成
-        # list = [player or enemy, unit_id, action_number(行動番号), kinds(攻撃・移動・防御(auto)), consumption(行動力消費量), x, y(移動先(今いる場所)), weapon_direction(武器向き), weapon(武器), shield_direction(盾向き), shield(盾)]
+        # ここの管理の仕方よくわからんどこで管理するべきなのか
+        # list = [unit_id, action_number(1ターンで何回目の行動か), consumption(行動力消費量), x, y(移動先(今いる場所)), weapon_direction(武器向き), weapon(武器), shield_direction(盾向き), shield(盾)]
+        # データとしては上記のものだけで成立する？
+        # 行動消費量は防御（auto）でも減るため予想とは違った行動が起こる可能性あり
         # CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TITLE_CROWN_END_POS[0], TITLE_CROWN_END_POS[1]), 16)
+        # 最終的に選択ユニットの1ターン行動を全部ぼかして見通せる感じのものにする。（武器の向き、盾の向き含めて）
         pass
 
 
@@ -693,4 +720,5 @@ class Battle(GameSequenceBase):
         # 行動数の減り方は、攻撃方法や移動で異なる
         # 行動終了時のplayer or enemy .xy[num][1, 2]に移動先のデータを入れ替え
         # 移動時の計算も必要
+
 

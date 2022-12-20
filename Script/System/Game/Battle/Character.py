@@ -61,7 +61,7 @@ class Character(GameObject):
         super().__init__()
         self.unit_side = side
         self.__isSelect = False
-        self.__isVisible = False
+        self.__isVisible = False        # 防具で見えない状態かどうか
 
         self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl)
         self.ID = num
