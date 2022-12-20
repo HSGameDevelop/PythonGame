@@ -10,7 +10,7 @@ class CharacterStatus:
         self.__deffencePoint     = data.defensepoint     # 防御力
         self.__avoidancePoint    = data.avoidancepoint   # 回避力
         self.__technologyPoint   = data.technologypoint  # 技術力
-        self.__visible           = data.visible          # 視界
+        self.__visible           = int(data.visible)     # 視界
 
     @property
     def CharacterId(self) -> int:

@@ -10,6 +10,7 @@ from Script.System.Util.Command import Command
 from Script.System.Util.Command.MoveCommand import MoveCommand
 # マップ表示のクラス
 from .Map import Map
+from .MoveMethod import MoveMethod
 # プレイヤー表示のクラス
 from .Character import CharacterManager
 from .Player import Player
@@ -37,7 +38,7 @@ MAX_COUNTER = 30
 CIRCLE_WIDTH_OUT = 40
 CIRCLE_WIDTH_IN = 35
 
-PREPARE_TIME = 30
+PREPARE_TIME = 2
 
 TURN_DISPLAY = 150
 DATA_DISPLAY_WIDTH = 400
@@ -66,7 +67,7 @@ PREPARE_UNIT_WIDTH = 50
 # 色の設定
 BOARD_COLOR = ColorList.GRAY.value              # 盤面全体（見えない位置）
 VISIBLE_COLOR = ColorList.WHITE.value           # ユニットから見える範囲（カラー）
-CAN_MOVE_COLOR = ColorList.LIGHTBLUE.value      # ユニットの移動可能範囲（カラー）
+CAN_MOVE_COLOR = ColorList.SKYBLUE.value      # ユニットの移動可能範囲（カラー）
 DEAD_COLOR = ColorList.MAROON.value             # 侵入不可エリア
 DEAD_OUT_LINE_COLOR = ColorList.BLACK.value     # 侵入不可エリア枠線
 OUT_LINE_COLOR = ColorList.BLACK.value          # 枠線の色
@@ -412,12 +413,9 @@ class Battle(GameSequenceBase):
                 yl = player_y
 
             visible_distance = player[num].Status.Visible #見える範囲.Status.characterName
+            player[num].VisibleArea = MoveMethod.DistanceReverse(xl, yl, visible_distance)
+
             # move_distance = player[num].Status.ActionPower #移動できる距離
-
-        # for num in range(720):
-            # 優先順位　まず、壁、プレイヤー移動、プレイヤー視覚、建物
-            # y = map.m_xy[num][1]   x = map.m_xy[num][0]
-
 
         # ６点指定 六角形 30*24
         for num in range(720):
@@ -441,6 +439,14 @@ class Battle(GameSequenceBase):
             elif map.m_xy[num][14] == 4:
                 color = BOARD_COLOR
                 outline = OUT_LINE_COLOR
+
+            for p_num in range(1):
+                AreaData = player[p_num].VisibleArea
+                a_count = len(AreaData)
+                for a_num in range(a_count):
+                    if map.m_xy[num][0] == AreaData[a_num][0] and map.m_xy[num][1] == AreaData[a_num][1]:
+                        color = CAN_MOVE_COLOR
+                        outline = OUT_LINE_COLOR
 
             # 内側描画
             pygame.draw.polygon( self.screen, color, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])])
@@ -663,7 +669,7 @@ class Battle(GameSequenceBase):
                                 self.text_enemy_status.SetPos(enemy[e_num].x + 21, enemy[e_num].y - 21)
                                 self.text_enemy_status.SetSize(DATA_DISPLAY_WIDTH, DATA_DISPLAY_HEIGHT)
                                 
-                                enemy_font_size_list1 = [30, 30, 30, 30, 30, 30, 30, 30]
+                                enemy_font_size_list = [30, 30, 30, 30, 30, 30, 30, 30]
                                 enemy_text_list = []
                                 enemy_text_list.append("I  D：" + str(enemy[e_num].ID))
                                 enemy_text_list.append("行動力：" + enemy[e_num].Status.ActionPower)
@@ -709,8 +715,8 @@ class Battle(GameSequenceBase):
         # ここの管理の仕方よくわからんどこで管理するべきなのか
         # list = [unit_id, action_number(1ターンで何回目の行動か), consumption(行動力消費量), x, y(移動先(今いる場所)), weapon_direction(武器向き), weapon(武器), shield_direction(盾向き), shield(盾)]
         # データとしては上記のものだけで成立する？
-        # 行動消費量は防御（auto）でも減るため予想とは違った行動が起こる可能性あり
-        # CommandUtil.AddMoveCommand(MoveCommand.MoveType.NormalToPosition, self, Define.Position(TITLE_CROWN_END_POS[0], TITLE_CROWN_END_POS[1]), 16)
+
+        # 行動消費量は防御（auto）でも減るため予想とは違った行動が起こる可能性あり（後の行動で武器の方向を変えて相手から外した場合、移動が優先される。）
         # 最終的に選択ユニットの1ターン行動を全部ぼかして見通せる感じのものにする。（武器の向き、盾の向き含めて）
         pass
 
