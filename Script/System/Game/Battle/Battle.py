@@ -440,11 +440,12 @@ class Battle(GameSequenceBase):
                 color = BOARD_COLOR
                 outline = OUT_LINE_COLOR
 
-            for p_num in range(1):
+            for p_num in range(PLAYER_UNIT_NUM):
                 AreaData = player[p_num].VisibleArea
                 a_count = len(AreaData)
-                for a_num in range(a_count):
-                    if map.m_xy[num][0] == AreaData[a_num][0] and map.m_xy[num][1] == AreaData[a_num][1]:
+                print("x: " + str(player[p_num].xl) + " y: " + str(player[p_num].yl) )
+                for a_num in range(a_count):                    
+                    if map.m_xy[num][0] == AreaData[a_num][0] and map.m_xy[num][1] == AreaData[a_num][1] and map.m_xy[num][14] != -1:
                         color = CAN_MOVE_COLOR
                         outline = OUT_LINE_COLOR
 
