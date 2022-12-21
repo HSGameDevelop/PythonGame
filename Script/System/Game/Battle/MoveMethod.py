@@ -12,6 +12,7 @@ class MoveMethod():
         area = []
         distance_ex = distance + 1
         col_y = 0
+        # プレイヤーの左右＋プレイヤー上部
         for col in range(distance_ex):
             if y % 2 == 0 and col % 2 == 0:
                 if col == 0:
@@ -40,6 +41,7 @@ class MoveMethod():
                 else:
                     area.append([ ((x - distance) + ((row - col_first) * second) + 1) / 2, (y - distance) + col])
 
+        # プレイヤーの下部
         for col in range(distance):
             if y % 2 == 0 and col % 2 == 0:
                 if col == 0:
