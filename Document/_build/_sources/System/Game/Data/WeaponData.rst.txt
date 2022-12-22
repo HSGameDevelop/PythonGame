@@ -1,7 +1,0 @@
-WeaponData module
-=================
-
-.. automodule:: WeaponData
-   :members:
-   :undoc-members:
-   :show-inheritance:

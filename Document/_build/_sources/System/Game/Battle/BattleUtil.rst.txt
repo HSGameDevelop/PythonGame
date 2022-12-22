@@ -1,7 +1,0 @@
-BattleUtil module
-=================
-
-.. automodule:: BattleUtil
-   :members:
-   :undoc-members:
-   :show-inheritance:

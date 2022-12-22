@@ -1,7 +1,0 @@
-MapData module
-==============
-
-.. automodule:: MapData
-   :members:
-   :undoc-members:
-   :show-inheritance:

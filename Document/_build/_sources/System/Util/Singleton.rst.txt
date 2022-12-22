@@ -1,7 +1,0 @@
-Singleton module
-================
-
-.. automodule:: Singleton
-   :members:
-   :undoc-members:
-   :show-inheritance:

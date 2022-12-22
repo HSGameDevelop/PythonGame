@@ -1,7 +1,0 @@
-BinaryFileManager module
-========================
-
-.. automodule:: BinaryFileManager
-   :members:
-   :undoc-members:
-   :show-inheritance:

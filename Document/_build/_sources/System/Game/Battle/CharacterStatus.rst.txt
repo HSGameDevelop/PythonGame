@@ -1,7 +1,0 @@
-CharacterStatus module
-======================
-
-.. automodule:: CharacterStatus
-   :members:
-   :undoc-members:
-   :show-inheritance:

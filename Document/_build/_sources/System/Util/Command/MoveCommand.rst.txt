@@ -1,7 +1,0 @@
-MoveCommand module
-==================
-
-.. automodule:: MoveCommand
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,7 +1,0 @@
-TitleCrown module
-=================
-
-.. automodule:: TitleCrown
-   :members:
-   :undoc-members:
-   :show-inheritance:

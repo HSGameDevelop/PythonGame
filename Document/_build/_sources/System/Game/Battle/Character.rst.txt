@@ -1,7 +1,0 @@
-Character module
-================
-
-.. automodule:: Character
-   :members:
-   :undoc-members:
-   :show-inheritance:
