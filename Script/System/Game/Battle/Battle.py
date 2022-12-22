@@ -157,7 +157,6 @@ class Battle(GameSequenceBase):
                 self.click_flag_counter = 5
 
             if self.PrepareTimer.GetCounter() <= 0:
-                self.state = self.BattleState.Counter
                 self.isUnitSelect = False
                 self.isWeaponselect1 = False
                 self.isWeaponselect2 = False
@@ -165,6 +164,7 @@ class Battle(GameSequenceBase):
                 for num in range(PLAYER_UNIT_NUM):
                     self.player[num].IsSelect == False
                 self.BattleTimer = Timer(MAX_COUNTER, TIMER_X, TIMER_Y)
+                self.state = self.BattleState.Counter
             return
         elif self.state == self.BattleState.Counter:
             self.TurnDisplay -= 1
@@ -186,6 +186,9 @@ class Battle(GameSequenceBase):
 
             # ターンのタイマー
             if self.BattleTimer.GetCounter() <= 0:
+                self.isUnitSelect = False
+                for num in range(PLAYER_UNIT_NUM):
+                    self.player[num].IsSelect == False
                 self.state = self.BattleState.Stop
             return
         elif self.state == self.BattleState.Stop:
@@ -280,7 +283,7 @@ class Battle(GameSequenceBase):
                 self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
                 if Point_x != None and Point_y !=  None:
                     if self.pushClick == 1:
-                        for p_num in range(6):
+                        for p_num in range(PLAYER_UNIT_NUM):
                             pos = player[p_num].GetPos()
                             if pos.x - (PREPARE_UNIT_WIDTH) < Point_x and Point_x < pos.x + (PREPARE_UNIT_WIDTH) and pos.y - (PREPARE_UNIT_WIDTH) < Point_y and Point_y < pos.y + (PREPARE_UNIT_WIDTH):
                                 player[p_num].IsSelect = True
@@ -290,10 +293,10 @@ class Battle(GameSequenceBase):
 
                                 player_font_size_list = [30, 30, 30, 30, 30]
                                 player_text_list = []
-                                player_text_list.append("I  D：" + str(player[p_num].ID) + "　　　　行動力：" + player[p_num].Status.ActionPower)
-                                player_text_list.append("名　前：" + player[p_num].Status.characterName + "　　　　体　力：" + player[p_num].Status.HitPoint)
-                                player_text_list.append("攻撃力：" + player[p_num].Status.AttackPoint + "　　　　防御力：" + player[p_num].Status.DeffencePoint)
-                                player_text_list.append("回避力：" + player[p_num].Status.AvoidancePoint+ "　　　　技術力：" + player[p_num].Status.TechnologyPoint)
+                                player_text_list.append("I  D：" + str(player[p_num].ID) + "　　　　行動力：" + str(payer[p_num].Status.ActionPower))
+                                player_text_list.append("名　前：" + player[p_num].Status.characterName + "　　　　体　力：" + str(player[p_num].Status.HitPoint))
+                                player_text_list.append("攻撃力：" + str(player[p_num].Status.AttackPoint) + "　　　　防御力：" + str(player[p_num].Status.DeffencePoint))
+                                player_text_list.append("回避力：" + str(player[p_num].Status.AvoidancePoint) + "　　　　技術力：" + str(player[p_num].Status.TechnologyPoint))
 
                                 self.text_player.SetFontsize(player_font_size_list)
                                 self.text_player.SetText(player_text_list)
@@ -339,13 +342,13 @@ class Battle(GameSequenceBase):
                                             if weapon[w_num].GetSelect() == True:
                                                 self.isWeaponselect2 = True
 
-                        for p_num in range(6):
+                        for p_num in range(PLAYER_UNIT_NUM):
                             if self.player_flg != p_num:
                                 player[p_num].IsSelect = False
 
                     elif self.pushClick == 3:
                         w_num = None
-                        for p_num in range(6):
+                        for p_num in range(PLAYER_UNIT_NUM):
                             if player[p_num].IsSelect == True:
                                 weaponId1 = player[p_num].WeaponId
                                 weaponId2 = player[p_num].SecondWeaponId
@@ -381,11 +384,11 @@ class Battle(GameSequenceBase):
                         weapon_text_list = []
                         weapon_text_list.append("I  D：" + str(weapon[w_num].weaponId))
                         weapon_text_list.append("名　前：" + weapon[w_num].weaponName)
-                        weapon_text_list.append("射　程：" + weapon[w_num].range)
-                        weapon_text_list.append("攻撃力：" + weapon[w_num].power)
-                        weapon_text_list.append("消　費：" + weapon[w_num].actioncost)
+                        weapon_text_list.append("射　程：" + str(weapon[w_num].range))
+                        weapon_text_list.append("攻撃力：" + str(weapon[w_num].power))
+                        weapon_text_list.append("消　費：" + str(weapon[w_num].actioncost))
                         weapon_text_list.append("角　度：" + str(weapon[w_num].angle) + "°")
-                        weapon_text_list.append("装備時行動力増減：" + weapon[w_num].plusdown)
+                        weapon_text_list.append("装備時行動力増減：" + str(weapon[w_num].plusdown))
 
                         self.text_weapon.SetFontsize(weapon_font_size_list)
                         self.text_weapon.SetText(weapon_text_list)
@@ -395,6 +398,7 @@ class Battle(GameSequenceBase):
                         self.isWeaponhover = True
                     elif weapon_flg != True:
                         self.isWeaponhover = False
+
 
 
     def DrawMap(self, map, player):
@@ -412,10 +416,12 @@ class Battle(GameSequenceBase):
                 xl = (2 * player_x) - 1
                 yl = player_y
 
-            visible_distance = player[num].Status.Visible #見える範囲.Status.characterName
+            # 移動すると見える範囲が変更されるので、移動時に更新をかける
+            visible_distance = player[num].Status.Visible #見える範囲
             player[num].VisibleArea = MoveMethod.DistanceReverse(xl, yl, visible_distance)
 
-            move_distance = player[num].Status.ActionPower #移動できる距離
+            # ActionPowerは、移動するごとに減るようにしたいので、移動選択するたびに更新する。
+            move_distance = player[num].Status.ActionPower - 10 #移動できる距離
             player[num].MoveArea = MoveMethod.DistanceReverse(xl, yl, move_distance)
 
         # ６点指定 六角形 30*24
@@ -444,14 +450,14 @@ class Battle(GameSequenceBase):
             for p_num in range(PLAYER_UNIT_NUM):
                 VisibleAreaData = player[p_num].VisibleArea
                 visible_count = len(VisibleAreaData)
-                MoveAreaData = player[p_num].MoveArea
-                move_count = len(MoveAreaData)
                 for visible_num in range(visible_count):
                     if map.m_xy[num][0] == VisibleAreaData[visible_num][0] and map.m_xy[num][1] == VisibleAreaData[visible_num][1] and map.m_xy[num][14] != -1:
                         color = VISIBLE_COLOR
                         outline = OUT_LINE_COLOR
 
                 if player[p_num].IsSelect == True:
+                    MoveAreaData = player[p_num].MoveArea
+                    move_count = len(MoveAreaData)
                     for move_num in range(move_count):
                         if map.m_xy[num][0] == MoveAreaData[move_num][0] and map.m_xy[num][1] == MoveAreaData[move_num][1] and map.m_xy[num][14] != -1:
                             color = CAN_MOVE_COLOR
@@ -558,7 +564,7 @@ class Battle(GameSequenceBase):
         pass
 
     def CalcReturnPos(self, player, enemy, map, weapon):
-        # 全部マップ・プレイヤー・エネミー何をクリックしても返ってきます。        
+        # 全部マップ・プレイヤー・エネミー何をクリックしても返って来るようにする。        
         Point_x, Point_y = PgLib.GetInputManager().GetMouse().GetPosMouce()
         self.pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
         flg = False
@@ -572,7 +578,7 @@ class Battle(GameSequenceBase):
                 self.before_pushClick = PgLib.GetInputManager().GetMouse().GetPushClick()
                 if Point_x != None and Point_y !=  None:
                     if self.pushClick == 1:
-                        for p_num in range(6):
+                        for p_num in range(PLAYER_UNIT_NUM):
                             p_x = math.floor(player[p_num].x)
                             p_y = math.floor(player[p_num].y)
                             player[p_num].IsSelect = False
@@ -581,7 +587,7 @@ class Battle(GameSequenceBase):
                                 weaponid1 = player[p_num].WeaponId
                                 weaponid2 = player[p_num].SecondWeaponId
 
-                                self.text_player_status.SetPos(player[p_num].x + 21, player[p_num].y - 21)
+                                self.text_player_status.SetPos(280, 50)
 
                                 if weaponid1 != None and weaponid2 != None:
                                     font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
@@ -589,67 +595,67 @@ class Battle(GameSequenceBase):
                                     text_list.append("I  D：" + str(player[p_num].ID))
                                     text_list.append("行動力：" + player[p_num].Status.ActionPower)
                                     text_list.append("名　前：" + player[p_num].Status.characterName)
-                                    text_list.append("体　力：" + player[p_num].Status.HitPoint)
-                                    text_list.append("攻撃力：" + player[p_num].Status.AttackPoint)
-                                    text_list.append("防御力：" + player[p_num].Status.DeffencePoint)
-                                    text_list.append("回避力：" + player[p_num].Status.AvoidancePoint)
-                                    text_list.append("技術力：" + player[p_num].Status.TechnologyPoint)
+                                    text_list.append("体　力：" + str(player[p_num].Status.HitPoint))
+                                    text_list.append("攻撃力：" + str(player[p_num].Status.AttackPoint))
+                                    text_list.append("防御力：" + str(player[p_num].Status.DeffencePoint))
+                                    text_list.append("回避力：" + str(player[p_num].Status.AvoidancePoint))
+                                    text_list.append("技術力：" + str(player[p_num].Status.TechnologyPoint))
 
                                     text_list.append("I  D：" + str(weapon[weaponid1].weaponId))
                                     text_list.append("名　前：" + weapon[weaponid1].weaponName)
-                                    text_list.append("射　程：" + weapon[weaponid1].range)
-                                    text_list.append("攻撃力：" + weapon[weaponid1].power)
-                                    text_list.append("消　費：" + weapon[weaponid1].actioncost)
+                                    text_list.append("射　程：" + str(weapon[weaponid1].range))
+                                    text_list.append("攻撃力：" + str(weapon[weaponid1].power))
+                                    text_list.append("消　費：" + str(weapon[weaponid1].actioncost))
                                     text_list.append("角　度：" + str(weapon[weaponid1].angle) + "°")
-                                    text_list.append("装備時行動力増減：" + weapon[weaponid1].plusdown)
+                                    text_list.append("装備時行動力増減：" + str(weapon[weaponid1].plusdown))
                                     
                                     text_list.append("I  D：" + str(weapon[weaponid2].weaponId))
                                     text_list.append("名　前：" + weapon[weaponid2].weaponName)
-                                    text_list.append("射　程：" + weapon[weaponid2].range)
-                                    text_list.append("攻撃力：" + weapon[weaponid2].power)
-                                    text_list.append("消　費：" + weapon[weaponid2].actioncost)
+                                    text_list.append("射　程：" + str(weapon[weaponid2].range))
+                                    text_list.append("攻撃力：" + str(weapon[weaponid2].power))
+                                    text_list.append("消　費：" + str(weapon[weaponid2].actioncost))
                                     text_list.append("角　度：" + str(weapon[weaponid2].angle) + "°")
-                                    text_list.append("装備時行動力増減：" + weapon[weaponid2].plusdown)
+                                    text_list.append("装備時行動力増減：" + str(weapon[weaponid2].plusdown))
 
                                 elif weaponid1 != None and weaponid2 == None:
                                     font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
                                     text_list = []
                                     text_list.append("I  D：" + str(player[p_num].ID))
-                                    text_list.append("行動力：" + player[p_num].Status.ActionPower)
+                                    text_list.append("行動力：" + str(player[p_num].Status.ActionPower))
                                     text_list.append("名　前：" + player[p_num].Status.characterName)
-                                    text_list.append("体　力：" + player[p_num].Status.HitPoint)
-                                    text_list.append("攻撃力：" + player[p_num].Status.AttackPoint)
-                                    text_list.append("防御力：" + player[p_num].Status.DeffencePoint)
-                                    text_list.append("回避力：" + player[p_num].Status.AvoidancePoint)
-                                    text_list.append("技術力：" + player[p_num].Status.TechnologyPoint)
+                                    text_list.append("体　力：" + str(player[p_num].Status.HitPoint))
+                                    text_list.append("攻撃力：" + str(player[p_num].Status.AttackPoint))
+                                    text_list.append("防御力：" + str(player[p_num].Status.DeffencePoint))
+                                    text_list.append("回避力：" + str(player[p_num].Status.AvoidancePoint))
+                                    text_list.append("技術力：" + str(player[p_num].Status.TechnologyPoint))
 
                                     text_list.append("I  D：" + str(weapon[weaponid1].weaponId))
                                     text_list.append("名　前：" + weapon[weaponid1].weaponName)
-                                    text_list.append("射　程：" + weapon[weaponid1].range)
-                                    text_list.append("攻撃力：" + weapon[weaponid1].power)
-                                    text_list.append("消　費：" + weapon[weaponid1].actioncost)
+                                    text_list.append("射　程：" + str(weapon[weaponid1].range))
+                                    text_list.append("攻撃力：" + str(weapon[weaponid1].power))
+                                    text_list.append("消　費：" + str(weapon[weaponid1].actioncost))
                                     text_list.append("角　度：" + str(weapon[weaponid1].angle) + "°")
-                                    text_list.append("装備時行動力増減：" + weapon[weaponid1].plusdown)
+                                    text_list.append("装備時行動力増減：" + str(weapon[weaponid1].plusdown))
 
                                 elif weaponid1 == None and weaponid2 == None:
-                                    font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
+                                    font_size_list = [30, 30, 30, 30, 30, 30, 30, 30]#, 30, 30, 30, 30, 30, 30, 30]
                                     text_list = []
                                     text_list.append("I  D：" + str(player[p_num].ID))
-                                    text_list.append("行動力：" + player[p_num].Status.ActionPower)
+                                    text_list.append("行動力：" + str(player[p_num].Status.ActionPower))
                                     text_list.append("名　前：" + player[p_num].Status.characterName)
-                                    text_list.append("体　力：" + player[p_num].Status.HitPoint)
-                                    text_list.append("攻撃力：" + player[p_num].Status.AttackPoint)
-                                    text_list.append("防御力：" + player[p_num].Status.DeffencePoint)
-                                    text_list.append("回避力：" + player[p_num].Status.AvoidancePoint)
-                                    text_list.append("技術力：" + player[p_num].Status.TechnologyPoint)
+                                    text_list.append("体　力：" + str(player[p_num].Status.HitPoint))
+                                    text_list.append("攻撃力：" + str(player[p_num].Status.AttackPoint))
+                                    text_list.append("防御力：" + str(player[p_num].Status.DeffencePoint))
+                                    text_list.append("回避力：" + str(player[p_num].Status.AvoidancePoint))
+                                    text_list.append("技術力：" + str(player[p_num].Status.TechnologyPoint))
 
-                                    text_list.append("I  D：" + str(weapon[1].weaponId))
-                                    text_list.append("名　前：" + weapon[1].weaponName)
-                                    text_list.append("射　程：" + weapon[1].range)
-                                    text_list.append("攻撃力：" + weapon[1].power)
-                                    text_list.append("消　費：" + weapon[1].actioncost)
-                                    text_list.append("角　度：" + str(weapon[1].angle) + "°")
-                                    text_list.append("装備時行動力増減：" + weapon[1].plusdown)
+                                    #text_list.append("I  D：" + str(weapon[1].weaponId))
+                                    #text_list.append("名　前：" + weapon[1].weaponName)
+                                    #text_list.append("射　程：" + str(weapon[1].range))
+                                    #text_list.append("攻撃力：" + str(weapon[1].power))
+                                    #text_list.append("消　費：" + str(weapon[1].actioncost))
+                                    #text_list.append("角　度：" + str(weapon[1].angle) + "°")
+                                    #text_list.append("装備時行動力増減：" + str(weapon[1].plusdown))
 
                                 self.text_player_status.SetFontsize(font_size_list)
                                 self.text_player_status.SetText(text_list)
@@ -669,7 +675,7 @@ class Battle(GameSequenceBase):
                                     self.isUnitselect = True
                                     flg = True
 
-                        for e_num in range(6):
+                        for e_num in range(ENEMY_UNIT_NUM):
                             e_x = math.floor(enemy[e_num].x)
                             e_y = math.floor(enemy[e_num].y)
                             enemy[e_num].IsSelect = False
@@ -707,11 +713,11 @@ class Battle(GameSequenceBase):
                             #    print(map.xy[e_num])
                         
                     elif self.pushClick == 3:
-                        for p_num in range(6):
+                        for p_num in range(PLAYER_UNIT_NUM):
                             if player[p_num].IsSelect == True:
                                 player[p_num].IsSelect = False
 
-                        for e_num in range(6):
+                        for e_num in range(ENEMY_UNIT_NUM):
                             if enemy[e_num].IsSelect == True:
                                 enemy[e_num].IsSelect = False
 
