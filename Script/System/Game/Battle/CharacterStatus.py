@@ -2,15 +2,15 @@ from ..Data.GameData import CharacterData
 
 class CharacterStatus:
     def __init__(self, data : CharacterData) -> None:
-        self.__characterId       = data.characterId      # キャラクターID
-        self.__characterName     = data.characterName    # キャラクター名
-        self.__actionPower       = data.actionpower      # 行動力
-        self.__hitPoint          = data.hitpoint         # HP
-        self.__attackPoint       = data.attackpoint      # 攻撃力
-        self.__deffencePoint     = data.defensepoint     # 防御力
-        self.__avoidancePoint    = data.avoidancepoint   # 回避力
-        self.__technologyPoint   = data.technologypoint  # 技術力
-        self.__visible           = data.visible          # 視界
+        self.__characterId       = data.characterId             # キャラクターID
+        self.__characterName     = data.characterName           # キャラクター名
+        self.__actionPower       = int(data.actionpower)        # 行動力
+        self.__hitPoint          = int(data.hitpoint)           # HP
+        self.__attackPoint       = int(data.attackpoint)        # 攻撃力
+        self.__deffencePoint     = int(data.defensepoint)       # 防御力
+        self.__avoidancePoint    = int(data.avoidancepoint)     # 回避力
+        self.__technologyPoint   = int(data.technologypoint)    # 技術力
+        self.__visible           = int(data.visible)            # 視界
 
     @property
     def CharacterId(self) -> int:

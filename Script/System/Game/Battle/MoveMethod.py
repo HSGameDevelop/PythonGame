@@ -8,31 +8,103 @@ class MoveMethod():
         pass
 
     # マップのマスの範囲（移動・視野）を求める
-    def distance_reverse(x, y, distance):
-        # 東
-        east = [(distance * second + x), y]
-        # 西
-        west = [(x - distance * second), y]
-        for col in range(distance * second + 1):
-            if col == 0 or col == distance * second + 1:
-                for raw in range(distance * second + 1):
-                    north_east = [(x + distance), y  - distance]
-                    # north_west = [ x - distance, y]
-                    # distance * 2 から distance + 1 まで
-                    # for num in range(distance + 1, distance * 2 + 1):
-            elif col == 1 or col == distance * second:
-                for raw in range(distance * second):
-                    north_east = [(x + distance), y  - distance]
-            elif col == 2 or col == distance * second - 1:
-                for raw in range(distance * second - 1):
-                    north_east = [(x + distance), y  - distance]
+    def DistanceReverse(x, y, distance):
+        area = []
+        distance_ex = distance + 1
+        col_y = 0
+        # プレイヤーの左右＋プレイヤー上部
+        if distance % 2 == 1:
+            for col in range(distance_ex):
+                if y % 2 == 0 and col % 2 == 0:
+                    if col == 0:
+                        col_y = col + 1
+                    elif col % 2 == 0 and col != 0:
+                        col_y = (col_y + 1)
+                elif y % 2 == 0 and col % 2 == 1:
+                    if col == 0:
+                        col_y = col + 1
+                    elif col % 2 == 0 and col != 0:
+                        col_y = (col_y + 1)
+                elif y % 2 == 1 and col % 2 == 0:
+                    if col == 0:
+                        col_y = col - 1
+                    elif col % 2 == 1 and col != 0:
+                        col_y = (col_y + 1)
+                elif y % 2 == 1 and col % 2 == 1:
+                    if col == 0:
+                        col_y = col - 1
+                    elif col % 2 == 1 and col != 0:
+                        col_y = (col_y + 1)
+                col_first = col_y
+                for row in range(distance_ex + col):
+                    if y % 2 == 1:
+                        area.append([ ((x - distance) + ((row - col_first) * second)) / 2, (y - distance) + col])
+                    else:
+                        area.append([ ((x - distance) + ((row - col_first) * second) + 1) / 2, (y - distance) + col])
+        else:
+            for col in range(distance_ex):
+                if y % 2 == 0 and col % 2 == 0:
+                    if col == 0:
+                        col_y = col
+                    elif col % 2 == 1 and col != 0:
+                        col_y = (col_y + 1)
+                elif y % 2 == 0 and col % 2 == 1:
+                    if col == 0:
+                        col_y = col + 1
+                    elif col % 2 == 1 and col != 0:
+                        col_y = (col_y + 1)
 
-            # 南西
-            south_west = [(x - distance), y + distance]
-            # 南東
-            south_east = [(x + distance), y + distance]
-            # この六角形をどう繋げるか
-        pass    
+                elif y % 2 == 1 and col % 2 == 0:
+                    if col == 0:
+                        col_y = col
+                    elif col % 2 == 0 and col != 0:
+                        col_y = (col_y + 1)
+                elif y % 2 == 1 and col % 2 == 1:
+                    if col == 0:
+                        col_y = col
+                    elif col % 2 == 0 and col != 0:
+                        col_y = (col_y + 1)
+                col_first = col_y
+                for row in range(distance_ex + col):
+                    if y % 2 == 1:
+                        area.append([ ((x - distance) + ((row - col_first) * second) + 1) / 2, (y - distance) + col])
+                    else:
+                        area.append([ ((x - distance) + ((row - col_first) * second)) / 2, (y - distance) + col])
+
+        # プレイヤーの下部
+        for col in range(distance):
+            if y % 2 == 0 and col % 2 == 0:
+                if col == 0:
+                    col_y = col
+                elif col % 2 == 1 and col != 0:
+                    col_y = (col_y + 1)
+            elif y % 2 == 0 and col % 2 == 1:
+                if col == 0:
+                    col_y = col
+                elif col % 2 == 1 and col != 0:
+                    col_y = (col_y + 1)
+        
+            elif y % 2 == 1 and col % 2 == 0:
+                if col == 0:
+                    col_y = col + 1
+                elif col % 2 == 0 and col != 0:
+                    col_y = (col_y + 1)
+            elif y % 2 == 1 and col % 2 == 1:
+                if col == 0:
+                    col_y = col + 1
+                elif col % 2 == 0 and col != 0:
+                    col_y = (col_y + 1)
+            col_first = col_y
+            for row in range( (distance * second) - col):
+                if ((y + 1) + col) % 2 == 0 and y % 2 == 1:
+                    area.append([ ((x - (distance * second) + 1) + ((row + col_first) * second)) / 2, (y + 1) + col])
+                elif ((y + 1) + col) % 2 == 1 and y % 2 == 1:
+                    area.append([ ((x - (distance * second) + 1) + ((row + col_first) * second)) / 2, (y + 1) + col])
+                if ((y + 1) + col) % 2 == 0 and y % 2 == 0:
+                    area.append([ ((x - (distance * second) + 1) + ((row + col_first) * second) - 1) / 2, (y + 1) + col])
+                elif ((y + 1) + col) % 2 == 1 and y % 2 == 0:
+                    area.append([ ((x - (distance * second) + 1) + ((row + col_first) * second) - 1) / 2, (y + 1) + col])
+        return area
 
     # マップのマスの範囲（移動・視野）を求める
     def double_distance(player_x, player_y, x, y):
