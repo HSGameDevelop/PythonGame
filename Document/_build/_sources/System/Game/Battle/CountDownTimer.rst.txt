@@ -1,0 +1,7 @@
+CountDownTimer module
+=====================
+
+.. automodule:: CountDownTimer
+   :members:
+   :undoc-members:
+   :show-inheritance:

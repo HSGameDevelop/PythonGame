@@ -1,0 +1,7 @@
+Define module
+=============
+
+.. automodule:: Define
+   :members:
+   :undoc-members:
+   :show-inheritance:

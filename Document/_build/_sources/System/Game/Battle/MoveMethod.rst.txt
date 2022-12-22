@@ -1,0 +1,7 @@
+MoveMethod module
+=================
+
+.. automodule:: MoveMethod
+   :members:
+   :undoc-members:
+   :show-inheritance:

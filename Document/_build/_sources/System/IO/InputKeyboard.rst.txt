@@ -1,0 +1,7 @@
+InputKeyboard module
+====================
+
+.. automodule:: InputKeyboard
+   :members:
+   :undoc-members:
+   :show-inheritance:

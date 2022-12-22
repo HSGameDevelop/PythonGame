@@ -1,0 +1,7 @@
+BattleDefine module
+===================
+
+.. automodule:: BattleDefine
+   :members:
+   :undoc-members:
+   :show-inheritance:

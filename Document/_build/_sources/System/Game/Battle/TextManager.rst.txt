@@ -1,0 +1,7 @@
+TextManager module
+==================
+
+.. automodule:: TextManager
+   :members:
+   :undoc-members:
+   :show-inheritance:

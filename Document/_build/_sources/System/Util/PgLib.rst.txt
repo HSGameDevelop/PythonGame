@@ -1,0 +1,7 @@
+PgLib module
+============
+
+.. automodule:: PgLib
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+GameData module
+===============
+
+.. automodule:: GameData
+   :members:
+   :undoc-members:
+   :show-inheritance:

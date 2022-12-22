@@ -1,0 +1,7 @@
+ColorList module
+================
+
+.. automodule:: ColorList
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+CharanterManager module
+=======================
+
+.. automodule:: CharanterManager
+   :members:
+   :undoc-members:
+   :show-inheritance:

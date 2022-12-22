@@ -1,0 +1,7 @@
+InputMouse module
+=================
+
+.. automodule:: InputMouse
+   :members:
+   :undoc-members:
+   :show-inheritance:
