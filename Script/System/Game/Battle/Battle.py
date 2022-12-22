@@ -67,7 +67,7 @@ PREPARE_UNIT_WIDTH = 50
 # 色の設定
 BOARD_COLOR = ColorList.GRAY.value              # 盤面全体（見えない位置）
 VISIBLE_COLOR = ColorList.WHITE.value           # ユニットから見える範囲（カラー）
-CAN_MOVE_COLOR = ColorList.SKYBLUE.value      # ユニットの移動可能範囲（カラー）
+CAN_MOVE_COLOR = ColorList.SKYBLUE.value        # ユニットの移動可能範囲（カラー）
 DEAD_COLOR = ColorList.MAROON.value             # 侵入不可エリア
 DEAD_OUT_LINE_COLOR = ColorList.BLACK.value     # 侵入不可エリア枠線
 OUT_LINE_COLOR = ColorList.BLACK.value          # 枠線の色
@@ -415,7 +415,8 @@ class Battle(GameSequenceBase):
             visible_distance = player[num].Status.Visible #見える範囲.Status.characterName
             player[num].VisibleArea = MoveMethod.DistanceReverse(xl, yl, visible_distance)
 
-            # move_distance = player[num].Status.ActionPower #移動できる距離
+            move_distance = player[num].Status.ActionPower #移動できる距離
+            player[num].MoveArea = MoveMethod.DistanceReverse(xl, yl, move_distance)
 
         # ６点指定 六角形 30*24
         for num in range(720):
@@ -441,13 +442,20 @@ class Battle(GameSequenceBase):
                 outline = OUT_LINE_COLOR
 
             for p_num in range(PLAYER_UNIT_NUM):
-                AreaData = player[p_num].VisibleArea
-                a_count = len(AreaData)
-                print("x: " + str(player[p_num].xl) + " y: " + str(player[p_num].yl) )
-                for a_num in range(a_count):                    
-                    if map.m_xy[num][0] == AreaData[a_num][0] and map.m_xy[num][1] == AreaData[a_num][1] and map.m_xy[num][14] != -1:
-                        color = CAN_MOVE_COLOR
+                VisibleAreaData = player[p_num].VisibleArea
+                visible_count = len(VisibleAreaData)
+                MoveAreaData = player[p_num].MoveArea
+                move_count = len(MoveAreaData)
+                for visible_num in range(visible_count):
+                    if map.m_xy[num][0] == VisibleAreaData[visible_num][0] and map.m_xy[num][1] == VisibleAreaData[visible_num][1] and map.m_xy[num][14] != -1:
+                        color = VISIBLE_COLOR
                         outline = OUT_LINE_COLOR
+
+                if player[p_num].IsSelect == True:
+                    for move_num in range(move_count):
+                        if map.m_xy[num][0] == MoveAreaData[move_num][0] and map.m_xy[num][1] == MoveAreaData[move_num][1] and map.m_xy[num][14] != -1:
+                            color = CAN_MOVE_COLOR
+                            outline = OUT_LINE_COLOR
 
             # 内側描画
             pygame.draw.polygon( self.screen, color, [(map.m_xy[num][2], map.m_xy[num][3]), (map.m_xy[num][4], map.m_xy[num][5]), (map.m_xy[num][6], map.m_xy[num][7]), (map.m_xy[num][8], map.m_xy[num][9]), (map.m_xy[num][10], map.m_xy[num][11]), (map.m_xy[num][12], map.m_xy[num][13])])

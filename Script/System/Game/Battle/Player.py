@@ -6,6 +6,7 @@ class Player(Character):
     def __init__(self, xl, yl, num):
         super().__init__(xl, yl, SideType.Player, num)
         self.__visibleArea : list = []
+        self.__moveArea : list = []
 
     def PlayerDraw(self):
         if self.IsVisible == True:
@@ -25,3 +26,11 @@ class Player(Character):
     @VisibleArea.setter
     def VisibleArea(self, visibleArea):
         self.__visibleArea = visibleArea
+
+    @property
+    def MoveArea(self):
+        return self.__moveArea
+    @MoveArea.setter
+    def MoveArea(self, moveArea):
+        self.__moveArea = moveArea
+
