@@ -447,11 +447,13 @@ class Battle(GameSequenceBase):
                 color = BOARD_COLOR
                 outline = OUT_LINE_COLOR
 
+
             for p_num in range(PLAYER_UNIT_NUM):
+                # 見える範囲のマスの色よりユニット選択時の移動できるマスを優先する。（合わせることができないので）
                 VisibleAreaData = player[p_num].VisibleArea
                 visible_count = len(VisibleAreaData)
                 for visible_num in range(visible_count):
-                    if map.m_xy[num][0] == VisibleAreaData[visible_num][0] and map.m_xy[num][1] == VisibleAreaData[visible_num][1] and map.m_xy[num][14] != -1:
+                    if map.m_xy[num][0] == VisibleAreaData[visible_num][0] and map.m_xy[num][1] == VisibleAreaData[visible_num][1] and map.m_xy[num][14] != -1 and color != CAN_MOVE_COLOR:
                         color = VISIBLE_COLOR
                         outline = OUT_LINE_COLOR
 
