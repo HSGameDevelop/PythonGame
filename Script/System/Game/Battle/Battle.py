@@ -40,7 +40,7 @@ CIRCLE_WIDTH_IN = 35
 
 PREPARE_TIME = 2
 
-TURN_DISPLAY = 150
+TURN_DISPLAY = 30
 DATA_DISPLAY_WIDTH = 400
 DATA_DISPLAY_HEIGHT = 300
 
@@ -640,7 +640,7 @@ class Battle(GameSequenceBase):
                                     text_list.append("装備時行動力増減：" + str(weapon[weaponid1].plusdown))
 
                                 elif weaponid1 == None and weaponid2 == None:
-                                    font_size_list = [30, 30, 30, 30, 30, 30, 30, 30]#, 30, 30, 30, 30, 30, 30, 30]
+                                    font_size_list = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
                                     text_list = []
                                     text_list.append("I  D：" + str(player[p_num].ID))
                                     text_list.append("行動力：" + str(player[p_num].Status.ActionPower))
@@ -651,13 +651,13 @@ class Battle(GameSequenceBase):
                                     text_list.append("回避力：" + str(player[p_num].Status.AvoidancePoint))
                                     text_list.append("技術力：" + str(player[p_num].Status.TechnologyPoint))
 
-                                    #text_list.append("I  D：" + str(weapon[1].weaponId))
-                                    #text_list.append("名　前：" + weapon[1].weaponName)
-                                    #text_list.append("射　程：" + str(weapon[1].range))
-                                    #text_list.append("攻撃力：" + str(weapon[1].power))
-                                    #text_list.append("消　費：" + str(weapon[1].actioncost))
-                                    #text_list.append("角　度：" + str(weapon[1].angle) + "°")
-                                    #text_list.append("装備時行動力増減：" + str(weapon[1].plusdown))
+                                    text_list.append("I  D：" + str(weapon[1].weaponId))
+                                    text_list.append("名　前：" + weapon[1].weaponName)
+                                    text_list.append("射　程：" + str(weapon[1].range))
+                                    text_list.append("攻撃力：" + str(weapon[1].power))
+                                    text_list.append("消　費：" + str(weapon[1].actioncost))
+                                    text_list.append("角　度：" + str(weapon[1].angle) + "°")
+                                    text_list.append("装備時行動力増減：" + str(weapon[1].plusdown))
 
                                 self.text_player_status.SetFontsize(font_size_list)
                                 self.text_player_status.SetText(text_list)
