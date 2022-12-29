@@ -18,7 +18,7 @@ class Weapon(GameObject):
         super().__init__(size=(128,128))
         self.weaponId       = GameData.GetWeaponDataFromId(id).weaponId       # 武器ID
         self.weaponName     = GameData.GetWeaponDataFromId(id).weaponName     # 武器名
-        self.weaponEnglish  =  self.English()                                  # 武器名(英語)
+        self.weaponEnglish  =  self.English()                                 # 武器名(英語)
         self.range          = GameData.GetWeaponDataFromId(id).range          # 射程距離
         self.power          = GameData.GetWeaponDataFromId(id).power          # 攻撃力
         self.actioncost     = GameData.GetWeaponDataFromId(id).actioncost     # 攻撃時の行動力消費
@@ -33,6 +33,7 @@ class Weapon(GameObject):
         self.SetSelect(self.isSelect)
         self.SetImage(self.image)
         self.SetBaseImage(self.image)
+        self.SetAngle(0)
 
     def GetHover(self):
         return self.isHover

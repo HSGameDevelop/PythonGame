@@ -63,6 +63,8 @@ class Character(GameObject):
         self.unit_side = side
         self.__isSelect = False
         self.__isVisible = False        # 防具で見えない状態かどうか
+        self.__weapondirection   = pi / 2                       # 武器方向
+        self.__deffencedierction = pi / 2                       # 防御方向
 
         self.xl, self.yl, self.x, self.y, self.tagname = self.prepareUnit(xl, yl)
         self.ID = num
