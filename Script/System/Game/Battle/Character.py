@@ -6,6 +6,7 @@ from ..Data.GameData import GameData
 from ..Data.ColorList import ColorList
 from .CharacterStatus import CharacterStatus
 from .BattleDefine import *
+from math import pi
 
 # キャラの視界を設定マップへ反映するように追加
 

@@ -33,7 +33,6 @@ class Weapon(GameObject):
         self.SetSelect(self.isSelect)
         self.SetImage(self.image)
         self.SetBaseImage(self.image)
-        self.SetAngle(0)
 
     def GetHover(self):
         return self.isHover
